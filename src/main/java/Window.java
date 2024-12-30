@@ -5,7 +5,7 @@ import java.time.Instant;
 
 public class Window extends JFrame implements Runnable {
     private static Window window = null;
-    protected boolean isRunning = true;
+    protected boolean isRunning;
 
     public Input keyListener = new Input();
     public Player player = new Player(100, 100, null);

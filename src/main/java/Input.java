@@ -2,7 +2,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class Input implements KeyListener {
-    public boolean jumpPressed;
+    public boolean leftPressed, rightPressed;
 
     @Override
     public void keyTyped(KeyEvent e) {}
@@ -12,8 +12,21 @@ public class Input implements KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             Window.getWindow().player.jump();
         }
+        if (e.getKeyCode() == KeyEvent.VK_A) {
+            leftPressed = true;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_D) {
+            rightPressed = true;
+        }
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {}
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_A) {
+            leftPressed = false;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_D) {
+            rightPressed = false;
+        }
+    }
 }

@@ -5,4 +5,5 @@ public class Constants {
 
     public static final float GRAVITATIONAL_CONSTANT = 0.33f;
     public static final float TERMINAL_VELOCITY = 5f;
+    public static final int PLAYER_SPEED = 3;
 }

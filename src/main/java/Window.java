@@ -8,7 +8,7 @@ public class Window extends JFrame implements Runnable {
     protected boolean isRunning;
 
     public Input keyListener = new Input();
-    public Player player = new Player(100, 100, null);
+    public Player player = new Player(100, 100, null, keyListener);
 
     public Window(int width, int height, String title) {
         setSize(width, height);

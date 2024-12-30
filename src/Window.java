@@ -4,8 +4,10 @@ import java.time.Duration;
 import java.time.Instant;
 
 public class Window extends JFrame implements Runnable {
+    private static Window window = null;
     protected boolean isRunning = true;
 
+    public Input keyListener = new Input();
     public Player player = new Player(100, 100, null);
 
     public Window(int width, int height, String title) {
@@ -14,8 +16,17 @@ public class Window extends JFrame implements Runnable {
         setResizable(false);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addKeyListener(keyListener);
 
         isRunning = true;
+    }
+
+    public static Window getWindow() {
+        if (Window.window == null) {
+            Window.window = new Window(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, Constants.SCREEN_TITLE);
+        }
+
+        return Window.window;
     }
 
     private void update(double dt) {

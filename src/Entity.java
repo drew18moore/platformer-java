@@ -5,6 +5,11 @@ public class Entity {
     public int screenX;
     public int screenY;
 
+    public float velocityY = 0;
+
+    public boolean isSolid = false;
+    public boolean useGravity = false;
+
     BufferedImage sprite;
 
     public Entity(int screenX, int screenY, BufferedImage sprite) {
@@ -20,6 +25,15 @@ public class Entity {
             g2.fillRect(0, 0, 50, 50);
             g2.dispose();
             this.sprite = placeholder;
+        }
+    }
+
+    public void update(double dt) {
+        if (useGravity) {
+            screenY += (int)velocityY;
+            velocityY += Constants.GRAVITATIONAL_CONSTANT;
+            if (velocityY > Constants.TERMINAL_VELOCITY) velocityY = Constants.TERMINAL_VELOCITY;
+            else if (velocityY < -Constants.TERMINAL_VELOCITY) velocityY = -Constants.TERMINAL_VELOCITY;
         }
     }
 

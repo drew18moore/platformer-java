@@ -19,7 +19,7 @@ public class Entity {
         if (sprite != null) {
             this.sprite = sprite;
         } else {
-            BufferedImage placeholder = new BufferedImage(50, 50, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage placeholder = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2 = placeholder.createGraphics();
             g2.setColor(Color.BLUE);
             g2.fillRect(0, 0, 50, 50);
@@ -37,7 +37,11 @@ public class Entity {
         }
     }
 
+    public void draw(Graphics2D g2) {
+        g2.drawImage(this.sprite, this.screenX, this.screenY, Constants.TILE_SIZE, Constants.TILE_SIZE, null);
+    }
+
     public Rectangle getBounds() {
-        return new Rectangle(screenX, screenY, sprite.getWidth(), sprite.getHeight());
+        return new Rectangle(screenX, screenY, Constants.TILE_SIZE, Constants.TILE_SIZE);
     }
 }

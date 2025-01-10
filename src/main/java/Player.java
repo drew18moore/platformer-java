@@ -8,7 +8,7 @@ public class Player extends Entity {
 
     public Player(int screenX, int screenY, final Input input) {
         super(screenX, screenY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
-        this.useGravity = true;
+//        this.useGravity = true;
         this.keyListener = input;
 
         try {
@@ -16,7 +16,12 @@ public class Player extends Entity {
 
             this.movementSprites = new BufferedImage[8];
             for (int i = 0; i < 8; i++) {
-                movementSprites[i] = spriteSheet.getSubimage(i * Constants.PLAYER_SPRITE_TILE_SIZE, 2 * Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
+                movementSprites[i] = spriteSheet.getSubimage(
+                        i * Constants.PLAYER_SPRITE_TILE_SIZE,
+                        2 * Constants.PLAYER_SPRITE_TILE_SIZE,
+                        Constants.PLAYER_SPRITE_TILE_SIZE,
+                        Constants.PLAYER_SPRITE_TILE_SIZE
+                );
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,11 +53,19 @@ public class Player extends Entity {
         }
     }
 
+    @Override
+    public Rectangle getBounds() {
+        return new Rectangle(screenX, screenY, Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE, Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE);
+    }
+
     public void jump() {
         this.velocityY -= 10;
     }
 
     public void draw(Graphics2D g2) {
         super.draw(g2);
+        Rectangle rect = getBounds();
+        g2.setColor(Color.RED);
+        g2.drawRect(rect.x, rect.y, rect.width, rect.height);
     }
 }

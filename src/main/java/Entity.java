@@ -2,8 +2,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Entity {
-    public int screenX;
-    public int screenY;
+    public int worldX;
+    public int worldY;
 
     public int spriteWidth;
     public int spriteHeight;
@@ -18,9 +18,9 @@ public class Entity {
     public int spriteNum = 0;
     public boolean facingLeft = false;
 
-    public Entity(int screenX, int screenY, BufferedImage[] movementSprites, int spriteWidth, int spriteHeight) {
-        this.screenX = screenX;
-        this.screenY = screenY;
+    public Entity(int worldX, int worldY, BufferedImage[] movementSprites, int spriteWidth, int spriteHeight) {
+        this.worldX = worldX;
+        this.worldY = worldY;
 
         this.spriteWidth = spriteWidth;
         this.spriteHeight = spriteHeight;
@@ -39,7 +39,7 @@ public class Entity {
 
     public void update(double dt) {
         if (useGravity) {
-            screenY += (int)velocityY;
+            worldY += (int)velocityY;
             velocityY += Constants.GRAVITATIONAL_CONSTANT;
             if (velocityY > Constants.TERMINAL_VELOCITY) velocityY = Constants.TERMINAL_VELOCITY;
             else if (velocityY < -Constants.TERMINAL_VELOCITY) velocityY = -Constants.TERMINAL_VELOCITY;
@@ -48,13 +48,13 @@ public class Entity {
 
     public void draw(Graphics2D g2) {
         if (facingLeft) {
-            g2.drawImage(this.movementSprites[spriteNum], this.screenX + this.spriteWidth * Constants.SCALE, this.screenY, this.spriteWidth * -Constants.SCALE, this.spriteHeight * Constants.SCALE, null);
+            g2.drawImage(this.movementSprites[spriteNum], this.worldX + this.spriteWidth * Constants.SCALE, this.worldY, this.spriteWidth * -Constants.SCALE, this.spriteHeight * Constants.SCALE, null);
         } else {
-            g2.drawImage(this.movementSprites[spriteNum], this.screenX, this.screenY, this.spriteWidth * Constants.SCALE, this.spriteHeight * Constants.SCALE, null);
+            g2.drawImage(this.movementSprites[spriteNum], this.worldX, this.worldY, this.spriteWidth * Constants.SCALE, this.spriteHeight * Constants.SCALE, null);
         }
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(screenX, screenY, Constants.TILE_SIZE, Constants.TILE_SIZE);
+        return new Rectangle(worldX, worldY, Constants.TILE_SIZE, Constants.TILE_SIZE);
     }
 }

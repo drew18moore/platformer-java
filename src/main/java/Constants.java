@@ -13,4 +13,11 @@ public class Constants {
 
     public static final int PLAYER_SPRITE_TILE_SIZE = 32;
 
+    public static final int WORLD_MAP_NUM_TILE_WIDTH = 30;
+    public static final int WORLD_MAP_NUM_TILE_HEIGHT = 20;
+
+    public static final int WORLD_TILE_SET_NUM_TILE_WIDTH = 16;
+    public static final int WORLD_TILE_SET_NUM_TILE_HEIGHT = 16;
+
+    public  static final int WORLD_TILE_SET_NUM_TILES = WORLD_TILE_SET_NUM_TILE_WIDTH * WORLD_TILE_SET_NUM_TILE_HEIGHT;
 }

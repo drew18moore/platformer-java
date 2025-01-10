@@ -4,10 +4,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Player extends Entity {
+    public final int screenX = (Constants.SCREEN_WIDTH/2)-(Constants.PLAYER_SPRITE_TILE_SIZE*Constants.SCALE/2);
+    public final int screenY = (Constants.SCREEN_HEIGHT/2)-(Constants.PLAYER_SPRITE_TILE_SIZE*Constants.SCALE/2);
     private final Input keyListener;
 
-    public Player(int screenX, int screenY, final Input input) {
-        super(screenX, screenY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
+    public Player(int worldX, int worldY, final Input input) {
+        super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE
+        );
 //        this.useGravity = true;
         this.keyListener = input;
 
@@ -33,11 +36,11 @@ public class Player extends Entity {
 
         if (keyListener.leftPressed) {
             facingLeft = true;
-            screenX -= Constants.PLAYER_SPEED;
+            worldX -= Constants.PLAYER_SPEED;
         }
         if (keyListener.rightPressed) {
             facingLeft = false;
-            screenX += Constants.PLAYER_SPEED;
+            worldX += Constants.PLAYER_SPEED;
         }
 
         if (keyListener.leftPressed || keyListener.rightPressed) {
@@ -63,7 +66,12 @@ public class Player extends Entity {
     }
 
     public void draw(Graphics2D g2) {
-        super.draw(g2);
+        if (facingLeft) {
+            g2.drawImage(this.movementSprites[spriteNum], this.screenX + this.spriteWidth * Constants.SCALE, this.screenY, this.spriteWidth * -Constants.SCALE, this.spriteHeight * Constants.SCALE, null);
+        } else {
+            g2.drawImage(this.movementSprites[spriteNum], this.screenX, this.screenY, this.spriteWidth * Constants.SCALE, this.spriteHeight * Constants.SCALE, null);
+        }
+
         Rectangle rect = getBounds();
         g2.setColor(Color.RED);
         g2.drawRect(rect.x, rect.y, rect.width, rect.height);

@@ -9,9 +9,10 @@ public class Window extends JFrame implements Runnable {
     protected boolean isRunning;
 
     public Input keyListener = new Input();
+    public TileManager tileManager = new TileManager();
     public Player player = new Player(
-            (Constants.SCREEN_WIDTH/2)-(Constants.PLAYER_SPRITE_TILE_SIZE*Constants.SCALE/2),
-            (Constants.SCREEN_HEIGHT/2)-(Constants.PLAYER_SPRITE_TILE_SIZE*Constants.SCALE/2),
+            Constants.TILE_SIZE * 10,
+            Constants.TILE_SIZE * 10,
             keyListener
     );
 
@@ -45,6 +46,7 @@ public class Window extends JFrame implements Runnable {
 
     private void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+        tileManager.draw(g2);
         player.draw(g2);
     }
 

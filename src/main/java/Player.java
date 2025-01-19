@@ -8,8 +8,6 @@ public class Player extends Entity {
     public final int screenY = (Constants.SCREEN_HEIGHT/2)-(Constants.PLAYER_SPRITE_TILE_SIZE*Constants.SCALE/2);
     private final Input keyListener;
 
-    private final int hitboxWidth, hitboxHeight, hitboxOffsetX, hitboxOffsetY;
-
     public Player(int worldX, int worldY, final Input input) {
         super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
         this.useGravity = true;
@@ -19,6 +17,7 @@ public class Player extends Entity {
         this.hitboxHeight = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 55;
         this.hitboxOffsetX = 30;
         this.hitboxOffsetY = 35;
+        this.showHitbox = true;
 
         try {
             BufferedImage spriteSheet = ImageIO.read(getClass().getResourceAsStream("/sprites/knight.png"));
@@ -54,22 +53,6 @@ public class Player extends Entity {
             worldX = nextWorldX;
         }
 
-        // Gravity effect
-        if (this.useGravity) {
-            velocityY += Constants.GRAVITATIONAL_CONSTANT;
-            if (velocityY > Constants.TERMINAL_VELOCITY) {
-                velocityY = Constants.TERMINAL_VELOCITY;
-            }
-        }
-
-        int nextWorldY = worldY + (int) velocityY;
-        if (!isColliding(worldX, nextWorldY)) {
-            worldY = nextWorldY;
-        } else {
-            velocityY = 0;
-        }
-
-
         if (keyListener.leftPressed || keyListener.rightPressed) {
             spriteCounter++;
             if (spriteCounter > 12) {
@@ -81,18 +64,6 @@ public class Player extends Entity {
                 spriteCounter = 0;
             }
         }
-    }
-
-    private boolean isColliding(int worldX, int worldY) {
-        TileManager tileManager = Window.getWindow().tileManager;
-
-        int leftX = worldX + hitboxOffsetX;
-        int rightX = worldX + hitboxOffsetX + hitboxWidth - 1;
-        int topY = worldY + hitboxOffsetY;
-        int bottomY = worldY + hitboxOffsetY + hitboxHeight - 1;
-
-        return tileManager.isSolidTile(leftX, topY) || tileManager.isSolidTile(rightX, topY) ||
-                tileManager.isSolidTile(leftX, bottomY) || tileManager.isSolidTile(rightX, bottomY);
     }
 
     @Override
@@ -111,8 +82,10 @@ public class Player extends Entity {
             g2.drawImage(this.movementSprites[spriteNum], this.screenX, this.screenY, this.spriteWidth * Constants.SCALE, this.spriteHeight * Constants.SCALE, null);
         }
 
-        Rectangle rect = getBounds();
-        g2.setColor(Color.RED);
-        g2.drawRect(rect.x, rect.y, rect.width, rect.height);
+        if (showHitbox) {
+            Rectangle rect = getBounds();
+            g2.setColor(Color.RED);
+            g2.drawRect(rect.x, rect.y, rect.width, rect.height);
+        }
     }
 }

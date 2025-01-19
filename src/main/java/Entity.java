@@ -4,11 +4,13 @@ import java.awt.image.BufferedImage;
 public class Entity {
     public int worldX, worldY;
     public int spriteWidth, spriteHeight;
+    public int hitboxWidth, hitboxHeight, hitboxOffsetX, hitboxOffsetY;
 
     public float velocityY = 0;
 
     public boolean isSolid = false;
     public boolean useGravity = false;
+    public boolean showHitbox = false;
 
     BufferedImage[] movementSprites;
     public int spriteCounter = 0;
@@ -21,6 +23,11 @@ public class Entity {
 
         this.spriteWidth = spriteWidth;
         this.spriteHeight = spriteHeight;
+
+        this.hitboxOffsetX = 0;
+        this.hitboxOffsetY = 0;
+        this.hitboxWidth = spriteWidth;
+        this.hitboxHeight = spriteHeight;
 
         if (movementSprites != null) {
             this.movementSprites = movementSprites;
@@ -35,12 +42,20 @@ public class Entity {
     }
 
     public void update(double dt) {
-//        if (useGravity) {
-//            worldY += (int)velocityY;
-//            velocityY += Constants.GRAVITATIONAL_CONSTANT;
-//            if (velocityY > Constants.TERMINAL_VELOCITY) velocityY = Constants.TERMINAL_VELOCITY;
-//            else if (velocityY < -Constants.TERMINAL_VELOCITY) velocityY = -Constants.TERMINAL_VELOCITY;
-//        }
+        // Apply gravity if enabled
+        if (useGravity) {
+            velocityY += Constants.GRAVITATIONAL_CONSTANT;
+            if (velocityY > Constants.TERMINAL_VELOCITY) {
+                velocityY = Constants.TERMINAL_VELOCITY;
+            }
+        }
+
+        int nextWorldY = worldY + (int) velocityY;
+        if (!isColliding(worldX, nextWorldY)) {
+            worldY = nextWorldY;
+        } else {
+            velocityY = 0;
+        }
     }
 
     public void draw(Graphics2D g2) {
@@ -49,9 +64,27 @@ public class Entity {
         } else {
             g2.drawImage(this.movementSprites[spriteNum], this.worldX, this.worldY, this.spriteWidth * Constants.SCALE, this.spriteHeight * Constants.SCALE, null);
         }
+
+        if (showHitbox) {
+            Rectangle hitbox = getBounds();
+            g2.setColor(Color.RED);
+            g2.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+        }
     }
 
     public Rectangle getBounds() {
-        return new Rectangle(worldX, worldY, Constants.TILE_SIZE, Constants.TILE_SIZE);
+        return new Rectangle(worldX + hitboxOffsetX, worldY + hitboxOffsetY, hitboxWidth, hitboxHeight);
+    }
+
+    public boolean isColliding(int worldX, int worldY) {
+        TileManager tileManager = Window.getWindow().tileManager;
+
+        int leftX = worldX + hitboxOffsetX;
+        int rightX = worldX + hitboxOffsetX + hitboxWidth - 1;
+        int topY = worldY + hitboxOffsetY;
+        int bottomY = worldY + hitboxOffsetY + hitboxHeight - 1;
+
+        return tileManager.isSolidTile(leftX, topY) || tileManager.isSolidTile(rightX, topY) ||
+                tileManager.isSolidTile(leftX, bottomY) || tileManager.isSolidTile(rightX, bottomY);
     }
 }

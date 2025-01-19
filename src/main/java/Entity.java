@@ -2,11 +2,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Entity {
-    public int worldX;
-    public int worldY;
-
-    public int spriteWidth;
-    public int spriteHeight;
+    public int worldX, worldY;
+    public int spriteWidth, spriteHeight;
 
     public float velocityY = 0;
 
@@ -38,12 +35,12 @@ public class Entity {
     }
 
     public void update(double dt) {
-        if (useGravity) {
-            worldY += (int)velocityY;
-            velocityY += Constants.GRAVITATIONAL_CONSTANT;
-            if (velocityY > Constants.TERMINAL_VELOCITY) velocityY = Constants.TERMINAL_VELOCITY;
-            else if (velocityY < -Constants.TERMINAL_VELOCITY) velocityY = -Constants.TERMINAL_VELOCITY;
-        }
+//        if (useGravity) {
+//            worldY += (int)velocityY;
+//            velocityY += Constants.GRAVITATIONAL_CONSTANT;
+//            if (velocityY > Constants.TERMINAL_VELOCITY) velocityY = Constants.TERMINAL_VELOCITY;
+//            else if (velocityY < -Constants.TERMINAL_VELOCITY) velocityY = -Constants.TERMINAL_VELOCITY;
+//        }
     }
 
     public void draw(Graphics2D g2) {

@@ -11,8 +11,8 @@ public class Window extends JFrame implements Runnable {
     public Input keyListener = new Input();
     public TileManager tileManager = new TileManager();
     public Player player = new Player(
-            Constants.TILE_SIZE * 10,
-            Constants.TILE_SIZE * 10,
+            Constants.TILE_SIZE * 2,
+            Constants.TILE_SIZE * 2,
             keyListener
     );
 

@@ -26,7 +26,7 @@ public class TileManager {
         for (int i = 0; i < Constants.WORLD_TILE_SET_NUM_TILE_WIDTH; i++) {
             for (int j = 0; j < Constants.WORLD_TILE_SET_NUM_TILE_HEIGHT; j++) {
                 System.out.println(i + ", " + j + ", " + i * Constants.TILE_WIDTH + ", " + j * Constants.TILE_WIDTH);
-                tiles[t] = new Tile(tileSet.getSubimage(j * Constants.TILE_WIDTH, i * Constants.TILE_WIDTH, Constants.TILE_WIDTH, Constants.TILE_WIDTH));
+                tiles[t] = new Tile(tileSet.getSubimage(j * Constants.TILE_WIDTH, i * Constants.TILE_WIDTH, Constants.TILE_WIDTH, Constants.TILE_WIDTH), true);
                 t++;
             }
         }
@@ -50,13 +50,24 @@ public class TileManager {
             rows.add(intValues);
         }
 
-        // Convert List to 2D array
         int[][] array = new int[Constants.WORLD_MAP_NUM_TILE_WIDTH][Constants.WORLD_MAP_NUM_TILE_HEIGHT];
         for (int i = 0; i < rows.size(); i++) {
             array[i] = rows.get(i);
         }
 
         return array;
+    }
+
+    public boolean isSolidTile(int worldX, int worldY) {
+        int col = worldX / Constants.TILE_SIZE;
+        int row = worldY / Constants.TILE_SIZE;
+
+        if (col < 0 || col >= Constants.WORLD_MAP_NUM_TILE_WIDTH || row < 0 || row >= Constants.WORLD_MAP_NUM_TILE_HEIGHT) {
+            return true;
+        }
+
+        int tileIndex = worldMap[row][col];
+        return tileIndex >= 0 && tiles[tileIndex].collision;
     }
 
     public void draw(Graphics2D g2) {

@@ -11,6 +11,7 @@ public class Entity {
     public boolean isSolid = false;
     public boolean useGravity = false;
     public boolean showHitbox = false;
+    public boolean isOnGround = false;
 
     BufferedImage[] movementSprites;
     public int spriteCounter = 0;
@@ -41,22 +42,35 @@ public class Entity {
         }
     }
 
-    public void update(double dt) {
-        // Apply gravity if enabled
+    public void update(double dt, boolean jumpPressed) {
+        System.out.println(isOnGround);
+
         if (useGravity) {
-            velocityY += Constants.GRAVITATIONAL_CONSTANT;
+            if (velocityY < 0) {
+                velocityY += Constants.GRAVITY_ASCEND;
+            } else {
+                velocityY += Constants.GRAVITY_DESCEND;
+            }
+
             if (velocityY > Constants.TERMINAL_VELOCITY) {
                 velocityY = Constants.TERMINAL_VELOCITY;
             }
+        }
+
+        if (jumpPressed && isOnGround) {
+            velocityY = -Constants.JUMP_FORCE;
+            isOnGround = false;
         }
 
         int nextWorldY = worldY + (int) velocityY;
         if (!isColliding(worldX, nextWorldY)) {
             worldY = nextWorldY;
         } else {
+            if (velocityY > 0) isOnGround = true;
             velocityY = 0;
         }
     }
+
 
     public void draw(Graphics2D g2) {
         if (facingLeft) {

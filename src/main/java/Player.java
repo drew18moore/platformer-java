@@ -37,7 +37,7 @@ public class Player extends Entity {
     }
 
     public void update(double dt) {
-        super.update(dt);
+        super.update(dt, keyListener.jumpPressed);
 
         int nextWorldX = worldX;
         if (keyListener.leftPressed) {

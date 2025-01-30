@@ -1,8 +1,9 @@
 package main;
 
-import entities.Player;
-import inputs.Input;
-import levels.TileManager;
+import gamestates.Gamestate;
+import gamestates.Playing;
+import gamestates.Menu;
+import inputs.KeyboardInput;
 import utils.Constants;
 
 import javax.swing.*;
@@ -14,13 +15,10 @@ public class Window extends JFrame implements Runnable {
     private static Window window = null;
     protected boolean isRunning;
 
-    public Input keyListener = new Input();
-    public TileManager tileManager = new TileManager();
-    public Player player = new Player(
-            Constants.TILE_SIZE * 2,
-            Constants.TILE_SIZE * 2,
-            keyListener
-    );
+    public KeyboardInput keyListener = new KeyboardInput();
+
+    public Menu menu = new Menu();
+    public Playing playing = new Playing();
 
     public Window(int width, int height, String title) {
         setSize(width, height);
@@ -45,15 +43,18 @@ public class Window extends JFrame implements Runnable {
         Image dbImage = createImage(getWidth(), getHeight());
         Graphics dbg = dbImage.getGraphics();
         this.draw(dbg);
+        switch(Gamestate.state) {
+            case PLAYING -> playing.update();
+            case MENU -> menu.update();
+        }
         getGraphics().drawImage(dbImage, 0, 0, this);
-
-        player.update();
     }
 
     private void draw(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
-        tileManager.draw(g2);
-        player.draw(g2);
+        switch(Gamestate.state) {
+            case PLAYING -> playing.draw(g);
+            case MENU -> menu.draw(g);
+        }
     }
 
     @Override

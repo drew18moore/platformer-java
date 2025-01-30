@@ -95,7 +95,7 @@ public class Entity {
     }
 
     public boolean isColliding(int worldX, int worldY) {
-        TileManager tileManager = Window.getWindow().tileManager;
+        TileManager tileManager = Window.getWindow().playing.tileManager;
 
         int leftX = worldX + hitboxOffsetX;
         int rightX = worldX + hitboxOffsetX + hitboxWidth - 1;

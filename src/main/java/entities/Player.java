@@ -1,6 +1,6 @@
 package entities;
 
-import inputs.Input;
+import inputs.KeyboardInput;
 import utils.Constants;
 
 import javax.imageio.ImageIO;
@@ -11,12 +11,11 @@ import java.io.IOException;
 public class Player extends Entity {
     public final int screenX = (Constants.SCREEN_WIDTH/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     public final int screenY = (Constants.SCREEN_HEIGHT/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
-    private final Input keyListener;
+    public boolean leftPressed, rightPressed, jumpPressed;
 
-    public Player(int worldX, int worldY, final Input input) {
+    public Player(int worldX, int worldY) {
         super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
         this.useGravity = true;
-        this.keyListener = input;
 
         this.hitboxWidth = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 60;
         this.hitboxHeight = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 55;
@@ -42,14 +41,14 @@ public class Player extends Entity {
     }
 
     public void update() {
-        super.update(keyListener.jumpPressed);
+        super.update(jumpPressed);
 
         int nextWorldX = worldX;
-        if (keyListener.leftPressed) {
+        if (leftPressed) {
             facingLeft = true;
             nextWorldX -= Constants.PLAYER_SPEED;
         }
-        if (keyListener.rightPressed) {
+        if (rightPressed) {
             facingLeft = false;
             nextWorldX += Constants.PLAYER_SPEED;
         }
@@ -58,7 +57,7 @@ public class Player extends Entity {
             worldX = nextWorldX;
         }
 
-        if (keyListener.leftPressed || keyListener.rightPressed) {
+        if (leftPressed || rightPressed) {
             spriteCounter++;
             if (spriteCounter > 12) {
                 if (spriteNum >= 7) {

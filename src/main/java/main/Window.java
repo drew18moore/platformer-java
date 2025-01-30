@@ -51,6 +51,7 @@ public class Window extends JFrame implements Runnable {
         switch(Gamestate.state) {
             case PLAYING -> playing.update();
             case MENU -> menu.update();
+            case QUIT -> System.exit(0);
         }
         getGraphics().drawImage(dbImage, 0, 0, this);
     }

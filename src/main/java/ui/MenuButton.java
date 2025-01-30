@@ -51,7 +51,6 @@ public class MenuButton {
         g2.setFont(new Font("Arial", Font.BOLD, height / 3));
         FontMetrics fm = g2.getFontMetrics();
         int textWidth = fm.stringWidth(label);
-        int textHeight = fm.getAscent();
 
         g2.setColor(textColor);
         g2.drawString(label, (width - textWidth) / 2, (height - fm.getHeight()) / 2 + fm.getAscent());

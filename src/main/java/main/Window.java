@@ -4,6 +4,7 @@ import gamestates.Gamestate;
 import gamestates.Playing;
 import gamestates.Menu;
 import inputs.KeyboardInput;
+import inputs.MouseInput;
 import utils.Constants;
 
 import javax.swing.*;
@@ -16,6 +17,7 @@ public class Window extends JFrame implements Runnable {
     protected boolean isRunning;
 
     public KeyboardInput keyListener = new KeyboardInput();
+    public MouseInput mouseListener = new MouseInput();
 
     public Menu menu = new Menu();
     public Playing playing = new Playing();
@@ -26,7 +28,10 @@ public class Window extends JFrame implements Runnable {
         setResizable(false);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         addKeyListener(keyListener);
+        addMouseListener(mouseListener);
+        addMouseMotionListener(mouseListener);
 
         isRunning = true;
     }

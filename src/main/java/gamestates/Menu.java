@@ -40,17 +40,38 @@ public class Menu implements Statemethods {
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+        for (MenuButton mb : btns) {
+            if (mb.bounds.contains(e.getX(), e.getY())) {
+                mb.mousePressed = true;
+                break;
+            }
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        for (MenuButton mb : btns) {
+            if (mb.bounds.contains(e.getX(), e.getY())) {
+                if (mb.mousePressed) mb.applyGamestate();
+                break;
+            }
+        }
+        resetBtns();
+    }
 
+    private void resetBtns() {
+        for (MenuButton mb : btns) {
+            mb.resetBools();
+        }
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-
+        for (MenuButton mb : btns) {
+            if (mb.bounds.contains(e.getX(), e.getY())) {
+                mb.mouseOver = true;
+            } else mb.mouseOver = false;
+        }
     }
 
     @Override

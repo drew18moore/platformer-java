@@ -24,5 +24,10 @@ public class Constants {
     public static final int WORLD_TILE_SET_NUM_TILE_WIDTH = 16;
     public static final int WORLD_TILE_SET_NUM_TILE_HEIGHT = 16;
 
-    public  static final int WORLD_TILE_SET_NUM_TILES = WORLD_TILE_SET_NUM_TILE_WIDTH * WORLD_TILE_SET_NUM_TILE_HEIGHT;
+    public static final int WORLD_TILE_SET_NUM_TILES = WORLD_TILE_SET_NUM_TILE_WIDTH * WORLD_TILE_SET_NUM_TILE_HEIGHT;
+
+    public static final int BTN_WIDTH = 100;
+    public static final int BTN_HEIGHT = 25;
+    public static final int BTN_WIDTH_SCALED = BTN_WIDTH * SCALE;
+    public static final int BTN_HEIGHT_SCALED = BTN_HEIGHT * SCALE;
 }

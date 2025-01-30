@@ -1,3 +1,8 @@
+package levels;
+
+import main.Window;
+import utils.Constants;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -25,7 +30,6 @@ public class TileManager {
         int t = 0;
         for (int i = 0; i < Constants.WORLD_TILE_SET_NUM_TILE_WIDTH; i++) {
             for (int j = 0; j < Constants.WORLD_TILE_SET_NUM_TILE_HEIGHT; j++) {
-                System.out.println(i + ", " + j + ", " + i * Constants.TILE_WIDTH + ", " + j * Constants.TILE_WIDTH);
                 tiles[t] = new Tile(tileSet.getSubimage(j * Constants.TILE_WIDTH, i * Constants.TILE_WIDTH, Constants.TILE_WIDTH, Constants.TILE_WIDTH), true);
                 t++;
             }
@@ -79,14 +83,14 @@ public class TileManager {
 
             int worldX = worldCol * Constants.TILE_SIZE;
             int worldY = worldRow * Constants.TILE_SIZE;
-            int screenX = worldX - Window.getWindow().player.worldX + Window.getWindow().player.screenX;
-            int screenY = worldY - Window.getWindow().player.worldY + Window.getWindow().player.screenY;
+            int screenX = worldX - main.Window.getWindow().player.worldX + main.Window.getWindow().player.screenX;
+            int screenY = worldY - main.Window.getWindow().player.worldY + main.Window.getWindow().player.screenY;
 
             if (tile != -1 &&
-                    worldX + Constants.TILE_SIZE * 2 > Window.getWindow().player.worldX - Window.getWindow().player.screenX &&
-                    worldX - Constants.TILE_SIZE * 2 < Window.getWindow().player.worldX + Window.getWindow().player.screenX &&
-                    worldY + Constants.TILE_SIZE * 2 > Window.getWindow().player.worldY - Window.getWindow().player.screenY &&
-                    worldY - Constants.TILE_SIZE * 2 < Window.getWindow().player.worldY + Window.getWindow().player.screenY) {
+                    worldX + Constants.TILE_SIZE * 2 > main.Window.getWindow().player.worldX - main.Window.getWindow().player.screenX &&
+                    worldX - Constants.TILE_SIZE * 2 < main.Window.getWindow().player.worldX + main.Window.getWindow().player.screenX &&
+                    worldY + Constants.TILE_SIZE * 2 > main.Window.getWindow().player.worldY - main.Window.getWindow().player.screenY &&
+                    worldY - Constants.TILE_SIZE * 2 < main.Window.getWindow().player.worldY + Window.getWindow().player.screenY) {
                 g2.drawImage(tiles[tile].image, screenX, screenY, Constants.TILE_SIZE, Constants.TILE_SIZE, null);
             }
             worldCol++;

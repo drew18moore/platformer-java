@@ -1,3 +1,9 @@
+package entities;
+
+import levels.TileManager;
+import main.Window;
+import utils.Constants;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -42,9 +48,7 @@ public class Entity {
         }
     }
 
-    public void update(double dt, boolean jumpPressed) {
-        System.out.println(isOnGround);
-
+    public void update(boolean jumpPressed) {
         if (useGravity) {
             if (velocityY < 0) {
                 velocityY += Constants.GRAVITY_ASCEND;

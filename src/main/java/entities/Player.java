@@ -1,11 +1,16 @@
+package entities;
+
+import inputs.Input;
+import utils.Constants;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Player extends Entity {
-    public final int screenX = (Constants.SCREEN_WIDTH/2)-(Constants.PLAYER_SPRITE_TILE_SIZE*Constants.SCALE/2);
-    public final int screenY = (Constants.SCREEN_HEIGHT/2)-(Constants.PLAYER_SPRITE_TILE_SIZE*Constants.SCALE/2);
+    public final int screenX = (Constants.SCREEN_WIDTH/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
+    public final int screenY = (Constants.SCREEN_HEIGHT/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     private final Input keyListener;
 
     public Player(int worldX, int worldY, final Input input) {
@@ -36,8 +41,8 @@ public class Player extends Entity {
         }
     }
 
-    public void update(double dt) {
-        super.update(dt, keyListener.jumpPressed);
+    public void update() {
+        super.update(keyListener.jumpPressed);
 
         int nextWorldX = worldX;
         if (keyListener.leftPressed) {
@@ -69,10 +74,6 @@ public class Player extends Entity {
     @Override
     public Rectangle getBounds() {
         return new Rectangle(screenX + hitboxOffsetX, screenY + hitboxOffsetY, hitboxWidth, hitboxHeight);
-    }
-
-    public void jump() {
-        this.velocityY -= 10;
     }
 
     public void draw(Graphics2D g2) {

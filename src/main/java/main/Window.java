@@ -1,4 +1,10 @@
-import javax.imageio.ImageIO;
+package main;
+
+import entities.Player;
+import inputs.Input;
+import levels.TileManager;
+import utils.Constants;
+
 import javax.swing.*;
 import java.awt.*;
 import java.time.Duration;
@@ -35,13 +41,13 @@ public class Window extends JFrame implements Runnable {
         return Window.window;
     }
 
-    private void update(double dt) {
+    private void update() {
         Image dbImage = createImage(getWidth(), getHeight());
         Graphics dbg = dbImage.getGraphics();
         this.draw(dbg);
         getGraphics().drawImage(dbImage, 0, 0, this);
 
-        player.update(dt);
+        player.update();
     }
 
     private void draw(Graphics g) {
@@ -60,7 +66,7 @@ public class Window extends JFrame implements Runnable {
                 lastFrameTime = Instant.now();
 
                 double deltaWanted = 0.0167;
-                update(deltaWanted);
+                update();
                 long msToSleep = (long)((deltaWanted - deltaTime) * 1000);
                 if (msToSleep > 0) {
                     Thread.sleep(msToSleep);

@@ -9,12 +9,15 @@ public class Constants {
     public static final int SCREEN_HEIGHT = TILE_HEIGHT * TILE_SIZE;
     public static final String SCREEN_TITLE = "Platformer";
 
-    public static final int PLAYER_SPEED = 3;
+    public static final int FPS = 120;
+    public static final int UPS = 200;
 
-    public static final float GRAVITY_ASCEND = 0.3f;
-    public static final float GRAVITY_DESCEND = 0.6f;
-    public static final float TERMINAL_VELOCITY = 12.0f;
-    public static final float JUMP_FORCE = 10.0f;
+    public static final float PLAYER_SPEED = 1.2f;
+
+    public static final float GRAVITY_ASCEND = 0.15f;
+    public static final float GRAVITY_DESCEND = 0.25f;
+    public static final float TERMINAL_VELOCITY = 5.0f;
+    public static final float JUMP_FORCE = 7.0f;
 
     public static final int PLAYER_SPRITE_TILE_SIZE = 32;
 

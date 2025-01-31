@@ -5,10 +5,11 @@ import main.Window;
 import utils.Constants;
 
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class Entity {
-    public int worldX, worldY;
+    public float worldX, worldY;
     public int spriteWidth, spriteHeight;
     public int hitboxWidth, hitboxHeight, hitboxOffsetX, hitboxOffsetY;
 
@@ -66,8 +67,8 @@ public class Entity {
             isOnGround = false;
         }
 
-        int nextWorldY = worldY + (int) velocityY;
-        if (!isColliding(worldX, nextWorldY)) {
+        float nextWorldY = worldY + velocityY;
+        if (!isColliding((int) worldX, (int) nextWorldY)) {
             worldY = nextWorldY;
         } else {
             if (velocityY > 0) isOnGround = true;
@@ -78,20 +79,20 @@ public class Entity {
 
     public void draw(Graphics2D g2) {
         if (facingLeft) {
-            g2.drawImage(this.movementSprites[spriteNum], this.worldX + this.spriteWidth * Constants.SCALE, this.worldY, this.spriteWidth * -Constants.SCALE, this.spriteHeight * Constants.SCALE, null);
+            g2.drawImage(this.movementSprites[spriteNum], (int)(this.worldX + this.spriteWidth * Constants.SCALE), (int) this.worldY, this.spriteWidth * -Constants.SCALE, this.spriteHeight * Constants.SCALE, null);
         } else {
-            g2.drawImage(this.movementSprites[spriteNum], this.worldX, this.worldY, this.spriteWidth * Constants.SCALE, this.spriteHeight * Constants.SCALE, null);
+            g2.drawImage(this.movementSprites[spriteNum], (int) this.worldX, (int) this.worldY, this.spriteWidth * Constants.SCALE, this.spriteHeight * Constants.SCALE, null);
         }
 
         if (showHitbox) {
-            Rectangle hitbox = getBounds();
+            Rectangle2D.Float hitbox = getBounds();
             g2.setColor(Color.RED);
-            g2.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+            g2.drawRect((int) hitbox.x, (int) hitbox.y, (int) hitbox.width, (int) hitbox.height);
         }
     }
 
-    public Rectangle getBounds() {
-        return new Rectangle(worldX + hitboxOffsetX, worldY + hitboxOffsetY, hitboxWidth, hitboxHeight);
+    public Rectangle2D.Float getBounds() {
+        return new Rectangle2D.Float(worldX + hitboxOffsetX, worldY + hitboxOffsetY, hitboxWidth, hitboxHeight);
     }
 
     public boolean isColliding(int worldX, int worldY) {

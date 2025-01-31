@@ -83,15 +83,15 @@ public class TileManager {
 
             int worldX = worldCol * Constants.TILE_SIZE;
             int worldY = worldRow * Constants.TILE_SIZE;
-            int screenX = worldX - main.Window.getWindow().playing.player.worldX + main.Window.getWindow().playing.player.screenX;
-            int screenY = worldY - main.Window.getWindow().playing.player.worldY + main.Window.getWindow().playing.player.screenY;
+            float screenX = worldX - main.Window.getWindow().playing.player.worldX + main.Window.getWindow().playing.player.screenX;
+            float screenY = worldY - main.Window.getWindow().playing.player.worldY + main.Window.getWindow().playing.player.screenY;
 
             if (tile != -1 &&
                     worldX + Constants.TILE_SIZE * 2 > main.Window.getWindow().playing.player.worldX - main.Window.getWindow().playing.player.screenX &&
                     worldX - Constants.TILE_SIZE * 2 < main.Window.getWindow().playing.player.worldX + main.Window.getWindow().playing.player.screenX &&
                     worldY + Constants.TILE_SIZE * 2 > main.Window.getWindow().playing.player.worldY - main.Window.getWindow().playing.player.screenY &&
                     worldY - Constants.TILE_SIZE * 2 < main.Window.getWindow().playing.player.worldY + Window.getWindow().playing.player.screenY) {
-                g2.drawImage(tiles[tile].image, screenX, screenY, Constants.TILE_SIZE, Constants.TILE_SIZE, null);
+                g2.drawImage(tiles[tile].image, (int) screenX, (int) screenY, Constants.TILE_SIZE, Constants.TILE_SIZE, null);
             }
             worldCol++;
 

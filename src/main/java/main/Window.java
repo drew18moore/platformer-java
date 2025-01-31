@@ -3,35 +3,28 @@ package main;
 import gamestates.Gamestate;
 import gamestates.Playing;
 import gamestates.Menu;
-import inputs.KeyboardInput;
-import inputs.MouseInput;
 import utils.Constants;
 
 import javax.swing.*;
 import java.awt.*;
-import java.time.Duration;
-import java.time.Instant;
 
 public class Window extends JFrame implements Runnable {
     private static Window window = null;
+    private Panel panel;
     protected boolean isRunning;
-
-    public KeyboardInput keyListener = new KeyboardInput();
-    public MouseInput mouseListener = new MouseInput();
+    private boolean SHOW_FPS_UPS = true;
 
     public Menu menu = new Menu();
     public Playing playing = new Playing();
 
     public Window(int width, int height, String title) {
-        setSize(width, height);
         setTitle(title);
+        panel = new Panel(width, height, this);
+        add(panel);
         setResizable(false);
+        pack();
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        addKeyListener(keyListener);
-        addMouseListener(mouseListener);
-        addMouseMotionListener(mouseListener);
 
         isRunning = true;
     }
@@ -45,18 +38,14 @@ public class Window extends JFrame implements Runnable {
     }
 
     private void update() {
-        Image dbImage = createImage(getWidth(), getHeight());
-        Graphics dbg = dbImage.getGraphics();
-        this.draw(dbg);
         switch(Gamestate.state) {
             case PLAYING -> playing.update();
             case MENU -> menu.update();
             case QUIT -> System.exit(0);
         }
-        getGraphics().drawImage(dbImage, 0, 0, this);
     }
 
-    private void draw(Graphics g) {
+    protected void draw(Graphics g) {
         switch(Gamestate.state) {
             case PLAYING -> playing.draw(g);
             case MENU -> menu.draw(g);
@@ -65,24 +54,50 @@ public class Window extends JFrame implements Runnable {
 
     @Override
     public void run() {
-        Instant lastFrameTime = Instant.now();
-        try {
-            while (isRunning) {
-                Instant time = Instant.now();
-                double deltaTime = Duration.between(lastFrameTime, time).toNanos() * 10E-10;
-                lastFrameTime = Instant.now();
+        double timePerFrame = 1000000000.0 / Constants.FPS;
+        double timePerUpdate = 1000000000.0 / Constants.UPS;
 
-                double deltaWanted = 0.0167;
+        long previousTime = System.nanoTime();
+
+        int frames = 0;
+        int updates = 0;
+        long lastCheck = System.currentTimeMillis();
+
+        double deltaU = 0;
+        double deltaF = 0;
+
+        while (true) {
+
+            long currentTime = System.nanoTime();
+
+            deltaU += (currentTime - previousTime) / timePerUpdate;
+            deltaF += (currentTime - previousTime) / timePerFrame;
+            previousTime = currentTime;
+
+            if (deltaU >= 1) {
                 update();
-                long msToSleep = (long)((deltaWanted - deltaTime) * 1000);
-                if (msToSleep > 0) {
-                    Thread.sleep(msToSleep);
-                }
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+                updates++;
+                deltaU--;
 
-        this.dispose();
+            }
+
+            if (deltaF >= 1) {
+                panel.repaint();
+                frames++;
+                deltaF--;
+
+            }
+
+            if (SHOW_FPS_UPS)
+                if (System.currentTimeMillis() - lastCheck >= 1000) {
+
+                    lastCheck = System.currentTimeMillis();
+                    System.out.println("FPS: " + frames + " | UPS: " + updates);
+                    frames = 0;
+                    updates = 0;
+
+                }
+
+        }
     }
 }

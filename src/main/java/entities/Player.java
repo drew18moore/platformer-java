@@ -1,10 +1,10 @@
 package entities;
 
-import inputs.KeyboardInput;
 import utils.Constants;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -12,6 +12,7 @@ public class Player extends Entity {
     public final int screenX = (Constants.SCREEN_WIDTH/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     public final int screenY = (Constants.SCREEN_HEIGHT/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     public boolean leftPressed, rightPressed, jumpPressed;
+    public float SPEED = Constants.PLAYER_SPEED;
 
     public Player(int worldX, int worldY) {
         super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
@@ -43,17 +44,17 @@ public class Player extends Entity {
     public void update() {
         super.update(jumpPressed);
 
-        int nextWorldX = worldX;
+        float nextWorldX = worldX;
         if (leftPressed) {
             facingLeft = true;
-            nextWorldX -= Constants.PLAYER_SPEED;
+            nextWorldX -= SPEED;
         }
         if (rightPressed) {
             facingLeft = false;
-            nextWorldX += Constants.PLAYER_SPEED;
+            nextWorldX += SPEED;
         }
 
-        if (!isColliding(nextWorldX, worldY)) {
+        if (!isColliding((int) nextWorldX, (int) worldY)) {
             worldX = nextWorldX;
         }
 
@@ -71,8 +72,8 @@ public class Player extends Entity {
     }
 
     @Override
-    public Rectangle getBounds() {
-        return new Rectangle(screenX + hitboxOffsetX, screenY + hitboxOffsetY, hitboxWidth, hitboxHeight);
+    public Rectangle2D.Float getBounds() {
+        return new Rectangle2D.Float(screenX + hitboxOffsetX, screenY + hitboxOffsetY, hitboxWidth, hitboxHeight);
     }
 
     public void draw(Graphics2D g2) {
@@ -83,9 +84,9 @@ public class Player extends Entity {
         }
 
         if (showHitbox) {
-            Rectangle rect = getBounds();
+            Rectangle2D.Float rect = getBounds();
             g2.setColor(Color.RED);
-            g2.drawRect(rect.x, rect.y, rect.width, rect.height);
+            g2.drawRect((int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height);
         }
     }
 }

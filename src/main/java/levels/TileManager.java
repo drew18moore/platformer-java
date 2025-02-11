@@ -16,8 +16,8 @@ public class TileManager {
 
     public TileManager() {
         try {
-            this.tiles = getTileSet("/tilesets/world_tileset.png");
-            this.worldMap = getMapFromCSV("/maps/map1.csv");
+            this.tiles = getTileSet("/tilesets/tileset0.png");
+            this.worldMap = getMapFromCSV("/maps/map0.csv");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -28,9 +28,9 @@ public class TileManager {
         BufferedImage tileSet = ImageIO.read(getClass().getResourceAsStream(path));
         tiles = new Tile[Constants.WORLD_TILE_SET_NUM_TILES];
         int t = 0;
-        for (int i = 0; i < Constants.WORLD_TILE_SET_NUM_TILE_WIDTH; i++) {
-            for (int j = 0; j < Constants.WORLD_TILE_SET_NUM_TILE_HEIGHT; j++) {
-                tiles[t] = new Tile(tileSet.getSubimage(j * Constants.TILE_WIDTH, i * Constants.TILE_WIDTH, Constants.TILE_WIDTH, Constants.TILE_WIDTH), true);
+        for (int i = 0; i < Constants.WORLD_TILE_SET_NUM_TILE_HEIGHT; i++) {
+            for (int j = 0; j < Constants.WORLD_TILE_SET_NUM_TILE_WIDTH; j++) {
+                tiles[t] = new Tile(tileSet.getSubimage(j * Constants.TILE_WIDTH, i * Constants.TILE_WIDTH, Constants.TILE_WIDTH, Constants.TILE_WIDTH), t != 11 && t != 6);
                 t++;
             }
         }

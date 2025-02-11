@@ -1,5 +1,7 @@
 package entities;
 
+import levels.TileManager;
+import main.Window;
 import utils.Constants;
 
 import javax.imageio.ImageIO;
@@ -58,6 +60,10 @@ public class Player extends Entity {
             worldX = nextWorldX;
         }
 
+        if (isCollidingWithGoal((int) nextWorldX, (int) worldY)) {
+            System.out.println("GOAL");
+        }
+
         if (leftPressed || rightPressed) {
             spriteCounter++;
             if (spriteCounter > 12) {
@@ -88,5 +94,17 @@ public class Player extends Entity {
             g2.setColor(Color.RED);
             g2.drawRect((int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height);
         }
+    }
+
+    private boolean isCollidingWithGoal(int worldX, int worldY) {
+        TileManager tileManager = Window.getWindow().playing.tileManager;
+
+        int leftX = worldX + hitboxOffsetX;
+        int rightX = worldX + hitboxOffsetX + hitboxWidth - 1;
+        int topY = worldY + hitboxOffsetY;
+        int bottomY = worldY + hitboxOffsetY + hitboxHeight - 1;
+
+        return tileManager.isGoalTile(leftX, topY) || tileManager.isGoalTile(rightX, topY) ||
+                tileManager.isGoalTile(leftX, bottomY) || tileManager.isGoalTile(rightX, bottomY);
     }
 }

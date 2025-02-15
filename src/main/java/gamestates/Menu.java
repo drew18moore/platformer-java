@@ -1,6 +1,6 @@
 package gamestates;
 
-import ui.MenuButton;
+import ui.Button;
 import utils.Constants;
 
 import java.awt.*;
@@ -8,27 +8,27 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 public class Menu implements Statemethods {
-    private MenuButton[] btns = new MenuButton[3];
+    private Button[] btns = new Button[3];
 
     public Menu() {
         loadBtns();
     }
 
     private void loadBtns() {
-        btns[0] = new MenuButton(Constants.SCREEN_WIDTH / 2, 50, "Play", Gamestate.PLAYING);
-        btns[1] = new MenuButton(Constants.SCREEN_WIDTH / 2, 60 + Constants.BTN_HEIGHT_SCALED, "Options", Gamestate.OPTIONS);
-        btns[2] = new MenuButton(Constants.SCREEN_WIDTH / 2, 70 + Constants.BTN_HEIGHT_SCALED * 2, "Quit", Gamestate.QUIT);
+        btns[0] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, 50, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Play", () -> { Gamestate.state = Gamestate.PLAYING; });
+        btns[1] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, 60 + Constants.BTN_HEIGHT_SCALED,Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED,  "Options", () -> {  });
+        btns[2] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, 70 + Constants.BTN_HEIGHT_SCALED * 2,Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED,  "Quit", () -> { Gamestate.state = Gamestate.QUIT; });
     }
     @Override
     public void update() {
-        for (MenuButton mb : btns) {
+        for (Button mb : btns) {
             mb.update();
         }
     }
 
     @Override
     public void draw(Graphics g) {
-        for (MenuButton mb : btns) {
+        for (Button mb : btns) {
             mb.draw(g);
         }
     }
@@ -40,7 +40,7 @@ public class Menu implements Statemethods {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        for (MenuButton mb : btns) {
+        for (Button mb : btns) {
             if (mb.bounds.contains(e.getX(), e.getY())) {
                 mb.mousePressed = true;
                 break;
@@ -50,9 +50,9 @@ public class Menu implements Statemethods {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        for (MenuButton mb : btns) {
+        for (Button mb : btns) {
             if (mb.bounds.contains(e.getX(), e.getY())) {
-                if (mb.mousePressed) mb.applyGamestate();
+                if (mb.mousePressed) mb.onClick.run();
                 break;
             }
         }
@@ -60,14 +60,14 @@ public class Menu implements Statemethods {
     }
 
     private void resetBtns() {
-        for (MenuButton mb : btns) {
+        for (Button mb : btns) {
             mb.resetBools();
         }
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        for (MenuButton mb : btns) {
+        for (Button mb : btns) {
             if (mb.bounds.contains(e.getX(), e.getY())) {
                 mb.mouseOver = true;
             } else mb.mouseOver = false;

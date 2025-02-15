@@ -13,7 +13,7 @@ public class PauseMenu {
     public BufferedImage backgroundImg;
     public int bgX, bgY, bgW, bgH;
     private BufferedImage headerText;
-    public PauseButton resumeB, menuB;
+    public Button resumeB, menuB;
 
     public PauseMenu(Playing playing) {
         this.playing = playing;
@@ -22,8 +22,8 @@ public class PauseMenu {
         // Create Header
         headerText = createHeaderText();
         // Create buttons
-        resumeB = new PauseButton(bgX + (bgW - Constants.BTN_WIDTH_SCALED) / 2, bgY + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Resume");
-        menuB = new PauseButton(bgX + (bgW - Constants.BTN_WIDTH_SCALED) / 2, bgY + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu");
+        resumeB = new Button(bgX + (bgW - Constants.BTN_WIDTH_SCALED) / 2, bgY + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Resume", () -> { playing.isPaused = false; });
+        menuB = new Button(bgX + (bgW - Constants.BTN_WIDTH_SCALED) / 2, bgY + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu", () -> { Gamestate.state = Gamestate.MENU; playing.isPaused = false; });
     }
 
     private BufferedImage createBackground() {
@@ -79,10 +79,9 @@ public class PauseMenu {
 
     public void mouseReleased(MouseEvent e) {
         if (isIn(e, resumeB) && resumeB.mousePressed) {
-            playing.isPaused = false;
+            resumeB.onClick.run();
         } else if (isIn(e, menuB) && menuB.mousePressed) {
-            Gamestate.state = Gamestate.MENU;
-            playing.isPaused = false;
+            menuB.onClick.run();
         }
 
         resumeB.resetBools();
@@ -93,7 +92,7 @@ public class PauseMenu {
 
     }
 
-    private boolean isIn(MouseEvent e, PauseButton pb) {
-        return pb.bounds.contains(e.getX(), e.getY());
+    private boolean isIn(MouseEvent e, Button b) {
+        return b.bounds.contains(e.getX(), e.getY());
     }
 }

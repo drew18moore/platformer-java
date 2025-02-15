@@ -6,93 +6,53 @@ import utils.Constants;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 
-public class PauseMenu {
-    private Playing playing;
-    public BufferedImage backgroundImg;
-    public int bgX, bgY, bgW, bgH;
-    private BufferedImage headerText;
-    public Button resumeB, menuB;
-
+public class PauseMenu extends Modal {
     public PauseMenu(Playing playing) {
-        this.playing = playing;
-        // Create background
-        backgroundImg = createBackground();
-        // Create Header
-        headerText = createHeaderText();
-        // Create buttons
-        resumeB = new Button(bgX + (bgW - Constants.BTN_WIDTH_SCALED) / 2, bgY + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Resume", () -> { playing.isPaused = false; });
-        menuB = new Button(bgX + (bgW - Constants.BTN_WIDTH_SCALED) / 2, bgY + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu", () -> { Gamestate.state = Gamestate.MENU; playing.isPaused = false; });
+        super("Game Paused", new Button[]{
+                new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Resume", () -> { playing.isPaused = false; }),
+                new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu", () -> { Gamestate.state = Gamestate.MENU; playing.isPaused = false; }) });
+
     }
-
-    private BufferedImage createBackground() {
-        bgW = (int) (Constants.SCREEN_WIDTH * 0.5f);
-        bgH = (int) (Constants.SCREEN_HEIGHT * 0.7f);
-        bgX = (Constants.SCREEN_WIDTH - bgW) / 2;
-        bgY = (Constants.SCREEN_HEIGHT - bgH) / 2;
-        BufferedImage bg = new BufferedImage(bgW, bgH, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = bg.createGraphics();
-
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(Color.LIGHT_GRAY);
-        g2.fillRect(0, 0, bgW, bgH);
-
-        g2.dispose();
-        return bg;
-    }
-
-    private BufferedImage createHeaderText() {
-        BufferedImage headerText = new BufferedImage(Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = headerText.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        g2.setFont(new Font("Arial", Font.BOLD, Constants.BTN_HEIGHT_SCALED / 3));
-        FontMetrics fm = g2.getFontMetrics();
-        g2.setColor(Color.BLACK);
-        g2.drawString("Game Paused", (Constants.BTN_WIDTH_SCALED - fm.stringWidth(("Game Paused"))) / 2, (Constants.BTN_HEIGHT_SCALED - fm.getHeight()) / 2 + fm.getAscent());
-        g2.dispose();
-        return headerText;
-    }
-
 
     public void update() {
-        resumeB.update();
-        menuB.update();
+        super.update();
     }
 
     public void draw(Graphics g) {
-        g.drawImage(backgroundImg, bgX, bgY, bgW, bgH, null);
-
-        g.drawImage(headerText, bgX + (bgW - Constants.BTN_WIDTH_SCALED) / 2, bgY + 20, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, null);
-        resumeB.draw(g);
-        menuB.draw(g);
+        super.draw(g);
     }
 
     public void mousePressed(MouseEvent e) {
-        if (isIn(e, resumeB)) {
-            resumeB.mousePressed = true;
-        } else if (isIn(e, menuB)) {
-            menuB.mousePressed = true;
+        for (Button b : buttons) {
+            if (b.bounds.contains(e.getX(), e.getY())) {
+                b.mousePressed = true;
+                break;
+            }
         }
     }
 
     public void mouseReleased(MouseEvent e) {
-        if (isIn(e, resumeB) && resumeB.mousePressed) {
-            resumeB.onClick.run();
-        } else if (isIn(e, menuB) && menuB.mousePressed) {
-            menuB.onClick.run();
+        for (Button b : buttons) {
+            if (b.bounds.contains(e.getX(), e.getY())) {
+                if (b.mousePressed) b.onClick.run();
+                break;
+            }
         }
-
-        resumeB.resetBools();
-        menuB.resetBools();
+        resetBtns();
     }
 
     public void mouseMoved(MouseEvent e) {
-
+        for (Button b : buttons) {
+            if (b.bounds.contains(e.getX(), e.getY())) {
+                b.mouseOver = true;
+            } else b.mouseOver = false;
+        }
     }
 
-    private boolean isIn(MouseEvent e, Button b) {
-        return b.bounds.contains(e.getX(), e.getY());
+    private void resetBtns() {
+        for (Button mb : buttons) {
+            mb.resetBools();
+        }
     }
 }

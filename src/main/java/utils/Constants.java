@@ -33,4 +33,9 @@ public class Constants {
     public static final int BTN_HEIGHT = 25;
     public static final int BTN_WIDTH_SCALED = BTN_WIDTH * SCALE;
     public static final int BTN_HEIGHT_SCALED = BTN_HEIGHT * SCALE;
+
+    public static final int MODAL_BG_WIDTH = (int) (Constants.SCREEN_WIDTH * 0.5f);
+    public static final int MODAL_BG_HEIGHT = (int) (Constants.SCREEN_HEIGHT * 0.7f);
+    public static final int MODAL_BG_X = (Constants.SCREEN_WIDTH - MODAL_BG_WIDTH) / 2;
+    public static final int MODAL_BG_Y = (Constants.SCREEN_HEIGHT - MODAL_BG_HEIGHT) / 2;
 }

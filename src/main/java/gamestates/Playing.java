@@ -2,7 +2,8 @@ package gamestates;
 
 import entities.Player;
 import levels.TileManager;
-import ui.PauseMenu;
+import ui.Button;
+import ui.Modal;
 import utils.Constants;
 
 import java.awt.*;
@@ -15,7 +16,15 @@ public class Playing implements Statemethods {
             Constants.TILE_SIZE * 2,
             Constants.TILE_SIZE * 2
     );
-    public PauseMenu pauseMenu = new PauseMenu(this);
+    public Modal pauseMenu = new Modal("Game Paused", new Button[]{
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Resume", () -> {
+                isPaused = false;
+            }),
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu", () -> {
+                Gamestate.state = Gamestate.MENU;
+                isPaused = false;
+            })
+    });
     public boolean isPaused = false;
 
     @Override

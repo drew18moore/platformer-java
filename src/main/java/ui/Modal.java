@@ -3,6 +3,7 @@ package ui;
 import utils.Constants;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class Modal {
@@ -58,6 +59,39 @@ public class Modal {
 
         for (Button b: buttons) {
             b.draw(g);
+        }
+    }
+
+    public void mousePressed(MouseEvent e) {
+        for (Button b : buttons) {
+            if (b.bounds.contains(e.getX(), e.getY())) {
+                b.mousePressed = true;
+                break;
+            }
+        }
+    }
+
+    public void mouseReleased(MouseEvent e) {
+        for (Button b : buttons) {
+            if (b.bounds.contains(e.getX(), e.getY())) {
+                if (b.mousePressed) b.onClick.run();
+                break;
+            }
+        }
+        resetBtns();
+    }
+
+    public void mouseMoved(MouseEvent e) {
+        for (Button b : buttons) {
+            if (b.bounds.contains(e.getX(), e.getY())) {
+                b.mouseOver = true;
+            } else b.mouseOver = false;
+        }
+    }
+
+    public void resetBtns() {
+        for (Button mb : buttons) {
+            mb.resetBools();
         }
     }
 }

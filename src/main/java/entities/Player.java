@@ -1,5 +1,6 @@
 package entities;
 
+import gamestates.Playing;
 import levels.TileManager;
 import main.Window;
 import utils.Constants;
@@ -11,13 +12,15 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Player extends Entity {
+    private Playing playing;
     public final int screenX = (Constants.SCREEN_WIDTH/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     public final int screenY = (Constants.SCREEN_HEIGHT/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     public boolean leftPressed, rightPressed, jumpPressed;
     public float SPEED = Constants.PLAYER_SPEED;
 
-    public Player(int worldX, int worldY) {
+    public Player(int worldX, int worldY, Playing playing) {
         super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
+        this.playing = playing;
         this.useGravity = true;
 
         this.hitboxWidth = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 60;
@@ -61,7 +64,7 @@ public class Player extends Entity {
         }
 
         if (isCollidingWithGoal((int) nextWorldX, (int) worldY)) {
-            System.out.println("GOAL");
+            this.playing.showWinScreen = true;
         }
 
         if (leftPressed || rightPressed) {

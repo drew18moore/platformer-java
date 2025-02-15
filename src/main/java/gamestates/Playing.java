@@ -13,26 +13,36 @@ import java.awt.event.MouseEvent;
 public class Playing implements Statemethods {
     public TileManager tileManager = new TileManager();
     public Player player = new Player(
+            Constants.TILE_SIZE * 59,
             Constants.TILE_SIZE * 2,
-            Constants.TILE_SIZE * 2
+            this
     );
-    public Modal pauseMenu = new Modal("Game Paused", new Button[]{
+    private final Modal pauseMenu = new Modal("Game Paused", new Button[]{
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Resume", () -> {
                 isPaused = false;
             }),
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu", () -> {
                 Gamestate.state = Gamestate.MENU;
-                isPaused = false;
+                resetLevel();
+            })
+    });
+    private final Modal winScreen = new Modal("You Win!", new Button[]{
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Restart", this::resetLevel),
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu", () -> {
+                Gamestate.state = Gamestate.MENU;
+                resetLevel();
             })
     });
     public boolean isPaused = false;
+    public boolean showWinScreen = false;
 
     @Override
     public void update() {
-        if (!isPaused) {
+        if (!isPaused && !showWinScreen) {
             player.update();
         } else {
-            pauseMenu.update();
+            if (isPaused) pauseMenu.update();
+            else if (showWinScreen) winScreen.update();
         }
     }
 
@@ -44,6 +54,8 @@ public class Playing implements Statemethods {
 
         if (isPaused) {
             pauseMenu.draw(g);
+        } else if (showWinScreen) {
+            winScreen.draw(g);
         }
     }
 
@@ -54,6 +66,8 @@ public class Playing implements Statemethods {
     public void mousePressed(MouseEvent e) {
         if (isPaused) {
             pauseMenu.mousePressed(e);
+        } else if (showWinScreen) {
+            winScreen.mousePressed(e);
         }
     }
 
@@ -61,6 +75,8 @@ public class Playing implements Statemethods {
     public void mouseReleased(MouseEvent e) {
         if (isPaused) {
             pauseMenu.mouseReleased(e);
+        } else if (showWinScreen) {
+            winScreen.mouseReleased(e);
         }
     }
 
@@ -68,6 +84,8 @@ public class Playing implements Statemethods {
     public void mouseMoved(MouseEvent e) {
         if (isPaused) {
             pauseMenu.mouseMoved(e);
+        } else if (showWinScreen) {
+            winScreen.mouseMoved(e);
         }
     }
 
@@ -82,7 +100,7 @@ public class Playing implements Statemethods {
         if (e.getKeyCode() == KeyEvent.VK_D) {
             player.rightPressed = true;
         }
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+        if (!showWinScreen && e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             this.isPaused = !this.isPaused;
         }
     }
@@ -98,5 +116,16 @@ public class Playing implements Statemethods {
         if (e.getKeyCode() == KeyEvent.VK_D) {
             player.rightPressed = false;
         }
+    }
+
+    public void resetLevel() {
+        this.tileManager = new TileManager();
+        this.player = new Player(
+                Constants.TILE_SIZE * 59,
+                Constants.TILE_SIZE * 2,
+                this
+        );
+        this.isPaused = false;
+        this.showWinScreen = false;
     }
 }

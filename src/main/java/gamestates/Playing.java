@@ -1,5 +1,6 @@
 package gamestates;
 
+import entities.BasicZombie;
 import entities.Player;
 import levels.TileManager;
 import ui.Button;
@@ -17,6 +18,8 @@ public class Playing implements Statemethods {
             Constants.TILE_SIZE * 2,
             this
     );
+    public BasicZombie basicZombie = new BasicZombie(Constants.TILE_SIZE * 59, Constants.TILE_SIZE * 2, player);
+
     private final Modal pauseMenu = new Modal("Game Paused", new Button[]{
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Resume", () -> {
                 isPaused = false;
@@ -40,6 +43,7 @@ public class Playing implements Statemethods {
     public void update() {
         if (!isPaused && !showWinScreen) {
             player.update();
+            basicZombie.update();
         } else {
             if (isPaused) pauseMenu.update();
             else if (showWinScreen) winScreen.update();
@@ -51,6 +55,7 @@ public class Playing implements Statemethods {
         Graphics2D g2 = (Graphics2D) g;
         tileManager.draw(g2);
         player.draw(g2);
+        basicZombie.draw(g2);
 
         if (isPaused) {
             pauseMenu.draw(g);

@@ -49,14 +49,18 @@ public class Player extends Entity {
     public void update() {
         super.update(jumpPressed);
 
+        this.isMoving = false;
+
         float nextWorldX = worldX;
         if (leftPressed) {
             facingLeft = true;
             nextWorldX -= SPEED;
+            this.isMoving = true;
         }
         if (rightPressed) {
             facingLeft = false;
             nextWorldX += SPEED;
+            this.isMoving = true;
         }
 
         if (!isColliding((int) nextWorldX, (int) worldY)) {
@@ -65,18 +69,6 @@ public class Player extends Entity {
 
         if (isCollidingWithGoal((int) nextWorldX, (int) worldY)) {
             this.playing.showWinScreen = true;
-        }
-
-        if (leftPressed || rightPressed) {
-            spriteCounter++;
-            if (spriteCounter > 12) {
-                if (spriteNum >= 7) {
-                    spriteNum = 0;
-                } else {
-                    spriteNum++;
-                }
-                spriteCounter = 0;
-            }
         }
     }
 

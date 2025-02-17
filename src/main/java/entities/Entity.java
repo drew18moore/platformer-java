@@ -19,6 +19,7 @@ public class Entity {
     public boolean useGravity = false;
     public boolean showHitbox = false;
     public boolean isOnGround = false;
+    public boolean isMoving = false;
 
     BufferedImage[] movementSprites;
     public int spriteCounter = 0;
@@ -73,6 +74,18 @@ public class Entity {
         } else {
             if (velocityY > 0) isOnGround = true;
             velocityY = 0;
+        }
+
+        if (isMoving) {
+            spriteCounter++;
+            if (spriteCounter > 12) {
+                if (spriteNum >= 7) {
+                    spriteNum = 0;
+                } else {
+                    spriteNum++;
+                }
+                spriteCounter = 0;
+            }
         }
     }
 

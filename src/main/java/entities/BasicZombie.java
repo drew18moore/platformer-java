@@ -74,11 +74,16 @@ public class BasicZombie extends Entity {
             }
         }
 
-//        // TODO: Reimplement to render in screen space instead of world space
-//        if (showHitbox) {
-//            Rectangle2D.Float hitbox = getBounds();
-//            g2.setColor(Color.RED);
-//            g2.drawRect((int) hitbox.x, (int) hitbox.y, (int) hitbox.width, (int) hitbox.height);
-//        }
+        if (showHitbox) {
+            Rectangle2D.Float hitbox = getBounds();
+            g2.setColor(Color.RED);
+            g2.drawRect((int) hitbox.x, (int) hitbox.y, (int) hitbox.width, (int) hitbox.height);
+        }
+    }
+
+    public Rectangle2D.Float getBounds() {
+        float screenX = worldX - player.worldX + player.screenX;
+        float screenY = worldY - player.worldY + player.screenY;
+        return new Rectangle2D.Float(screenX + hitboxOffsetX, screenY + hitboxOffsetY, hitboxWidth, hitboxHeight);
     }
 }

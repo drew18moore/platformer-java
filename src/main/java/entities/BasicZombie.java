@@ -58,6 +58,10 @@ public class BasicZombie extends Entity {
         } else {
             this.facingLeft = !this.facingLeft;
         }
+
+        if (getBounds().intersects(player.getBounds())) {
+            player.damagePlayer(5);
+        }
     }
 
     public void draw(Graphics2D g2) {

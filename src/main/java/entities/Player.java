@@ -17,8 +17,12 @@ public class Player extends Entity {
     public final int screenY = (Constants.SCREEN_HEIGHT/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     public boolean leftPressed, rightPressed, jumpPressed;
     public float SPEED = Constants.PLAYER_SPEED;
-    public int health = Constants.PLAYER_STARTING_MAX_HEALTH;
+    private int health = Constants.PLAYER_STARTING_MAX_HEALTH;
     private BufferedImage healthBar = updateHealthBar();
+
+    public boolean invincible = false;
+    private long invincibilityStartTime = 0;
+    private final int INVINCIBILITY_DURATION = 2000;
 
     public Player(int worldX, int worldY, Playing playing) {
         super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
@@ -52,6 +56,13 @@ public class Player extends Entity {
         super.update(jumpPressed);
 
         this.isMoving = false;
+
+        if (invincible) {
+            long elapsedTime = System.currentTimeMillis() - invincibilityStartTime;
+            if (elapsedTime >= INVINCIBILITY_DURATION) {
+                invincible = false; // End invincibility after duration
+            }
+        }
 
         float nextWorldX = worldX;
         if (leftPressed) {
@@ -139,5 +150,14 @@ public class Player extends Entity {
         g2.dispose();
 
         return healthImg;
+    }
+
+    public void damagePlayer(int amount) {
+        if (!invincible) {
+            this.health -= amount;
+            this.healthBar = updateHealthBar();
+            invincible = true;
+            invincibilityStartTime = System.currentTimeMillis();
+        }
     }
 }

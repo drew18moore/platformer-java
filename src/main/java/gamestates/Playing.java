@@ -130,6 +130,7 @@ public class Playing implements Statemethods {
                 Constants.TILE_SIZE * 2,
                 this
         );
+        this.basicZombie = new BasicZombie(Constants.TILE_SIZE * 59, Constants.TILE_SIZE * 2, player);
         this.isPaused = false;
         this.showWinScreen = false;
     }

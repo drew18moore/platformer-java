@@ -17,6 +17,8 @@ public class Player extends Entity {
     public final int screenY = (Constants.SCREEN_HEIGHT/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     public boolean leftPressed, rightPressed, jumpPressed;
     public float SPEED = Constants.PLAYER_SPEED;
+    public int health = Constants.PLAYER_STARTING_MAX_HEALTH;
+    private BufferedImage healthBar = updateHealthBar();
 
     public Player(int worldX, int worldY, Playing playing) {
         super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
@@ -89,6 +91,8 @@ public class Player extends Entity {
             g2.setColor(Color.RED);
             g2.drawRect((int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height);
         }
+
+        g2.drawImage(healthBar, 0, 0, null);
     }
 
     private boolean isCollidingWithGoal(int worldX, int worldY) {
@@ -101,5 +105,39 @@ public class Player extends Entity {
 
         return tileManager.isGoalTile(leftX, topY) || tileManager.isGoalTile(rightX, topY) ||
                 tileManager.isGoalTile(leftX, bottomY) || tileManager.isGoalTile(rightX, bottomY);
+    }
+
+    private BufferedImage updateHealthBar() {
+        String healthStr = "Health: " + health;
+        Font font = new Font("Arial", Font.BOLD, Constants.PLAYER_HEALTH_FONT_SIZE);
+
+        BufferedImage tempImg = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = tempImg.createGraphics();
+        g2.setFont(font);
+
+        FontMetrics fm = g2.getFontMetrics();
+        int textWidth = fm.stringWidth(healthStr);
+        int textHeight = fm.getHeight();
+        g2.dispose();
+
+        int padding = 5;
+        int imageWidth = textWidth + padding * 2;
+        int imageHeight = textHeight + padding * 2;
+        BufferedImage healthImg = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_ARGB);
+
+        g2 = healthImg.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+
+        g2.setFont(font);
+        g2.setColor(Color.BLACK);
+        g2.fillRect(0, 0, imageWidth, imageHeight);
+        g2.setColor(Color.WHITE);
+
+        g2.drawString(healthStr, padding, padding + fm.getAscent());
+        g2.dispose();
+
+        return healthImg;
     }
 }

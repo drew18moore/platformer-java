@@ -22,7 +22,7 @@ public class Player extends Entity {
 
     public boolean invincible = false;
     private long invincibilityStartTime = 0;
-    private final int INVINCIBILITY_DURATION = 2000;
+    private final int INVINCIBILITY_DURATION = 500;
 
     public Player(int worldX, int worldY, Playing playing) {
         super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
@@ -82,6 +82,10 @@ public class Player extends Entity {
 
         if (isCollidingWithGoal((int) nextWorldX, (int) worldY)) {
             this.playing.showWinScreen = true;
+        }
+
+        if (health <= 0) {
+            playing.showDeathScreen = true;
         }
     }
 

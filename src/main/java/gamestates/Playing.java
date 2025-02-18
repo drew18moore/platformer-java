@@ -36,16 +36,25 @@ public class Playing implements Statemethods {
                 resetLevel();
             })
     });
+    private final Modal deathScreen = new Modal("You Died!", new Button[]{
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Restart", this::resetLevel),
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu", () -> {
+                Gamestate.state = Gamestate.MENU;
+                resetLevel();
+            })
+    });
     public boolean isPaused = false;
     public boolean showWinScreen = false;
+    public boolean showDeathScreen = false;
 
     @Override
     public void update() {
-        if (!isPaused && !showWinScreen) {
+        if (!isPaused && !showWinScreen && !showDeathScreen) {
             player.update();
             basicZombie.update();
         } else {
             if (isPaused) pauseMenu.update();
+            else if (showDeathScreen) deathScreen.update();
             else if (showWinScreen) winScreen.update();
         }
     }
@@ -59,6 +68,8 @@ public class Playing implements Statemethods {
 
         if (isPaused) {
             pauseMenu.draw(g);
+        } else if (showDeathScreen) {
+            deathScreen.draw(g);
         } else if (showWinScreen) {
             winScreen.draw(g);
         }
@@ -71,6 +82,8 @@ public class Playing implements Statemethods {
     public void mousePressed(MouseEvent e) {
         if (isPaused) {
             pauseMenu.mousePressed(e);
+        } else if (showDeathScreen) {
+            deathScreen.mousePressed(e);
         } else if (showWinScreen) {
             winScreen.mousePressed(e);
         }
@@ -80,6 +93,8 @@ public class Playing implements Statemethods {
     public void mouseReleased(MouseEvent e) {
         if (isPaused) {
             pauseMenu.mouseReleased(e);
+        } else if (showDeathScreen) {
+            deathScreen.mouseReleased(e);
         } else if (showWinScreen) {
             winScreen.mouseReleased(e);
         }
@@ -89,6 +104,8 @@ public class Playing implements Statemethods {
     public void mouseMoved(MouseEvent e) {
         if (isPaused) {
             pauseMenu.mouseMoved(e);
+        } else if (showDeathScreen) {
+            deathScreen.mouseMoved(e);
         } else if (showWinScreen) {
             winScreen.mouseMoved(e);
         }
@@ -105,7 +122,7 @@ public class Playing implements Statemethods {
         if (e.getKeyCode() == KeyEvent.VK_D) {
             player.rightPressed = true;
         }
-        if (!showWinScreen && e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+        if (!showWinScreen && !showDeathScreen && e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             this.isPaused = !this.isPaused;
         }
     }
@@ -133,5 +150,6 @@ public class Playing implements Statemethods {
         this.basicZombie = new BasicZombie(Constants.TILE_SIZE * 59, Constants.TILE_SIZE * 2, player);
         this.isPaused = false;
         this.showWinScreen = false;
+        this.showDeathScreen = false;
     }
 }

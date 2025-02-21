@@ -42,4 +42,6 @@ public class Constants {
     public static final int MODAL_BG_Y = (Constants.SCREEN_HEIGHT - MODAL_BG_HEIGHT) / 2;
 
     public static final float BASIC_ZOMBIE_SPEED = 0.5f;
+
+    public static final int WEAPON_SCALE = 2;
 }

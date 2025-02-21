@@ -4,6 +4,7 @@ import gamestates.Playing;
 import levels.TileManager;
 import main.Window;
 import utils.Constants;
+import weapons.Pistol;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -24,6 +25,8 @@ public class Player extends Entity {
     private long invincibilityStartTime = 0;
     private final int INVINCIBILITY_DURATION = 500;
 
+    public Pistol pistol;
+
     public Player(int worldX, int worldY, Playing playing) {
         super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
         this.playing = playing;
@@ -34,6 +37,8 @@ public class Player extends Entity {
         this.hitboxOffsetX = 30;
         this.hitboxOffsetY = 35;
         this.showHitbox = true;
+
+        this.pistol = new Pistol(this);
 
         try {
             BufferedImage spriteSheet = ImageIO.read(getClass().getResourceAsStream("/sprites/knight.png"));
@@ -54,6 +59,7 @@ public class Player extends Entity {
 
     public void update() {
         super.update(jumpPressed);
+        this.pistol.update();
 
         this.isMoving = false;
 
@@ -108,6 +114,7 @@ public class Player extends Entity {
         }
 
         g2.drawImage(healthBar, 0, 0, null);
+        this.pistol.draw(g2);
     }
 
     private boolean isCollidingWithGoal(int worldX, int worldY) {

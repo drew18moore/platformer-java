@@ -108,6 +108,8 @@ public class Playing implements Statemethods {
             deathScreen.mouseMoved(e);
         } else if (showWinScreen) {
             winScreen.mouseMoved(e);
+        } else {
+            player.pistol.mouseMoved(e);
         }
     }
 

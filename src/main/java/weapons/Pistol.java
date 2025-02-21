@@ -67,12 +67,14 @@ public class Pistol {
         int mouseX = e.getX();
         int mouseY = e.getY();
 
-        // Calculate the pistol's position on the screen (relative to the player)
-        int pistolX = player.screenX + player.spriteWidth * Constants.SCALE / 2;
-        int pistolY = player.screenY + player.spriteHeight * Constants.SCALE / 2;
+        // Position the pistol at the right side of the player's hitbox
+        int pistolX = player.screenX + player.hitboxOffsetX + player.hitboxWidth;
+
+        // Align the bottom-left corner of the pistol vertically with the center of the player's hitbox
+        int pistolY = player.screenY + player.hitboxOffsetY + player.hitboxHeight / 2;
 
         // Calculate the angle between the pistol's position and the mouse cursor
-        this.angle = (int) Math.toDegrees(Math.atan2(mouseY - pistolY, mouseX - pistolX));
+        angle = (int) Math.toDegrees(Math.atan2(mouseY - pistolY, mouseX - pistolX));
 
         // Keep angle in the range of 0-360 degrees
         if (angle < 0) {

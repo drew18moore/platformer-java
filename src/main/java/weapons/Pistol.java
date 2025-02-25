@@ -32,7 +32,13 @@ public class Pistol {
     }
 
     public void draw(Graphics2D g2) {
-        int pistolX = player.screenX + player.hitboxOffsetX + player.hitboxWidth;
+        int pistolX;
+        if (player.facingLeft) {
+            pistolX = player.screenX + player.hitboxOffsetX;
+        } else {
+            pistolX = player.screenX + player.hitboxOffsetX + player.hitboxWidth;
+        }
+
         int pistolY = player.screenY + player.hitboxOffsetY + player.hitboxHeight / 2;
 
         int pivotX = pistolX;
@@ -43,8 +49,13 @@ public class Pistol {
 
         transform.translate(pivotX, pivotY);
         transform.rotate(Math.toRadians(angle));
-        transform.translate(0, -sprite.getHeight() * Constants.WEAPON_SCALE);
-        transform.scale(Constants.WEAPON_SCALE, Constants.WEAPON_SCALE);
+        transform.translate(0, -sprite.getHeight());
+
+        if (player.facingLeft) {
+            transform.scale(-Constants.WEAPON_SCALE, Constants.WEAPON_SCALE);
+        } else {
+            transform.scale(Constants.WEAPON_SCALE, Constants.WEAPON_SCALE);
+        }
 
         g2.drawImage(sprite, transform, null);
         g2.setTransform(old);
@@ -63,23 +74,16 @@ public class Pistol {
     }
 
     public void mouseMoved(MouseEvent e) {
-        // Get the mouse position from the event
         int mouseX = e.getX();
         int mouseY = e.getY();
 
-        // Position the pistol at the right side of the player's hitbox
-        int pistolX = player.screenX + player.hitboxOffsetX + player.hitboxWidth;
-
-        // Align the bottom-left corner of the pistol vertically with the center of the player's hitbox
+        int pistolX = player.screenX + player.hitboxOffsetX + player.hitboxWidth / 2;
         int pistolY = player.screenY + player.hitboxOffsetY + player.hitboxHeight / 2;
 
-        // Calculate the angle between the pistol's position and the mouse cursor
         angle = (int) Math.toDegrees(Math.atan2(mouseY - pistolY, mouseX - pistolX));
 
-        // Keep angle in the range of 0-360 degrees
-        if (angle < 0) {
-            angle += 360;
-        }
+        player.facingLeft = mouseX < player.screenX + player.hitboxOffsetX + player.hitboxWidth / 2;
+        if (player.facingLeft) angle += 180;
     }
 
     public void keyPressed(KeyEvent e) {

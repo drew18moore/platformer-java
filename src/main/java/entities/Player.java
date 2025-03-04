@@ -72,12 +72,10 @@ public class Player extends Entity {
 
         float nextWorldX = worldX;
         if (leftPressed) {
-            facingLeft = true;
             nextWorldX -= SPEED;
             this.isMoving = true;
         }
         if (rightPressed) {
-            facingLeft = false;
             nextWorldX += SPEED;
             this.isMoving = true;
         }

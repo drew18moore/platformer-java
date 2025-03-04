@@ -86,6 +86,8 @@ public class Playing implements Statemethods {
             deathScreen.mousePressed(e);
         } else if (showWinScreen) {
             winScreen.mousePressed(e);
+        } else {
+            player.pistol.mousePressed(e);
         }
     }
 
@@ -97,6 +99,8 @@ public class Playing implements Statemethods {
             deathScreen.mouseReleased(e);
         } else if (showWinScreen) {
             winScreen.mouseReleased(e);
+        } else {
+            player.pistol.mouseReleased(e);
         }
     }
 

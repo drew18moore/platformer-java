@@ -6,6 +6,7 @@ import utils.Constants;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -18,7 +19,6 @@ public class Bullet {
     public boolean facingLeft;
 
     public Bullet(float x, float y, double angle, boolean facingLeft, float speed, Player player) {
-        System.out.println("ANGLE: " + angle);
         this.player = player;
         this.worldX = x;
         this.worldY = y;
@@ -28,7 +28,6 @@ public class Bullet {
         float velX = speed * (float) Math.cos(Math.toRadians(Math.abs(angle)));
         float velY = speed * (float) Math.sin(Math.toRadians(Math.abs(angle)));
 
-        System.out.println(velX + " | " + velY);
         if (facingLeft) {
             velX *= -1;
             velY *= angle <= 0 ? 1 : -1;
@@ -59,7 +58,15 @@ public class Bullet {
                 worldX - Constants.TILE_SIZE * 2 < player.worldX + player.screenX &&
                 worldY + Constants.TILE_SIZE * 2 > player.worldY - player.screenY &&
                 worldY - Constants.TILE_SIZE * 2 < player.worldY + Window.getWindow().playing.player.screenY) {
-            g2.fillRect((int) screenX - 3, (int) screenY - 2, 6, 4);
+            AffineTransform old = g2.getTransform();
+            AffineTransform transform = new AffineTransform();
+
+            transform.translate(screenX, screenY - sprite.getHeight());
+            transform.rotate(Math.toRadians(angle));
+
+            if (player.facingLeft) transform.scale(-1, 1);
+            g2.drawImage(sprite, transform, null);
+            g2.setTransform(old);
         }
     }
 }

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class Pistol {
     private final Player player;
     private int pivotScreenX, pivotScreenY;
-    private int angle = 45;
+    private double angle;
     private BufferedImage sprite;
     public ArrayList<Bullet> bullets;
 
@@ -58,13 +58,14 @@ public class Pistol {
         if (!player.facingLeft) {
             pistolWorldX += player.hitboxWidth;
         }
+
         float pistolWorldY = player.worldY + player.hitboxOffsetY + player.hitboxHeight / 2f;
         float scaledMuzzleX = (sprite.getWidth() - 3) * scale;
 
         if (player.facingLeft) scaledMuzzleX = -scaledMuzzleX;
 
-        float rotatedX = scaledMuzzleX * (float) Math.cos(radians) + 6 * (float) Math.sin(radians);
-        float rotatedY = scaledMuzzleX * (float) Math.sin(radians) - 6 * (float) Math.cos(radians);
+        float rotatedX = scaledMuzzleX * (float) Math.cos(radians);
+        float rotatedY = scaledMuzzleX * (float) Math.sin(radians);
 
         muzzleWorldX = pistolWorldX + rotatedX;
         muzzleWorldY = pistolWorldY + rotatedY;
@@ -77,7 +78,7 @@ public class Pistol {
 
         transform.translate(pivotScreenX, pivotScreenY);
         transform.rotate(Math.toRadians(angle));
-        transform.translate(0, -sprite.getHeight());
+        transform.translate(0, -3 * Constants.WEAPON_SCALE);
 
         if (player.facingLeft) {
             transform.scale(-Constants.WEAPON_SCALE, Constants.WEAPON_SCALE);
@@ -93,7 +94,14 @@ public class Pistol {
         int muzzleScreenX = (int) (muzzleWorldX - player.worldX + player.screenX);
         int muzzleScreenY = (int) (muzzleWorldY - player.worldY + player.screenY);
 
+        // Draw debug line showing bullet trajectory
         g2.setColor(Color.RED);
+        double radians = Math.toRadians(player.facingLeft ? angle - 180 : angle);
+        int lineLength = 500;
+        int endX = muzzleScreenX + (int) (Math.cos(radians) * lineLength);
+        int endY = muzzleScreenY + (int) (Math.sin(radians) * lineLength);
+
+        g2.drawLine(muzzleScreenX, muzzleScreenY, endX, endY);
         g2.fillRect(muzzleScreenX, muzzleScreenY, rectSize, rectSize);
         bullets.forEach(bullet -> bullet.draw(g2));
     }
@@ -116,10 +124,7 @@ public class Pistol {
         int mouseX = e.getX();
         int mouseY = e.getY();
 
-        int pistolX = player.screenX + player.hitboxOffsetX + player.hitboxWidth / 2;
-        int pistolY = player.screenY + player.hitboxOffsetY + player.hitboxHeight / 2;
-
-        angle = (int) Math.toDegrees(Math.atan2(mouseY - pistolY, mouseX - pistolX));
+        angle = Math.toDegrees(Math.atan2(mouseY - pivotScreenY, mouseX - pivotScreenX));
 
         player.facingLeft = mouseX < player.screenX + player.hitboxOffsetX + player.hitboxWidth / 2;
         if (player.facingLeft) angle += 180;

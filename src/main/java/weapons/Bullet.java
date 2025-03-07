@@ -14,10 +14,10 @@ public class Bullet {
     public float worldX, worldY;
     public BufferedImage sprite;
     public float velocityX, velocityY;
-    public int angle;
+    public double angle;
     public boolean facingLeft;
 
-    public Bullet(float x, float y, int angle, boolean facingLeft, float speed, Player player) {
+    public Bullet(float x, float y, double angle, boolean facingLeft, float speed, Player player) {
         System.out.println("ANGLE: " + angle);
         this.player = player;
         this.worldX = x;
@@ -59,7 +59,7 @@ public class Bullet {
                 worldX - Constants.TILE_SIZE * 2 < player.worldX + player.screenX &&
                 worldY + Constants.TILE_SIZE * 2 > player.worldY - player.screenY &&
                 worldY - Constants.TILE_SIZE * 2 < player.worldY + Window.getWindow().playing.player.screenY) {
-            g2.drawRect((int) screenX, (int) screenY, 2, 2);
+            g2.fillRect((int) screenX - 3, (int) screenY - 2, 6, 4);
         }
     }
 }

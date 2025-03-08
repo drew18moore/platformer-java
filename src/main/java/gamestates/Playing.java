@@ -167,6 +167,7 @@ public class Playing implements Statemethods {
 
     public void resetLevel() {
         this.tileManager = new TileManager();
+        this.bullets = new ArrayList<>();
         this.player = new Player(
                 Constants.TILE_SIZE * 59,
                 Constants.TILE_SIZE * 2,

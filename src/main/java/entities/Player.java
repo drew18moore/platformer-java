@@ -4,6 +4,7 @@ import gamestates.Playing;
 import levels.TileManager;
 import main.Window;
 import utils.Constants;
+import weapons.Bullet;
 import weapons.Pistol;
 
 import javax.imageio.ImageIO;
@@ -11,9 +12,10 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 
 public class Player extends Entity {
-    private Playing playing;
+    private final Playing playing;
     public final int screenX = (Constants.SCREEN_WIDTH/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     public final int screenY = (Constants.SCREEN_HEIGHT/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     public boolean leftPressed, rightPressed, jumpPressed;
@@ -27,7 +29,7 @@ public class Player extends Entity {
 
     public Pistol pistol;
 
-    public Player(int worldX, int worldY, Playing playing) {
+    public Player(int worldX, int worldY, Playing playing, List<Bullet> bullets) {
         super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
         this.playing = playing;
         this.useGravity = true;
@@ -38,7 +40,7 @@ public class Player extends Entity {
         this.hitboxOffsetY = 35;
         this.showHitbox = true;
 
-        this.pistol = new Pistol(this);
+        this.pistol = new Pistol(this, bullets);
 
         try {
             BufferedImage spriteSheet = ImageIO.read(getClass().getResourceAsStream("/sprites/knight.png"));

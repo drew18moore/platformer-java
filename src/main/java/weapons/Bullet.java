@@ -1,9 +1,12 @@
 package weapons;
 
+import entities.BasicZombie;
 import entities.Player;
 import main.Window;
 import utils.Constants;
 
+import java.awt.geom.Rectangle2D;
+import java.util.List;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -17,6 +20,7 @@ public class Bullet {
     public float velocityX, velocityY;
     public double angle;
     public boolean facingLeft;
+    private final int damage = 10;
 
     public Bullet(float x, float y, double angle, boolean facingLeft, float speed, Player player) {
         this.player = player;
@@ -35,7 +39,6 @@ public class Bullet {
             velY *= angle <= 0 ? -1 : 1;
         }
 
-        System.out.println(velX + " | " + velY);
         this.velocityX = velX;
         this.velocityY = velY;
 
@@ -46,9 +49,17 @@ public class Bullet {
         }
     }
 
-    public void update() {
+    public boolean update(List<BasicZombie> zombies) {
         this.worldX += velocityX;
         this.worldY += velocityY;
+
+        for (BasicZombie zombie : zombies) {
+            if (getWorldBounds().intersects(zombie.getWorldBounds())) {
+                zombie.takeDamage(damage);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void draw(Graphics2D g2) {
@@ -68,5 +79,9 @@ public class Bullet {
             g2.drawImage(sprite, transform, null);
             g2.setTransform(old);
         }
+    }
+
+    public Rectangle2D.Float getWorldBounds() {
+        return new Rectangle2D.Float(worldX, worldY, sprite.getWidth(), sprite.getHeight());
     }
 }

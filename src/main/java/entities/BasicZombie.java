@@ -1,6 +1,5 @@
 package entities;
 
-import gamestates.Playing;
 import main.Window;
 import utils.Constants;
 
@@ -89,5 +88,13 @@ public class BasicZombie extends Entity {
         float screenX = worldX - player.worldX + player.screenX;
         float screenY = worldY - player.worldY + player.screenY;
         return new Rectangle2D.Float(screenX + hitboxOffsetX, screenY + hitboxOffsetY, hitboxWidth, hitboxHeight);
+    }
+
+    public Rectangle2D.Float getWorldBounds() {
+        return new Rectangle2D.Float(worldX + hitboxOffsetX, worldY + hitboxOffsetY, hitboxWidth, hitboxHeight);
+    }
+
+    public void takeDamage(int amount) {
+        System.out.println("HIT");
     }
 }

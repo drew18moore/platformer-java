@@ -1,5 +1,6 @@
 package weapons;
 
+import entities.BasicZombie;
 import entities.Player;
 import utils.Constants;
 
@@ -10,20 +11,20 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 public class Pistol {
     private final Player player;
     private int pivotScreenX, pivotScreenY;
     private double angle;
     private BufferedImage sprite;
-    public ArrayList<Bullet> bullets;
+    public List<Bullet> bullets;
 
     public float muzzleWorldX, muzzleWorldY;
 
-    public Pistol(Player player) {
+    public Pistol(Player player, List<Bullet> bullets) {
         this.player = player;
-        this.bullets = new ArrayList<>();
+        this.bullets = bullets;
 
         try {
             this.sprite = ImageIO.read(getClass().getResourceAsStream("/sprites/pistol.png"));
@@ -46,8 +47,6 @@ public class Pistol {
         pivotScreenY = pistolScreenY;
 
         calculateMuzzleWorldPosition();
-
-        bullets.forEach(Bullet::update);
     }
 
     private void calculateMuzzleWorldPosition() {
@@ -103,7 +102,6 @@ public class Pistol {
 
         g2.drawLine(muzzleScreenX, muzzleScreenY, endX, endY);
         g2.fillRect(muzzleScreenX, muzzleScreenY, rectSize, rectSize);
-        bullets.forEach(bullet -> bullet.draw(g2));
     }
 
     public void mouseClicked(MouseEvent e) {

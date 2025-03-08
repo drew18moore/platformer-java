@@ -2,6 +2,7 @@ package weapons;
 
 import entities.BasicZombie;
 import entities.Player;
+import levels.TileManager;
 import main.Window;
 import utils.Constants;
 
@@ -50,8 +51,14 @@ public class Bullet {
     }
 
     public boolean update(List<BasicZombie> zombies) {
-        this.worldX += velocityX;
-        this.worldY += velocityY;
+        float nextWorldX = this.worldX + velocityX;
+        float nextWorldY = this.worldY + velocityY;
+        if(!isColliding((int) nextWorldX, (int) nextWorldY)) {
+            this.worldX += velocityX;
+            this.worldY += velocityY;
+        } else {
+            return true;
+        }
 
         for (BasicZombie zombie : zombies) {
             if (getWorldBounds().intersects(zombie.getWorldBounds())) {
@@ -83,5 +90,17 @@ public class Bullet {
 
     public Rectangle2D.Float getWorldBounds() {
         return new Rectangle2D.Float(worldX, worldY, sprite.getWidth(), sprite.getHeight());
+    }
+
+    public boolean isColliding(int worldX, int worldY) {
+        TileManager tileManager = Window.getWindow().playing.tileManager;
+
+        int leftX = worldX;
+        int rightX = worldX + sprite.getWidth();
+        int topY = worldY;
+        int bottomY = worldY + sprite.getHeight();
+
+        return tileManager.isSolidTile(leftX, topY) || tileManager.isSolidTile(rightX, topY) ||
+                tileManager.isSolidTile(leftX, bottomY) || tileManager.isSolidTile(rightX, bottomY);
     }
 }

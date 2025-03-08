@@ -1,6 +1,5 @@
 package weapons;
 
-import entities.BasicZombie;
 import entities.Player;
 import utils.Constants;
 
@@ -19,6 +18,8 @@ public class Pistol {
     private double angle;
     private BufferedImage sprite;
     public List<Bullet> bullets;
+    public int magazineMaxCapacity = 5;
+    public int bulletsRemaining = magazineMaxCapacity;
 
     public float muzzleWorldX, muzzleWorldY;
 
@@ -109,8 +110,9 @@ public class Pistol {
     }
 
     public void mousePressed(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON1) {
+        if (e.getButton() == MouseEvent.BUTTON1 && bulletsRemaining > 0) {
             this.bullets.add(new Bullet(muzzleWorldX, muzzleWorldY, angle, player.facingLeft, Constants.BULLET_SPEED, player));
+            bulletsRemaining--;
         }
     }
 

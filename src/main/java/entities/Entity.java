@@ -21,6 +21,8 @@ public class Entity {
     public boolean isOnGround = false;
     public boolean isMoving = false;
 
+    public int health = 100;
+
     BufferedImage[] movementSprites;
     public int spriteCounter = 0;
     public int spriteNum = 0;
@@ -118,5 +120,10 @@ public class Entity {
 
         return tileManager.isSolidTile(leftX, topY) || tileManager.isSolidTile(rightX, topY) ||
                 tileManager.isSolidTile(leftX, bottomY) || tileManager.isSolidTile(rightX, bottomY);
+    }
+
+    public void takeDamage(int amount) {
+        System.out.println("HIT");
+        this.health -= amount;
     }
 }

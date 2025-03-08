@@ -69,7 +69,15 @@ public class Playing implements Statemethods {
                     bulletIterator.remove();
                 }
             }
-            basicZombies.forEach(BasicZombie::update);
+
+            Iterator<BasicZombie> zombieIterator = basicZombies.iterator();
+            while (zombieIterator.hasNext()) {
+                BasicZombie zombie = zombieIterator.next();
+                zombie.update();
+                if (zombie.health <= 0) {
+                    zombieIterator.remove();
+                }
+            }
         } else {
             if (isPaused) pauseMenu.update();
             else if (showDeathScreen) deathScreen.update();

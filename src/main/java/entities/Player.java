@@ -163,7 +163,7 @@ public class Player extends Entity {
         return healthImg;
     }
 
-    public void damagePlayer(int amount) {
+    public void takeDamage(int amount) {
         if (!invincible) {
             this.health -= amount;
             this.healthBar = updateHealthBar();

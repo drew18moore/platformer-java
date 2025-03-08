@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class BasicZombie extends Entity {
-    private Player player;
+    private final Player player;
     public BasicZombie(int worldX, int worldY, Player player) {
         super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
 
@@ -22,6 +22,7 @@ public class BasicZombie extends Entity {
         this.hitboxOffsetX = 30;
         this.hitboxOffsetY = 35;
         this.showHitbox = true;
+        this.health = 30;
 
         try {
             BufferedImage spriteSheet = ImageIO.read(getClass().getResourceAsStream("/sprites/zombie-basic.png"));
@@ -59,7 +60,7 @@ public class BasicZombie extends Entity {
         }
 
         if (getBounds().intersects(player.getBounds())) {
-            player.damagePlayer(5);
+            player.takeDamage(5);
         }
     }
 
@@ -92,9 +93,5 @@ public class BasicZombie extends Entity {
 
     public Rectangle2D.Float getWorldBounds() {
         return new Rectangle2D.Float(worldX + hitboxOffsetX, worldY + hitboxOffsetY, hitboxWidth, hitboxHeight);
-    }
-
-    public void takeDamage(int amount) {
-        System.out.println("HIT");
     }
 }

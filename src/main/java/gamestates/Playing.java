@@ -6,19 +6,25 @@ import levels.TileManager;
 import ui.Button;
 import ui.Modal;
 import utils.Constants;
+import weapons.Bullet;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class Playing implements Statemethods {
     public TileManager tileManager = new TileManager();
+    public List<Bullet> bullets = new ArrayList<>();
+    public List<BasicZombie> basicZombies = new ArrayList<>();
     public Player player = new Player(
             Constants.TILE_SIZE * 59,
             Constants.TILE_SIZE * 2,
-            this
+            this,
+            bullets
     );
-    public BasicZombie basicZombie = new BasicZombie(Constants.TILE_SIZE * 59, Constants.TILE_SIZE * 2, player);
 
     private final Modal pauseMenu = new Modal("Game Paused", new Button[]{
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Resume", () -> {
@@ -47,11 +53,31 @@ public class Playing implements Statemethods {
     public boolean showWinScreen = false;
     public boolean showDeathScreen = false;
 
+    public Playing() {
+        basicZombies.add(new BasicZombie(Constants.TILE_SIZE * 59, Constants.TILE_SIZE * 2, player));
+    }
+
     @Override
     public void update() {
         if (!isPaused && !showWinScreen && !showDeathScreen) {
             player.update();
-            basicZombie.update();
+
+            Iterator<Bullet> bulletIterator = bullets.iterator();
+            while(bulletIterator.hasNext()) {
+                Bullet bullet = bulletIterator.next();
+                if (bullet.update(basicZombies)) {
+                    bulletIterator.remove();
+                }
+            }
+
+            Iterator<BasicZombie> zombieIterator = basicZombies.iterator();
+            while (zombieIterator.hasNext()) {
+                BasicZombie zombie = zombieIterator.next();
+                zombie.update();
+                if (zombie.health <= 0) {
+                    zombieIterator.remove();
+                }
+            }
         } else {
             if (isPaused) pauseMenu.update();
             else if (showDeathScreen) deathScreen.update();
@@ -64,7 +90,8 @@ public class Playing implements Statemethods {
         Graphics2D g2 = (Graphics2D) g;
         tileManager.draw(g2);
         player.draw(g2);
-        basicZombie.draw(g2);
+        basicZombies.forEach(zombie -> zombie.draw(g2));
+        bullets.forEach(bullet -> bullet.draw(g2));
 
         if (isPaused) {
             pauseMenu.draw(g);
@@ -86,6 +113,8 @@ public class Playing implements Statemethods {
             deathScreen.mousePressed(e);
         } else if (showWinScreen) {
             winScreen.mousePressed(e);
+        } else {
+            player.pistol.mousePressed(e);
         }
     }
 
@@ -97,6 +126,8 @@ public class Playing implements Statemethods {
             deathScreen.mouseReleased(e);
         } else if (showWinScreen) {
             winScreen.mouseReleased(e);
+        } else {
+            player.pistol.mouseReleased(e);
         }
     }
 
@@ -108,6 +139,8 @@ public class Playing implements Statemethods {
             deathScreen.mouseMoved(e);
         } else if (showWinScreen) {
             winScreen.mouseMoved(e);
+        } else {
+            player.pistol.mouseMoved(e);
         }
     }
 
@@ -142,12 +175,16 @@ public class Playing implements Statemethods {
 
     public void resetLevel() {
         this.tileManager = new TileManager();
+        this.bullets = new ArrayList<>();
         this.player = new Player(
                 Constants.TILE_SIZE * 59,
                 Constants.TILE_SIZE * 2,
-                this
+                this,
+                bullets
         );
-        this.basicZombie = new BasicZombie(Constants.TILE_SIZE * 59, Constants.TILE_SIZE * 2, player);
+        this.basicZombies = new ArrayList<>();
+        this.basicZombies.add(new BasicZombie(Constants.TILE_SIZE * 59, Constants.TILE_SIZE * 2, player));
+
         this.isPaused = false;
         this.showWinScreen = false;
         this.showDeathScreen = false;

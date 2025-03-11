@@ -4,15 +4,18 @@ import gamestates.Playing;
 import levels.TileManager;
 import main.Window;
 import utils.Constants;
+import weapons.Bullet;
+import weapons.Pistol;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 
 public class Player extends Entity {
-    private Playing playing;
+    private final Playing playing;
     public final int screenX = (Constants.SCREEN_WIDTH/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     public final int screenY = (Constants.SCREEN_HEIGHT/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     public boolean leftPressed, rightPressed, jumpPressed;
@@ -24,7 +27,9 @@ public class Player extends Entity {
     private long invincibilityStartTime = 0;
     private final int INVINCIBILITY_DURATION = 500;
 
-    public Player(int worldX, int worldY, Playing playing) {
+    public Pistol pistol;
+
+    public Player(int worldX, int worldY, Playing playing, List<Bullet> bullets) {
         super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
         this.playing = playing;
         this.useGravity = true;
@@ -34,6 +39,8 @@ public class Player extends Entity {
         this.hitboxOffsetX = 30;
         this.hitboxOffsetY = 35;
         this.showHitbox = true;
+
+        this.pistol = new Pistol(this, bullets);
 
         try {
             BufferedImage spriteSheet = ImageIO.read(getClass().getResourceAsStream("/sprites/knight.png"));
@@ -54,6 +61,7 @@ public class Player extends Entity {
 
     public void update() {
         super.update(jumpPressed);
+        this.pistol.update();
 
         this.isMoving = false;
 
@@ -66,12 +74,10 @@ public class Player extends Entity {
 
         float nextWorldX = worldX;
         if (leftPressed) {
-            facingLeft = true;
             nextWorldX -= SPEED;
             this.isMoving = true;
         }
         if (rightPressed) {
-            facingLeft = false;
             nextWorldX += SPEED;
             this.isMoving = true;
         }
@@ -108,6 +114,7 @@ public class Player extends Entity {
         }
 
         g2.drawImage(healthBar, 0, 0, null);
+        this.pistol.draw(g2);
     }
 
     private boolean isCollidingWithGoal(int worldX, int worldY) {
@@ -156,7 +163,7 @@ public class Player extends Entity {
         return healthImg;
     }
 
-    public void damagePlayer(int amount) {
+    public void takeDamage(int amount) {
         if (!invincible) {
             this.health -= amount;
             this.healthBar = updateHealthBar();

@@ -88,10 +88,8 @@ public class Playing implements Statemethods {
                 }
             }
         } else {
-            if (isPaused) pauseMenu.update();
-            else if (showDeathScreen) deathScreen.update();
-            else if (showWinScreen) winScreen.update();
-            else if (showBuyMenu) buyMenu.update();
+            Modal activeModal = getActiveModal();
+            if (activeModal != null) activeModal.update();
         }
     }
 
@@ -103,15 +101,8 @@ public class Playing implements Statemethods {
         basicZombies.forEach(zombie -> zombie.draw(g2));
         bullets.forEach(bullet -> bullet.draw(g2));
 
-        if (isPaused) {
-            pauseMenu.draw(g);
-        } else if (showDeathScreen) {
-            deathScreen.draw(g);
-        } else if (showWinScreen) {
-            winScreen.draw(g);
-        } else if (showBuyMenu) {
-            buyMenu.draw(g);
-        }
+        Modal activeModal = getActiveModal();
+        if (activeModal != null) activeModal.draw(g);
     }
 
     @Override
@@ -119,47 +110,23 @@ public class Playing implements Statemethods {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (isPaused) {
-            pauseMenu.mousePressed(e);
-        } else if (showDeathScreen) {
-            deathScreen.mousePressed(e);
-        } else if (showWinScreen) {
-            winScreen.mousePressed(e);
-        } else if (showBuyMenu) {
-            buyMenu.mousePressed(e);
-        } else {
-            player.pistol.mousePressed(e);
-        }
+        Modal activeModal = getActiveModal();
+        if (activeModal != null) activeModal.mousePressed(e);
+        else player.pistol.mousePressed(e);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (isPaused) {
-            pauseMenu.mouseReleased(e);
-        } else if (showDeathScreen) {
-            deathScreen.mouseReleased(e);
-        } else if (showWinScreen) {
-            winScreen.mouseReleased(e);
-        } else if (showBuyMenu) {
-            buyMenu.mouseReleased(e);
-        } else {
-            player.pistol.mouseReleased(e);
-        }
+        Modal activeModal = getActiveModal();
+        if (activeModal != null) activeModal.mouseReleased(e);
+        else player.pistol.mouseReleased(e);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if (isPaused) {
-            pauseMenu.mouseMoved(e);
-        } else if (showDeathScreen) {
-            deathScreen.mouseMoved(e);
-        } else if (showWinScreen) {
-            winScreen.mouseMoved(e);
-        } else if (showBuyMenu) {
-            buyMenu.mouseMoved(e);
-        } else {
-            player.pistol.mouseMoved(e);
-        }
+        Modal activeModal = getActiveModal();
+        if (activeModal != null) activeModal.mouseMoved(e);
+        else player.pistol.mouseMoved(e);
     }
 
     @Override
@@ -193,6 +160,14 @@ public class Playing implements Statemethods {
         if (e.getKeyCode() == KeyEvent.VK_D) {
             player.rightPressed = false;
         }
+    }
+
+    private Modal getActiveModal() {
+        if (isPaused) return pauseMenu;
+        if (showBuyMenu) return buyMenu;
+        if (showDeathScreen) return deathScreen;
+        if (showWinScreen) return winScreen;
+        return null;
     }
 
     public void resetLevel() {

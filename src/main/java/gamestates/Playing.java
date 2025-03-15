@@ -37,10 +37,10 @@ public class Playing implements Statemethods {
     });
     private final Modal buyMenu = new Modal("Buy Menu", new Button[]{
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Health Upgrade", () -> {
-                System.out.println("HEALTH++");
+                player.upgradeHealth();
             }),
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Speed Upgrade", () -> {
-                System.out.println("SPEED++");
+                player.upgradeSpeed();
             })
     });
     private final Modal winScreen = new Modal("You Win!", new Button[]{

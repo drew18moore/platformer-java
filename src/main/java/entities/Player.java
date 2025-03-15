@@ -19,9 +19,11 @@ public class Player extends Entity {
     public final int screenX = (Constants.SCREEN_WIDTH/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     public final int screenY = (Constants.SCREEN_HEIGHT/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     public boolean leftPressed, rightPressed, jumpPressed;
-    public float SPEED = Constants.PLAYER_SPEED;
-    private int health = Constants.PLAYER_STARTING_MAX_HEALTH;
     private BufferedImage healthBar = updateHealthBar();
+
+    private int maxHealth = Constants.PLAYER_STARTING_MAX_HEALTH;
+    private int health = maxHealth;
+    public float speed = Constants.PLAYER_STARTING_SPEED;
 
     public boolean invincible = false;
     private long invincibilityStartTime = 0;
@@ -74,11 +76,11 @@ public class Player extends Entity {
 
         float nextWorldX = worldX;
         if (leftPressed) {
-            nextWorldX -= SPEED;
+            nextWorldX -= speed;
             this.isMoving = true;
         }
         if (rightPressed) {
-            nextWorldX += SPEED;
+            nextWorldX += speed;
             this.isMoving = true;
         }
 
@@ -170,5 +172,15 @@ public class Player extends Entity {
             invincible = true;
             invincibilityStartTime = System.currentTimeMillis();
         }
+    }
+
+    public void upgradeHealth() {
+        maxHealth += 20;
+        health = maxHealth;
+        this.healthBar = updateHealthBar();
+    }
+
+    public void upgradeSpeed() {
+        speed += 0.2f;
     }
 }

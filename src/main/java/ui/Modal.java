@@ -42,7 +42,7 @@ public class Modal {
         g2.setFont(new Font("Arial", Font.BOLD, Constants.BTN_HEIGHT_SCALED / 3));
         FontMetrics fm = g2.getFontMetrics();
         g2.setColor(Color.BLACK);
-        g2.drawString(text, (Constants.BTN_WIDTH_SCALED - fm.stringWidth(("Game Paused"))) / 2, (Constants.BTN_HEIGHT_SCALED - fm.getHeight()) / 2 + fm.getAscent());
+        g2.drawString(text, (Constants.BTN_WIDTH_SCALED - fm.stringWidth((text))) / 2, (Constants.BTN_HEIGHT_SCALED - fm.getHeight()) / 2 + fm.getAscent());
         g2.dispose();
         return headerText;
     }

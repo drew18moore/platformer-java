@@ -35,6 +35,14 @@ public class Playing implements Statemethods {
                 resetLevel();
             })
     });
+    private final Modal buyMenu = new Modal("Buy Menu", new Button[]{
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Health Upgrade", () -> {
+                System.out.println("HEALTH++");
+            }),
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Speed Upgrade", () -> {
+                System.out.println("SPEED++");
+            })
+    });
     private final Modal winScreen = new Modal("You Win!", new Button[]{
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Restart", this::resetLevel),
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu", () -> {
@@ -50,6 +58,7 @@ public class Playing implements Statemethods {
             })
     });
     public boolean isPaused = false;
+    public boolean showBuyMenu = false;
     public boolean showWinScreen = false;
     public boolean showDeathScreen = false;
 
@@ -59,7 +68,7 @@ public class Playing implements Statemethods {
 
     @Override
     public void update() {
-        if (!isPaused && !showWinScreen && !showDeathScreen) {
+        if (!isPaused && !showWinScreen && !showDeathScreen && !showBuyMenu) {
             player.update();
 
             Iterator<Bullet> bulletIterator = bullets.iterator();
@@ -82,6 +91,7 @@ public class Playing implements Statemethods {
             if (isPaused) pauseMenu.update();
             else if (showDeathScreen) deathScreen.update();
             else if (showWinScreen) winScreen.update();
+            else if (showBuyMenu) buyMenu.update();
         }
     }
 
@@ -99,6 +109,8 @@ public class Playing implements Statemethods {
             deathScreen.draw(g);
         } else if (showWinScreen) {
             winScreen.draw(g);
+        } else if (showBuyMenu) {
+            buyMenu.draw(g);
         }
     }
 
@@ -113,6 +125,8 @@ public class Playing implements Statemethods {
             deathScreen.mousePressed(e);
         } else if (showWinScreen) {
             winScreen.mousePressed(e);
+        } else if (showBuyMenu) {
+            buyMenu.mousePressed(e);
         } else {
             player.pistol.mousePressed(e);
         }
@@ -126,6 +140,8 @@ public class Playing implements Statemethods {
             deathScreen.mouseReleased(e);
         } else if (showWinScreen) {
             winScreen.mouseReleased(e);
+        } else if (showBuyMenu) {
+            buyMenu.mouseReleased(e);
         } else {
             player.pistol.mouseReleased(e);
         }
@@ -139,6 +155,8 @@ public class Playing implements Statemethods {
             deathScreen.mouseMoved(e);
         } else if (showWinScreen) {
             winScreen.mouseMoved(e);
+        } else if (showBuyMenu) {
+            buyMenu.mouseMoved(e);
         } else {
             player.pistol.mouseMoved(e);
         }
@@ -156,7 +174,11 @@ public class Playing implements Statemethods {
             player.rightPressed = true;
         }
         if (!showWinScreen && !showDeathScreen && e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            this.isPaused = !this.isPaused;
+            if (showBuyMenu) showBuyMenu = false;
+            else this.isPaused = !this.isPaused;
+        }
+        if (!showWinScreen && !showDeathScreen && e.getKeyCode() == KeyEvent.VK_B) {
+            showBuyMenu = !showBuyMenu;
         }
     }
 
@@ -186,6 +208,7 @@ public class Playing implements Statemethods {
         this.basicZombies.add(new BasicZombie(Constants.TILE_SIZE * 59, Constants.TILE_SIZE * 2, player));
 
         this.isPaused = false;
+        this.showBuyMenu = false;
         this.showWinScreen = false;
         this.showDeathScreen = false;
     }

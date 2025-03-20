@@ -3,6 +3,7 @@ package gamestates;
 import entities.BasicZombie;
 import entities.Player;
 import levels.TileManager;
+import objects.Coin;
 import ui.Button;
 import ui.Modal;
 import utils.Constants;
@@ -25,6 +26,7 @@ public class Playing implements Statemethods {
             this,
             bullets
     );
+    public List<Coin> coins = new ArrayList<>();
 
     private final Modal pauseMenu = new Modal("Game Paused", new Button[]{
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Resume", () -> {
@@ -64,6 +66,7 @@ public class Playing implements Statemethods {
 
     public Playing() {
         basicZombies.add(new BasicZombie(Constants.TILE_SIZE * 59, Constants.TILE_SIZE * 2, player));
+        coins.add(new Coin(Constants.TILE_SIZE * 55, Constants.TILE_SIZE * 5, player));
     }
 
     @Override
@@ -87,6 +90,15 @@ public class Playing implements Statemethods {
                     zombieIterator.remove();
                 }
             }
+
+            Iterator<Coin> coinIterator = coins.iterator();
+            while(coinIterator.hasNext()) {
+                Coin coin = coinIterator.next();
+                if (coin.update()) {
+                    coinIterator.remove();
+                }
+            }
+            System.out.println(player.getCoins());
         } else {
             Modal activeModal = getActiveModal();
             if (activeModal != null) activeModal.update();
@@ -100,6 +112,7 @@ public class Playing implements Statemethods {
         player.draw(g2);
         basicZombies.forEach(zombie -> zombie.draw(g2));
         bullets.forEach(bullet -> bullet.draw(g2));
+        coins.forEach(coin -> coin.draw(g2));
 
         Modal activeModal = getActiveModal();
         if (activeModal != null) activeModal.draw(g);
@@ -181,6 +194,8 @@ public class Playing implements Statemethods {
         );
         this.basicZombies = new ArrayList<>();
         this.basicZombies.add(new BasicZombie(Constants.TILE_SIZE * 59, Constants.TILE_SIZE * 2, player));
+        this.coins = new ArrayList<>();
+        this.coins.add(new Coin(Constants.TILE_SIZE * 55, Constants.TILE_SIZE * 5, player ));
 
         this.isPaused = false;
         this.showBuyMenu = false;

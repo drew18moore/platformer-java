@@ -21,9 +21,10 @@ public class Player extends Entity {
     public boolean leftPressed, rightPressed, jumpPressed;
     private BufferedImage healthBar = updateHealthBar();
 
+    private int coins = 0;
     private int maxHealth = Constants.PLAYER_STARTING_MAX_HEALTH;
     private int health = maxHealth;
-    public float speed = Constants.PLAYER_STARTING_SPEED;
+    private float speed = Constants.PLAYER_STARTING_SPEED;
 
     public boolean invincible = false;
     private long invincibilityStartTime = 0;
@@ -183,4 +184,18 @@ public class Player extends Entity {
     public void upgradeSpeed() {
         speed += 0.2f;
     }
+
+    public boolean spendCoins(int amount) {
+        if (coins >= amount) {
+            coins -= amount;
+            return true;
+        }
+        return false;
+    }
+
+    public void earnCoins(int amount) {
+        coins += amount;
+    }
+
+    public int getCoins() { return coins; }
 }

@@ -180,13 +180,18 @@ public class Player extends Entity {
     }
 
     public void upgradeHealth() {
-        maxHealth += 20;
-        health = maxHealth;
-        this.healthBar = updateHudText("Health: ", health);
+        if (spendCoins(5)) {
+            maxHealth += 20;
+            health = maxHealth;
+            this.healthBar = updateHudText("Health: ", health);
+        }
+
     }
 
     public void upgradeSpeed() {
-        speed += 0.2f;
+        if (spendCoins(5)) {
+            speed += 0.2f;
+        }
     }
 
     public void buyPistol() {

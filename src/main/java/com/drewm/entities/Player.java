@@ -19,7 +19,6 @@ public class Player extends Entity {
     public final int screenX = (Constants.SCREEN_WIDTH/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     public final int screenY = (Constants.SCREEN_HEIGHT/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     public boolean leftPressed, rightPressed, jumpPressed;
-    private BufferedImage healthBar = updateHealthBar();
 
     private int coins = 0;
     private int maxHealth = Constants.PLAYER_STARTING_MAX_HEALTH;
@@ -31,6 +30,9 @@ public class Player extends Entity {
     private final int INVINCIBILITY_DURATION = 500;
 
     public Pistol pistol;
+
+    private BufferedImage healthBar = updateHudText("Health: ", health);
+    private BufferedImage coinCount = updateHudText("Coins: ", coins);
 
     public Player(float worldX, float worldY, Playing playing, List<Bullet> bullets) {
         super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
@@ -117,6 +119,7 @@ public class Player extends Entity {
         }
 
         g2.drawImage(healthBar, 0, 0, null);
+        g2.drawImage(coinCount, Constants.SCREEN_WIDTH - coinCount.getWidth(), 0, null);
         this.pistol.draw(g2);
     }
 
@@ -132,8 +135,8 @@ public class Player extends Entity {
                 levelManager.isGoalTile(leftX, bottomY) || levelManager.isGoalTile(rightX, bottomY);
     }
 
-    private BufferedImage updateHealthBar() {
-        String healthStr = "Health: " + health;
+    private BufferedImage updateHudText(String text, int value) {
+        String textStr = text + value;
         Font font = new Font("Arial", Font.BOLD, Constants.PLAYER_HEALTH_FONT_SIZE);
 
         BufferedImage tempImg = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
@@ -141,7 +144,7 @@ public class Player extends Entity {
         g2.setFont(font);
 
         FontMetrics fm = g2.getFontMetrics();
-        int textWidth = fm.stringWidth(healthStr);
+        int textWidth = fm.stringWidth(textStr);
         int textHeight = fm.getHeight();
         g2.dispose();
 
@@ -160,7 +163,7 @@ public class Player extends Entity {
         g2.fillRect(0, 0, imageWidth, imageHeight);
         g2.setColor(Color.WHITE);
 
-        g2.drawString(healthStr, padding, padding + fm.getAscent());
+        g2.drawString(textStr, padding, padding + fm.getAscent());
         g2.dispose();
 
         return healthImg;
@@ -169,7 +172,7 @@ public class Player extends Entity {
     public void takeDamage(int amount) {
         if (!invincible) {
             this.health -= amount;
-            this.healthBar = updateHealthBar();
+            this.healthBar = updateHudText("Health: ", health);
             invincible = true;
             invincibilityStartTime = System.currentTimeMillis();
         }
@@ -178,7 +181,7 @@ public class Player extends Entity {
     public void upgradeHealth() {
         maxHealth += 20;
         health = maxHealth;
-        this.healthBar = updateHealthBar();
+        this.healthBar = updateHudText("Health: ", health);
     }
 
     public void upgradeSpeed() {
@@ -188,6 +191,7 @@ public class Player extends Entity {
     public boolean spendCoins(int amount) {
         if (coins >= amount) {
             coins -= amount;
+            this.coinCount = updateHudText("Coins: ", coins);
             return true;
         }
         return false;
@@ -195,6 +199,7 @@ public class Player extends Entity {
 
     public void earnCoins(int amount) {
         coins += amount;
+        this.coinCount = updateHudText("Coins: ", coins);
     }
 
     public int getCoins() { return coins; }

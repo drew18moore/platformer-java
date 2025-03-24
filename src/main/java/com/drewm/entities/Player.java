@@ -29,6 +29,7 @@ public class Player extends Entity {
     private long invincibilityStartTime = 0;
     private final int INVINCIBILITY_DURATION = 500;
 
+    public boolean ownsPistol = false;
     public Pistol pistol;
 
     private BufferedImage healthBar = updateHudText("Health: ", health);
@@ -66,7 +67,7 @@ public class Player extends Entity {
 
     public void update() {
         super.update(jumpPressed);
-        this.pistol.update();
+        if (ownsPistol) this.pistol.update();
 
         this.isMoving = false;
 
@@ -120,7 +121,7 @@ public class Player extends Entity {
 
         g2.drawImage(healthBar, 0, 0, null);
         g2.drawImage(coinCount, Constants.SCREEN_WIDTH - coinCount.getWidth(), 0, null);
-        this.pistol.draw(g2);
+        if (ownsPistol) this.pistol.draw(g2);
     }
 
     private boolean isCollidingWithGoal(int worldX, int worldY) {
@@ -186,6 +187,12 @@ public class Player extends Entity {
 
     public void upgradeSpeed() {
         speed += 0.2f;
+    }
+
+    public void buyPistol() {
+        if (!ownsPistol && this.spendCoins(5)) {
+            this.ownsPistol = true;
+        }
     }
 
     public boolean spendCoins(int amount) {

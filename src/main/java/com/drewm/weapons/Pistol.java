@@ -26,6 +26,7 @@ public class Pistol {
     public Pistol(Player player, List<Bullet> bullets) {
         this.player = player;
         this.bullets = bullets;
+        calculatePivotScreenPosition();
 
         try {
             this.sprite = ImageIO.read(getClass().getResourceAsStream("/sprites/pistol.png"));
@@ -35,6 +36,11 @@ public class Pistol {
     }
 
     public void update() {
+        calculatePivotScreenPosition();
+        calculateMuzzleWorldPosition();
+    }
+
+    private void calculatePivotScreenPosition() {
         int pistolScreenX;
         if (player.facingLeft) {
             pistolScreenX = player.screenX + player.hitboxOffsetX;
@@ -46,8 +52,6 @@ public class Pistol {
 
         pivotScreenX = pistolScreenX;
         pivotScreenY = pistolScreenY;
-
-        calculateMuzzleWorldPosition();
     }
 
     private void calculateMuzzleWorldPosition() {

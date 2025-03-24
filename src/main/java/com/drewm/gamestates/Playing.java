@@ -36,6 +36,9 @@ public class Playing implements Statemethods {
             }),
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Speed Upgrade", () -> {
                 player.upgradeSpeed();
+            }),
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 50 + Constants.BTN_HEIGHT_SCALED * 3, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Buy Pistol", () -> {
+                player.buyPistol();
             })
     });
     private final Modal winScreen = new Modal("You Win!", new Button[]{

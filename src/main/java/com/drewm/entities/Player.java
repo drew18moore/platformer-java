@@ -1,7 +1,7 @@
 package com.drewm.entities;
 
 import com.drewm.gamestates.Playing;
-import com.drewm.levels.TileManager;
+import com.drewm.levels.LevelManager;
 import com.drewm.main.Window;
 import com.drewm.utils.Constants;
 import com.drewm.weapons.Bullet;
@@ -121,15 +121,15 @@ public class Player extends Entity {
     }
 
     private boolean isCollidingWithGoal(int worldX, int worldY) {
-        TileManager tileManager = Window.getWindow().playing.tileManager;
+        LevelManager levelManager = Window.getWindow().playing.levelManager;
 
         int leftX = worldX + hitboxOffsetX;
         int rightX = worldX + hitboxOffsetX + hitboxWidth - 1;
         int topY = worldY + hitboxOffsetY;
         int bottomY = worldY + hitboxOffsetY + hitboxHeight - 1;
 
-        return tileManager.isGoalTile(leftX, topY) || tileManager.isGoalTile(rightX, topY) ||
-                tileManager.isGoalTile(leftX, bottomY) || tileManager.isGoalTile(rightX, bottomY);
+        return levelManager.isGoalTile(leftX, topY) || levelManager.isGoalTile(rightX, topY) ||
+                levelManager.isGoalTile(leftX, bottomY) || levelManager.isGoalTile(rightX, bottomY);
     }
 
     private BufferedImage updateHealthBar() {

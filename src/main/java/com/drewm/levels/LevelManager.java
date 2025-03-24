@@ -16,14 +16,14 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileManager {
+public class LevelManager {
     private final Playing playing;
     private int[][] worldMap;
     private List<BasicZombie> basicZombies;
     private List<Coin> coins;
     Tile[] tiles;
 
-    public TileManager(Playing playing) {
+    public LevelManager(Playing playing) {
         this.playing = playing;
     }
 

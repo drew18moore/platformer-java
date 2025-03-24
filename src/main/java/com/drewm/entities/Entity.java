@@ -1,6 +1,6 @@
 package com.drewm.entities;
 
-import com.drewm.levels.TileManager;
+import com.drewm.levels.LevelManager;
 import com.drewm.main.Window;
 import com.drewm.utils.Constants;
 
@@ -111,15 +111,15 @@ public class Entity {
     }
 
     public boolean isColliding(int worldX, int worldY) {
-        TileManager tileManager = Window.getWindow().playing.tileManager;
+        LevelManager levelManager = Window.getWindow().playing.levelManager;
 
         int leftX = worldX + hitboxOffsetX;
         int rightX = worldX + hitboxOffsetX + hitboxWidth - 1;
         int topY = worldY + hitboxOffsetY;
         int bottomY = worldY + hitboxOffsetY + hitboxHeight - 1;
 
-        return tileManager.isSolidTile(leftX, topY) || tileManager.isSolidTile(rightX, topY) ||
-                tileManager.isSolidTile(leftX, bottomY) || tileManager.isSolidTile(rightX, bottomY);
+        return levelManager.isSolidTile(leftX, topY) || levelManager.isSolidTile(rightX, topY) ||
+                levelManager.isSolidTile(leftX, bottomY) || levelManager.isSolidTile(rightX, bottomY);
     }
 
     public void takeDamage(int amount) {

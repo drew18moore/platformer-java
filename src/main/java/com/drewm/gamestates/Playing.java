@@ -2,7 +2,7 @@ package com.drewm.gamestates;
 
 import com.drewm.entities.BasicZombie;
 import com.drewm.entities.Player;
-import com.drewm.levels.TileManager;
+import com.drewm.levels.LevelManager;
 import com.drewm.objects.Coin;
 import com.drewm.ui.Button;
 import com.drewm.ui.Modal;
@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Playing implements Statemethods {
-    public TileManager tileManager = new TileManager(this);
+    public LevelManager levelManager = new LevelManager(this);
     public List<Bullet> bullets = new ArrayList<>();
     public Player player;
 
@@ -58,7 +58,7 @@ public class Playing implements Statemethods {
     public boolean showDeathScreen = false;
 
     public Playing() {
-        this.tileManager.loadLevel("/maps/map0.json");
+        this.levelManager.loadLevel("/maps/map0.json");
     }
 
     @Override
@@ -69,12 +69,12 @@ public class Playing implements Statemethods {
             Iterator<Bullet> bulletIterator = bullets.iterator();
             while(bulletIterator.hasNext()) {
                 Bullet bullet = bulletIterator.next();
-                if (bullet.update(this.tileManager.getBasicZombies())) {
+                if (bullet.update(this.levelManager.getBasicZombies())) {
                     bulletIterator.remove();
                 }
             }
 
-            Iterator<BasicZombie> zombieIterator = this.tileManager.getBasicZombies().iterator();
+            Iterator<BasicZombie> zombieIterator = this.levelManager.getBasicZombies().iterator();
             while (zombieIterator.hasNext()) {
                 BasicZombie zombie = zombieIterator.next();
                 zombie.update();
@@ -83,7 +83,7 @@ public class Playing implements Statemethods {
                 }
             }
 
-            Iterator<Coin> coinIterator = this.tileManager.getCoins().iterator();
+            Iterator<Coin> coinIterator = this.levelManager.getCoins().iterator();
             while(coinIterator.hasNext()) {
                 Coin coin = coinIterator.next();
                 if (coin.update()) {
@@ -100,11 +100,11 @@ public class Playing implements Statemethods {
     @Override
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        tileManager.draw(g2);
+        levelManager.draw(g2);
         player.draw(g2);
-        this.tileManager.getBasicZombies().forEach(zombie -> zombie.draw(g2));
+        this.levelManager.getBasicZombies().forEach(zombie -> zombie.draw(g2));
         bullets.forEach(bullet -> bullet.draw(g2));
-        this.tileManager.getCoins().forEach(coin -> coin.draw(g2));
+        this.levelManager.getCoins().forEach(coin -> coin.draw(g2));
 
         Modal activeModal = getActiveModal();
         if (activeModal != null) activeModal.draw(g);
@@ -176,9 +176,9 @@ public class Playing implements Statemethods {
     }
 
     public void resetLevel() {
-        this.tileManager = new TileManager(this);
+        this.levelManager = new LevelManager(this);
         this.bullets = new ArrayList<>();
-        this.tileManager.loadLevel("/maps/map0.json");
+        this.levelManager.loadLevel("/maps/map0.json");
 
         this.isPaused = false;
         this.showBuyMenu = false;

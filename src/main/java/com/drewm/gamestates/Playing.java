@@ -52,7 +52,10 @@ public class Playing implements Statemethods {
             })
     });
     private final Modal deathScreen = new Modal("You Died!", new Button[]{
-            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Respawn", this::respawn),
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Respawn", () -> {
+                this.respawn();
+                this.showBuyMenu = true;
+            }),
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu", () -> {
                 Gamestate.state = Gamestate.MENU;
                 resetLevel();
@@ -154,9 +157,6 @@ public class Playing implements Statemethods {
         if (!showWinScreen && !showDeathScreen && e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             if (showBuyMenu) showBuyMenu = false;
             else this.isPaused = !this.isPaused;
-        }
-        if (!showWinScreen && !showDeathScreen && e.getKeyCode() == KeyEvent.VK_B) {
-            showBuyMenu = !showBuyMenu;
         }
     }
 

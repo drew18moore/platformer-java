@@ -27,7 +27,7 @@ public class LevelManager {
         this.playing = playing;
     }
 
-    public void loadLevel(String filePath) {
+    public void loadLevel(String filePath, boolean persistState) {
         try {
             // Load tileset
             this.tiles = getTileSet("/tilesets/tileset0.png");
@@ -44,7 +44,11 @@ public class LevelManager {
 
             // Load player
             EntityData playerData = levelData.players().get(0);
-            playing.player = new Player(playerData.x(), playerData.y(), this.playing, this.playing.bullets);
+            if (persistState) {
+                playing.player.respawn(playerData.x(), playerData.y());
+            } else {
+                playing.player = new Player(playerData.x(), playerData.y(), this.playing, this.playing.bullets);
+            }
 
             // Load enemies
             List<EntityData> enemies = levelData.enemies();

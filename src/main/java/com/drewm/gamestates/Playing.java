@@ -52,7 +52,7 @@ public class Playing implements Statemethods {
             })
     });
     private final Modal deathScreen = new Modal("You Died!", new Button[]{
-            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Restart", this::resetLevel),
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Respawn", this::respawn),
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu", () -> {
                 Gamestate.state = Gamestate.MENU;
                 resetLevel();
@@ -64,7 +64,7 @@ public class Playing implements Statemethods {
     public boolean showDeathScreen = false;
 
     public Playing() {
-        this.levelManager.loadLevel("/maps/map0.json");
+        this.levelManager.loadLevel("/maps/map0.json", false);
     }
 
     @Override
@@ -181,14 +181,25 @@ public class Playing implements Statemethods {
         return null;
     }
 
-    public void resetLevel() {
-        this.levelManager = new LevelManager(this);
-        this.bullets = new ArrayList<>();
-        this.levelManager.loadLevel("/maps/map0.json");
-
+    private void resetBools() {
         this.isPaused = false;
         this.showBuyMenu = false;
         this.showWinScreen = false;
         this.showDeathScreen = false;
+    }
+
+    public void resetLevel() {
+        this.levelManager = new LevelManager(this);
+        this.bullets = new ArrayList<>();
+        this.levelManager.loadLevel("/maps/map0.json", false);
+
+        resetBools();
+    }
+
+    public void respawn() {
+        this.bullets.clear();
+        this.levelManager.loadLevel("/maps/map0.json", true);
+
+        resetBools();
     }
 }

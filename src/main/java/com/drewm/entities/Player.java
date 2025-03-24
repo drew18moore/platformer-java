@@ -221,4 +221,11 @@ public class Player extends Entity {
     }
 
     public int getCoins() { return coins; }
+
+    public void respawn(float x, float y) {
+        this.worldX = x;
+        this.worldY = y;
+        this.health = maxHealth;
+        this.pistol.bulletsRemaining = this.pistol.magazineMaxCapacity;
+    }
 }

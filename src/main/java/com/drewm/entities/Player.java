@@ -200,6 +200,12 @@ public class Player extends Entity {
         }
     }
 
+    public void buyAmmo() {
+        if (ownsPistol && this.spendCoins(1)) {
+            this.pistol.bulletsRemaining++;
+        }
+    }
+
     public boolean spendCoins(int amount) {
         if (coins >= amount) {
             coins -= amount;

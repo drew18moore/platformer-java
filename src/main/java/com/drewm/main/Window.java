@@ -22,10 +22,19 @@ public class Window extends JFrame implements Runnable {
         panel = new Panel(width, height, this);
         add(panel);
         setResizable(false);
-        pack();
-        setVisible(true);
+        setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        // Set Fullscreen using GraphicsDevice
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        if (gd.isFullScreenSupported()) {
+            gd.setFullScreenWindow(this);
+        } else {
+            System.out.println("Fullscreen not supported, running in windowed mode.");
+            setSize(width, height);
+        }
+
+        setVisible(true);
         isRunning = true;
     }
 

@@ -1,5 +1,6 @@
 package com.drewm.gamestates;
 
+import com.drewm.main.Window;
 import com.drewm.ui.Button;
 import com.drewm.utils.Constants;
 
@@ -7,17 +8,21 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-public class Menu implements Statemethods {
-    private Button[] btns = new Button[3];
+public class Options implements Statemethods {
+    private final Window window;
+    private Button[] btns = new Button[2];
 
-    public Menu() {
+    public Options(Window window) {
+        this.window = window;
         loadBtns();
     }
 
     private void loadBtns() {
-        btns[0] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, 50, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Play", () -> { Gamestate.state = Gamestate.PLAYING; });
-        btns[1] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, 60 + Constants.BTN_HEIGHT_SCALED,Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED,  "Options", () -> { Gamestate.state = Gamestate.OPTIONS; });
-        btns[2] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, 70 + Constants.BTN_HEIGHT_SCALED * 2,Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED,  "Quit", () -> { Gamestate.state = Gamestate.QUIT; });
+        btns[0] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, 50, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, window.getIsFullscreen() ? "Disable Fullscreen" : "Enable Fullscreen", () -> {
+            window.setIsFullscreen(!window.getIsFullscreen());
+            loadBtns();
+        });
+        btns[1] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, 60 + Constants.BTN_HEIGHT_SCALED,Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED,  "Back", () -> { Gamestate.state = Gamestate.MENU; });
     }
     @Override
     public void update() {

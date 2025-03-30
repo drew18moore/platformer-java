@@ -1,6 +1,7 @@
 package com.drewm.main;
 
 import com.drewm.gamestates.Gamestate;
+import com.drewm.gamestates.Options;
 import com.drewm.gamestates.Playing;
 import com.drewm.gamestates.Menu;
 import com.drewm.utils.Constants;
@@ -13,36 +14,24 @@ public class Window extends JFrame implements Runnable {
     private Panel panel;
     protected boolean isRunning;
     private boolean SHOW_FPS_UPS = true;
-    public boolean isFullscreen = false;
+    private boolean isFullscreen = false;
+    private final int SCREEN_WIDTH;
+    private final int SCREEN_HEIGHT;
 
     public Menu menu = new Menu();
+    public Options options = new Options(this);
     public Playing playing = new Playing();
 
     public Window(int width, int height, String title) {
+        this.SCREEN_WIDTH = width;
+        this.SCREEN_HEIGHT = height;
         setTitle(title);
         panel = new Panel(width, height, this);
         add(panel);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Set Fullscreen using GraphicsDevice
-        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        if (this.isFullscreen && gd.isFullScreenSupported()) {
-            setUndecorated(true);
-            gd.setFullScreenWindow(this);
-        } else {
-            System.out.println("Fullscreen not supported, running in windowed mode.");
-
-            Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets(getGraphicsConfiguration());
-            int availableWidth = width - screenInsets.left - screenInsets.right;
-            int availableHeight = height - screenInsets.top - screenInsets.bottom;
-
-            Insets windowInsets = getInsets();
-            availableWidth -= windowInsets.left + windowInsets.right;
-            availableHeight -= windowInsets.top + windowInsets.bottom;
-
-            setSize(availableWidth, availableHeight);
-        }
+        setIsFullscreen(this.isFullscreen);
 
         setVisible(true);
         isRunning = true;
@@ -60,6 +49,7 @@ public class Window extends JFrame implements Runnable {
         switch(Gamestate.state) {
             case PLAYING -> playing.update();
             case MENU -> menu.update();
+            case OPTIONS -> options.update();
             case QUIT -> System.exit(0);
         }
     }
@@ -67,6 +57,7 @@ public class Window extends JFrame implements Runnable {
     protected void draw(Graphics g) {
         switch(Gamestate.state) {
             case PLAYING -> playing.draw(g);
+            case OPTIONS -> options.draw(g);
             case MENU -> menu.draw(g);
         }
     }
@@ -118,5 +109,34 @@ public class Window extends JFrame implements Runnable {
                 }
 
         }
+    }
+
+    public boolean getIsFullscreen() {
+        return this.isFullscreen;
+    }
+
+    public void setIsFullscreen(boolean bool) {
+        this.isFullscreen = bool;
+
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        dispose();
+        if (this.isFullscreen && gd.isFullScreenSupported()) {
+            setUndecorated(true);
+            gd.setFullScreenWindow(this);
+        } else {
+            System.out.println("Fullscreen not supported, running in windowed mode.");
+
+
+            Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets(getGraphicsConfiguration());
+            int availableWidth = SCREEN_WIDTH - screenInsets.left - screenInsets.right;
+            int availableHeight = SCREEN_HEIGHT - screenInsets.top - screenInsets.bottom;
+
+            Insets windowInsets = getInsets();
+            availableWidth -= windowInsets.left + windowInsets.right;
+            availableHeight -= windowInsets.top + windowInsets.bottom;
+
+            setSize(availableWidth, availableHeight);
+        }
+        setVisible(true);
     }
 }

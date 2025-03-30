@@ -13,6 +13,7 @@ public class Window extends JFrame implements Runnable {
     private Panel panel;
     protected boolean isRunning;
     private boolean SHOW_FPS_UPS = true;
+    public boolean isFullscreen = false;
 
     public Menu menu = new Menu();
     public Playing playing = new Playing();
@@ -22,16 +23,25 @@ public class Window extends JFrame implements Runnable {
         panel = new Panel(width, height, this);
         add(panel);
         setResizable(false);
-        setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Set Fullscreen using GraphicsDevice
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        if (gd.isFullScreenSupported()) {
+        if (this.isFullscreen && gd.isFullScreenSupported()) {
+            setUndecorated(true);
             gd.setFullScreenWindow(this);
         } else {
             System.out.println("Fullscreen not supported, running in windowed mode.");
-            setSize(width, height);
+
+            Insets screenInsets = Toolkit.getDefaultToolkit().getScreenInsets(getGraphicsConfiguration());
+            int availableWidth = width - screenInsets.left - screenInsets.right;
+            int availableHeight = height - screenInsets.top - screenInsets.bottom;
+
+            Insets windowInsets = getInsets();
+            availableWidth -= windowInsets.left + windowInsets.right;
+            availableHeight -= windowInsets.top + windowInsets.bottom;
+
+            setSize(availableWidth, availableHeight);
         }
 
         setVisible(true);

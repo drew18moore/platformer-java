@@ -136,7 +136,7 @@ public class Player extends Entity {
                 levelManager.isGoalTile(leftX, bottomY) || levelManager.isGoalTile(rightX, bottomY);
     }
 
-    private BufferedImage updateHudText(String text, int value) {
+    public BufferedImage updateHudText(String text, int value) {
         String textStr = text + value;
         Font font = new Font("Arial", Font.BOLD, Constants.PLAYER_HEALTH_FONT_SIZE);
 
@@ -202,7 +202,7 @@ public class Player extends Entity {
 
     public void buyAmmo() {
         if (ownsPistol && this.spendCoins(1)) {
-            this.pistol.bulletsRemaining++;
+            this.pistol.setBulletsRemaining(pistol.getBulletsRemaining()+1);
         }
     }
 
@@ -226,6 +226,6 @@ public class Player extends Entity {
         this.worldX = x;
         this.worldY = y;
         this.health = maxHealth;
-        this.pistol.bulletsRemaining = this.pistol.magazineMaxCapacity;
+        this.pistol.setBulletsRemaining(Constants.STARTING_AMMO);
     }
 }

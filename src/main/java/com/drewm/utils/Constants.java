@@ -49,5 +49,6 @@ public class Constants {
 
     public static final int WEAPON_SCALE = 2;
 
+    public static final int STARTING_AMMO = 5;
     public static final float BULLET_SPEED = 5f;
 }

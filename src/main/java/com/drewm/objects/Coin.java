@@ -42,13 +42,13 @@ public class Coin {
                 worldX - Constants.TILE_SIZE * 2 < player.worldX + player.screenX &&
                 worldY + Constants.TILE_SIZE * 2 > player.worldY - player.screenY &&
                 worldY - Constants.TILE_SIZE * 2 < player.worldY + Window.getWindow().playing.player.screenY) {
-            g2.drawImage(sprite, (int) screenX, (int) screenY, null);
+            g2.drawImage(sprite, (int) screenX, (int) screenY, sprite.getWidth() * 2, sprite.getHeight() * 2, null);
         }
     }
 
     public Rectangle2D.Float getScreenBounds() {
         float screenX = this.worldX - player.worldX + player.screenX;
         float screenY = this.worldY - player.worldY + player.screenY;
-        return new Rectangle2D.Float(screenX, screenY, sprite.getWidth(), sprite.getHeight());
+        return new Rectangle2D.Float(screenX, screenY, sprite.getWidth() * 2, sprite.getHeight() * 2);
     }
 }

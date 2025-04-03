@@ -122,6 +122,16 @@ public class Entity {
                 levelManager.isSolidTile(leftX, bottomY) || levelManager.isSolidTile(rightX, bottomY);
     }
 
+    public boolean isStandingOnSpike(int worldX, int worldY) {
+        LevelManager levelManager = Window.getWindow().playing.levelManager;
+
+        int leftX = worldX + hitboxOffsetX;
+        int rightX = worldX + hitboxOffsetX + hitboxWidth - 1;
+        int bottomY = worldY + hitboxOffsetY + hitboxHeight - 1;
+
+        return levelManager.isSpikeTile(leftX, bottomY) || levelManager.isSpikeTile(rightX, bottomY);
+    }
+
     public void takeDamage(int amount) {
         System.out.println("HIT");
         this.health -= amount;

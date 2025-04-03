@@ -75,7 +75,7 @@ public class LevelManager {
         int t = 0;
         for (int i = 0; i < Constants.WORLD_TILE_SET_NUM_TILE_HEIGHT; i++) {
             for (int j = 0; j < Constants.WORLD_TILE_SET_NUM_TILE_WIDTH; j++) {
-                tiles[t] = new Tile(tileSet.getSubimage(j * Constants.TILE_WIDTH, i * Constants.TILE_WIDTH, Constants.TILE_WIDTH, Constants.TILE_WIDTH), t != 11 && t != 6, t == 6);
+                tiles[t] = new Tile(tileSet.getSubimage(j * Constants.TILE_WIDTH, i * Constants.TILE_WIDTH, Constants.TILE_WIDTH, Constants.TILE_WIDTH), t != 11 && t != 6, t == 6, t == 13);
                 t++;
             }
         }
@@ -104,6 +104,18 @@ public class LevelManager {
 
         int tileIndex = worldMap[row][col];
         return tileIndex >= 0 && tiles[tileIndex].isGoal;
+    }
+
+    public boolean isSpikeTile(int worldX, int worldY) {
+        int col = worldX / Constants.TILE_SIZE;
+        int row = worldY / Constants.TILE_SIZE;
+
+        if (col < 0 || col >= Constants.WORLD_MAP_NUM_TILE_WIDTH || row < 0 || row >= Constants.WORLD_MAP_NUM_TILE_HEIGHT) {
+            return false;
+        }
+
+        int tileIndex = worldMap[row][col];
+        return tileIndex >= 0 && tiles[tileIndex].isSpike;
     }
 
     public void draw(Graphics2D g2) {

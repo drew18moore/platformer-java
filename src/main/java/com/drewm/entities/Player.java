@@ -74,7 +74,7 @@ public class Player extends Entity {
         if (invincible) {
             long elapsedTime = System.currentTimeMillis() - invincibilityStartTime;
             if (elapsedTime >= INVINCIBILITY_DURATION) {
-                invincible = false; // End invincibility after duration
+                invincible = false;
             }
         }
 
@@ -86,6 +86,10 @@ public class Player extends Entity {
         if (rightPressed) {
             nextWorldX += speed;
             this.isMoving = true;
+        }
+
+        if (isStandingOnSpike((int) worldX, (int) worldY + 1)) {
+            System.out.println("SPIKE!!!");
         }
 
         if (!isColliding((int) nextWorldX, (int) worldY)) {

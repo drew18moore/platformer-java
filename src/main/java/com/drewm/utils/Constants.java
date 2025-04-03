@@ -1,12 +1,16 @@
 package com.drewm.utils;
 
+import java.awt.*;
+
 public class Constants {
     public static final int SCALE = 3;
     public static final int TILE_SIZE = 16 * SCALE;
     public static final int TILE_WIDTH = 16;
     public static final int TILE_HEIGHT = 12;
-    public static final int SCREEN_WIDTH = TILE_WIDTH * TILE_SIZE;
-    public static final int SCREEN_HEIGHT = TILE_HEIGHT * TILE_SIZE;
+
+    public static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
+    public static final int SCREEN_WIDTH = SCREEN_SIZE.width;
+    public static final int SCREEN_HEIGHT = SCREEN_SIZE.height;
     public static final String SCREEN_TITLE = "Platformer";
 
     public static final int FPS = 120;
@@ -45,5 +49,6 @@ public class Constants {
 
     public static final int WEAPON_SCALE = 2;
 
+    public static final int STARTING_AMMO = 5;
     public static final float BULLET_SPEED = 5f;
 }

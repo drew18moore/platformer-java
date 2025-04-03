@@ -18,13 +18,15 @@ public class Pistol {
     private double angle;
     private BufferedImage sprite;
     public List<Bullet> bullets;
-    public int magazineMaxCapacity = 5;
-    public int bulletsRemaining = magazineMaxCapacity;
+    private int bulletsRemaining = Constants.STARTING_AMMO;
+
+    private BufferedImage ammoCount;
 
     public float muzzleWorldX, muzzleWorldY;
 
     public Pistol(Player player, List<Bullet> bullets) {
         this.player = player;
+        this.ammoCount = player.updateHudText("Ammo: ", bulletsRemaining);
         this.bullets = bullets;
         calculatePivotScreenPosition();
 
@@ -107,6 +109,8 @@ public class Pistol {
 
         g2.drawLine(muzzleScreenX, muzzleScreenY, endX, endY);
         g2.fillRect(muzzleScreenX, muzzleScreenY, rectSize, rectSize);
+
+        g2.drawImage(ammoCount, 0, 50, null);
     }
 
     public void mouseClicked(MouseEvent e) {
@@ -116,7 +120,7 @@ public class Pistol {
     public void mousePressed(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1 && bulletsRemaining > 0) {
             this.bullets.add(new Bullet(muzzleWorldX, muzzleWorldY, angle, player.facingLeft, Constants.BULLET_SPEED, player));
-            bulletsRemaining--;
+            setBulletsRemaining(getBulletsRemaining()-1);
         }
     }
 
@@ -140,5 +144,14 @@ public class Pistol {
 
     public void keyReleased(KeyEvent e) {
 
+    }
+
+    public int getBulletsRemaining() {
+        return this.bulletsRemaining;
+    }
+
+    public void setBulletsRemaining(int amount) {
+        this.bulletsRemaining = amount;
+        this.ammoCount = player.updateHudText("Ammo: ", bulletsRemaining);
     }
 }

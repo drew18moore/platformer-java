@@ -99,7 +99,6 @@ public class Playing implements Statemethods {
                     coinIterator.remove();
                 }
             }
-            System.out.println(player.getCoins());
         } else {
             Modal activeModal = getActiveModal();
             if (activeModal != null) activeModal.update();

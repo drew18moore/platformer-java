@@ -90,6 +90,7 @@ public class Player extends Entity {
 
         if (isStandingOnSpike((int) worldX, (int) worldY + 1)) {
             System.out.println("SPIKE!!!");
+            takeDamage(5);
         }
 
         if (!isColliding((int) nextWorldX, (int) worldY)) {

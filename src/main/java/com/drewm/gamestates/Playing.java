@@ -67,7 +67,7 @@ public class Playing implements Statemethods {
     public boolean showDeathScreen = false;
 
     public Playing() {
-        this.levelManager.loadLevel("/maps/map0.json", false);
+        this.levelManager.loadLevel("/maps/map1.json", false);
     }
 
     @Override
@@ -190,14 +190,14 @@ public class Playing implements Statemethods {
     public void resetLevel() {
         this.levelManager = new LevelManager(this);
         this.bullets = new ArrayList<>();
-        this.levelManager.loadLevel("/maps/map0.json", false);
+        this.levelManager.loadLevel("/maps/map1.json", false);
 
         resetBools();
     }
 
     public void respawn() {
         this.bullets.clear();
-        this.levelManager.loadLevel("/maps/map0.json", true);
+        this.levelManager.loadLevel("/maps/map1.json", true);
 
         resetBools();
     }

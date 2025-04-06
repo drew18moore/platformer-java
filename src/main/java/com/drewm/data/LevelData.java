@@ -4,6 +4,7 @@ import java.util.List;
 
 public record LevelData(
         List<int[]> tiles,
+        List<int[]> background,
         List<EntityData> players,
         List<EntityData> enemies,
         List<CoinData> coins

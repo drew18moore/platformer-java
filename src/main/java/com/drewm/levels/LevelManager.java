@@ -19,9 +19,11 @@ import java.util.List;
 public class LevelManager {
     private final Playing playing;
     private int[][] worldMap;
+    private int[][] worldBackground;
     private List<BasicZombie> basicZombies;
     private List<Coin> coins;
     Tile[] tiles;
+    Tile[] backgroundTiles;
 
     public LevelManager(Playing playing) {
         this.playing = playing;
@@ -30,16 +32,24 @@ public class LevelManager {
     public void loadLevel(String filePath, boolean persistState) {
         try {
             // Load tileset
-            this.tiles = getTileSet("/tilesets/tileset0.png");
+            this.tiles = getTileSet("/tilesets/tileset0.png", Constants.WORLD_TILE_SET_NUM_TILE_WIDTH, Constants.WORLD_TILE_SET_NUM_TILE_HEIGHT);
+            this.backgroundTiles = getTileSet("/tilesets/background-tileset0.png", Constants.WORLD_BACKGROUND_TILE_SET_NUM_TILE_WIDTH, Constants.WORLD_BACKGROUND_TILE_SET_NUM_TILE_HEIGHT);
 
             ObjectMapper objectMapper = new ObjectMapper();
             LevelData levelData = objectMapper.readValue(getClass().getResourceAsStream(filePath), LevelData.class);
 
-            this.worldMap = new int[Constants.WORLD_MAP_NUM_TILE_WIDTH][Constants.WORLD_MAP_NUM_TILE_HEIGHT];
+            this.worldMap = new int[Constants.WORLD_MAP_NUM_TILE_HEIGHT][Constants.WORLD_MAP_NUM_TILE_WIDTH];
             List<int[]> tileList = levelData.tiles();
             for (int i = 0; i < tileList.size(); i++) {
                 int[] tileRow = tileList.get(i);
                 System.arraycopy(tileRow, 0, worldMap[i], 0, tileRow.length);
+            }
+
+            this.worldBackground = new int[Constants.WORLD_MAP_NUM_TILE_HEIGHT][Constants.WORLD_MAP_NUM_TILE_WIDTH];
+            tileList = levelData.background();
+            for (int i = 0; i < tileList.size(); i++) {
+                int[] tileRow = tileList.get(i);
+                System.arraycopy(tileRow, 0, worldBackground[i], 0, tileRow.length);
             }
 
             // Load player
@@ -68,13 +78,13 @@ public class LevelManager {
         }
     }
 
-    private Tile[] getTileSet(String path) throws IOException {
+    private Tile[] getTileSet(String path, int width, int height) throws IOException {
         Tile[] tiles;
         BufferedImage tileSet = ImageIO.read(getClass().getResourceAsStream(path));
         tiles = new Tile[Constants.WORLD_TILE_SET_NUM_TILES];
         int t = 0;
-        for (int i = 0; i < Constants.WORLD_TILE_SET_NUM_TILE_HEIGHT; i++) {
-            for (int j = 0; j < Constants.WORLD_TILE_SET_NUM_TILE_WIDTH; j++) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
                 tiles[t] = new Tile(tileSet.getSubimage(j * Constants.TILE_WIDTH, i * Constants.TILE_WIDTH, Constants.TILE_WIDTH, Constants.TILE_WIDTH), t != 11 && t != 6, t == 6, t == 13);
                 t++;
             }
@@ -124,6 +134,7 @@ public class LevelManager {
 
         while (worldCol < Constants.WORLD_MAP_NUM_TILE_WIDTH && worldRow < Constants.WORLD_MAP_NUM_TILE_HEIGHT) {
             int tile = this.worldMap[worldRow][worldCol];
+            int background = this.worldBackground[worldRow][worldCol];
 
             int worldX = worldCol * Constants.TILE_SIZE;
             int worldY = worldRow * Constants.TILE_SIZE;
@@ -135,6 +146,7 @@ public class LevelManager {
                     worldX - Constants.TILE_SIZE * 2 < Window.getWindow().playing.player.worldX + Window.getWindow().playing.player.screenX &&
                     worldY + Constants.TILE_SIZE * 2 > Window.getWindow().playing.player.worldY - Window.getWindow().playing.player.screenY &&
                     worldY - Constants.TILE_SIZE * 2 < Window.getWindow().playing.player.worldY + Window.getWindow().playing.player.screenY) {
+                g2.drawImage(backgroundTiles[background].image, (int) screenX, (int) screenY, Constants.TILE_SIZE, Constants.TILE_SIZE, null);
                 g2.drawImage(tiles[tile].image, (int) screenX, (int) screenY, Constants.TILE_SIZE, Constants.TILE_SIZE, null);
             }
             worldCol++;

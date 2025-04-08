@@ -146,8 +146,10 @@ public class LevelManager {
                     worldX - Constants.TILE_SIZE * 2 < Window.getWindow().playing.player.worldX + Window.getWindow().playing.player.screenX &&
                     worldY + Constants.TILE_SIZE * 2 > Window.getWindow().playing.player.worldY - Window.getWindow().playing.player.screenY &&
                     worldY - Constants.TILE_SIZE * 2 < Window.getWindow().playing.player.worldY + Window.getWindow().playing.player.screenY) {
-                g2.drawImage(backgroundTiles[background].image, (int) screenX, (int) screenY, Constants.TILE_SIZE, Constants.TILE_SIZE, null);
-                g2.drawImage(tiles[tile].image, (int) screenX, (int) screenY, Constants.TILE_SIZE, Constants.TILE_SIZE, null);
+                int drawX = Math.round(screenX);
+                int drawY = Math.round(screenY);
+                g2.drawImage(backgroundTiles[background].image, drawX, drawY, Constants.TILE_SIZE, Constants.TILE_SIZE, null);
+                g2.drawImage(tiles[tile].image, drawX, drawY, Constants.TILE_SIZE, Constants.TILE_SIZE, null);
             }
             worldCol++;
 

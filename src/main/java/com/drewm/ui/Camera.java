@@ -16,18 +16,28 @@ public class Camera {
     private final int DEADZONE_BOTTOM = DEADZONE_TOP + DEADZONE_HEIGHT;
 
     public void update(Player player) {
-        float playerScreenX = player.worldX - cameraX;
-        float playerScreenY = player.worldY - cameraY;
+        float hitboxWorldX = player.worldX + player.hitboxOffsetX;
+        float hitboxWorldY = player.worldY + player.hitboxOffsetY;
 
-        if (playerScreenX < DEADZONE_LEFT)
-            cameraX = player.worldX - DEADZONE_LEFT;
-        else if (playerScreenX > DEADZONE_RIGHT)
-            cameraX = player.worldX - DEADZONE_RIGHT;
+        float hitboxBottomY = hitboxWorldY + player.hitboxHeight;
+        float hitboxRightX = hitboxWorldX + player.hitboxWidth;
 
-        if (playerScreenY < DEADZONE_TOP)
-            cameraY = player.worldY - DEADZONE_TOP;
-        else if (playerScreenY > DEADZONE_BOTTOM)
-            cameraY = player.worldY - DEADZONE_BOTTOM;
+        float playerLeftScreenX = hitboxWorldX - cameraX;
+        float playerTopScreenY = hitboxWorldY - cameraY;
+        float playerBottomScreenY = hitboxBottomY - cameraY;
+        float playerRightScreenX = hitboxRightX - cameraX;
+
+        if (playerLeftScreenX < DEADZONE_LEFT) {
+            cameraX = hitboxWorldX - DEADZONE_LEFT;
+        } else if (playerRightScreenX > DEADZONE_RIGHT) {
+            cameraX = hitboxRightX - DEADZONE_RIGHT;
+        }
+
+        if (playerTopScreenY < DEADZONE_TOP) {
+            cameraY = hitboxWorldY - DEADZONE_TOP;
+        } else if (playerBottomScreenY > DEADZONE_BOTTOM) {
+            cameraY = hitboxBottomY - DEADZONE_BOTTOM;
+        }
     }
 
     public float getCameraX() {

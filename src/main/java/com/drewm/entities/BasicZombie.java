@@ -16,10 +16,10 @@ public class BasicZombie extends Entity {
 
         this.useGravity = true;
 
-        this.hitboxWidth = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 60;
-        this.hitboxHeight = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 55;
-        this.hitboxOffsetX = 30;
-        this.hitboxOffsetY = 35;
+        this.hitboxWidth = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 80;
+        this.hitboxHeight = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 60;
+        this.hitboxOffsetX = 40;
+        this.hitboxOffsetY = 45;
         this.showHitbox = true;
         this.health = 30;
 

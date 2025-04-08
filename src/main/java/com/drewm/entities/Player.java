@@ -36,10 +36,10 @@ public class Player extends Entity {
         super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE, playing);
         this.useGravity = true;
 
-        this.hitboxWidth = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 60;
-        this.hitboxHeight = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 55;
-        this.hitboxOffsetX = 30;
-        this.hitboxOffsetY = 35;
+        this.hitboxWidth = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 80;
+        this.hitboxHeight = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 60;
+        this.hitboxOffsetX = 40;
+        this.hitboxOffsetY = 45;
         this.showHitbox = true;
 
         this.pistol = new Pistol(this, bullets);
@@ -92,7 +92,6 @@ public class Player extends Entity {
         if (!isColliding((int) nextWorldX, (int) worldY)) {
             worldX = nextWorldX;
             screenX = Math.round(worldX - playing.camera.getCameraX());
-//            screenY = Math.round(worldY - playing.camera.getCameraY());
         }
 
         if (isCollidingWithGoal((int) nextWorldX, (int) worldY)) {

@@ -15,9 +15,6 @@ import java.io.IOException;
 import java.util.List;
 
 public class Player extends Entity {
-    private final Playing playing;
-    public final int screenX = (Constants.SCREEN_WIDTH/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
-    public final int screenY = (Constants.SCREEN_HEIGHT/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     public boolean leftPressed, rightPressed, jumpPressed;
 
     private int coins = 0;
@@ -36,8 +33,7 @@ public class Player extends Entity {
     private BufferedImage coinCount = updateHudText("Coins: ", coins);
 
     public Player(float worldX, float worldY, Playing playing, List<Bullet> bullets) {
-        super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
-        this.playing = playing;
+        super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE, playing);
         this.useGravity = true;
 
         this.hitboxWidth = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 60;
@@ -95,6 +91,8 @@ public class Player extends Entity {
 
         if (!isColliding((int) nextWorldX, (int) worldY)) {
             worldX = nextWorldX;
+            screenX = Math.round(worldX - playing.camera.getCameraX());
+//            screenY = Math.round(worldY - playing.camera.getCameraY());
         }
 
         if (isCollidingWithGoal((int) nextWorldX, (int) worldY)) {

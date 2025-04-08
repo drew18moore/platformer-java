@@ -1,6 +1,7 @@
 package com.drewm.objects;
 
 import com.drewm.entities.Player;
+import com.drewm.gamestates.Playing;
 import com.drewm.main.Window;
 import com.drewm.utils.Constants;
 
@@ -11,12 +12,12 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Coin {
-    private final Player player;
+    private final Playing playing;
     public float worldX, worldY;
     private BufferedImage sprite;
 
-    public Coin(float x, float y, Player player) {
-        this.player = player;
+    public Coin(float x, float y, Playing playing) {
+        this.playing = playing;
         this.worldX = x;
         this.worldY = y;
 
@@ -28,27 +29,27 @@ public class Coin {
     }
 
     public boolean update() {
-        if (getScreenBounds().intersects(player.getBounds())) {
-            player.earnCoins(1);
+        if (getScreenBounds().intersects(playing.player.getBounds())) {
+            playing.player.earnCoins(1);
             return true;
         }
         return false;
     }
 
     public void draw(Graphics2D g2) {
-        float screenX = this.worldX - player.worldX + player.screenX;
-        float screenY = this.worldY - player.worldY + player.screenY;
-        if (worldX + Constants.TILE_SIZE * 2 > player.worldX - player.screenX &&
-                worldX - Constants.TILE_SIZE * 2 < player.worldX + player.screenX &&
-                worldY + Constants.TILE_SIZE * 2 > player.worldY - player.screenY &&
-                worldY - Constants.TILE_SIZE * 2 < player.worldY + Window.getWindow().playing.player.screenY) {
+        float screenX = this.worldX - playing.camera.getCameraX();
+        float screenY = this.worldY - playing.camera.getCameraY();
+        if (worldX + Constants.TILE_SIZE * 2 > playing.player.worldX - playing.player.screenX &&
+                worldX - Constants.TILE_SIZE * 2 < playing.player.worldX + playing.player.screenX &&
+                worldY + Constants.TILE_SIZE * 2 > playing.player.worldY - playing.player.screenY &&
+                worldY - Constants.TILE_SIZE * 2 < playing.player.worldY + Window.getWindow().playing.player.screenY) {
             g2.drawImage(sprite, (int) screenX, (int) screenY, sprite.getWidth() * 2, sprite.getHeight() * 2, null);
         }
     }
 
     public Rectangle2D.Float getScreenBounds() {
-        float screenX = this.worldX - player.worldX + player.screenX;
-        float screenY = this.worldY - player.worldY + player.screenY;
+        float screenX = this.worldX - playing.player.worldX + playing.player.screenX;
+        float screenY = this.worldY - playing.player.worldY + playing.player.screenY;
         return new Rectangle2D.Float(screenX, screenY, sprite.getWidth() * 2, sprite.getHeight() * 2);
     }
 }

@@ -4,7 +4,6 @@ import com.drewm.data.*;
 import com.drewm.entities.BasicZombie;
 import com.drewm.entities.Player;
 import com.drewm.gamestates.Playing;
-import com.drewm.main.Window;
 import com.drewm.objects.Coin;
 import com.drewm.utils.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -64,14 +63,14 @@ public class LevelManager {
             List<EntityData> enemies = levelData.enemies();
             this.basicZombies = new ArrayList<>();
             for (EntityData enemy : enemies) {
-                this.basicZombies.add(new BasicZombie(enemy.x(), enemy.y(), this.playing.player));
+                this.basicZombies.add(new BasicZombie(enemy.x(), enemy.y(), this.playing));
             }
 
             // Load coins
             List<CoinData> coins = levelData.coins();
             this.coins = new ArrayList<>();
             for (CoinData coin : coins) {
-                this.coins.add(new Coin(coin.x(), coin.y(), this.playing.player));
+                this.coins.add(new Coin(coin.x(), coin.y(), this.playing));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -131,6 +130,8 @@ public class LevelManager {
     public void draw(Graphics2D g2) {
         int worldCol = 0;
         int worldRow = 0;
+        float cameraX = playing.camera.getCameraX();
+        float cameraY = playing.camera.getCameraY();
 
         while (worldCol < Constants.WORLD_MAP_NUM_TILE_WIDTH && worldRow < Constants.WORLD_MAP_NUM_TILE_HEIGHT) {
             int tile = this.worldMap[worldRow][worldCol];
@@ -138,14 +139,14 @@ public class LevelManager {
 
             int worldX = worldCol * Constants.TILE_SIZE;
             int worldY = worldRow * Constants.TILE_SIZE;
-            float screenX = worldX - Window.getWindow().playing.player.worldX + Window.getWindow().playing.player.screenX;
-            float screenY = worldY - Window.getWindow().playing.player.worldY + Window.getWindow().playing.player.screenY;
+            float screenX = worldX - cameraX;
+            float screenY = worldY - cameraY;
 
             if (tile != -1 &&
-                    worldX + Constants.TILE_SIZE * 2 > Window.getWindow().playing.player.worldX - Window.getWindow().playing.player.screenX &&
-                    worldX - Constants.TILE_SIZE * 2 < Window.getWindow().playing.player.worldX + Window.getWindow().playing.player.screenX &&
-                    worldY + Constants.TILE_SIZE * 2 > Window.getWindow().playing.player.worldY - Window.getWindow().playing.player.screenY &&
-                    worldY - Constants.TILE_SIZE * 2 < Window.getWindow().playing.player.worldY + Window.getWindow().playing.player.screenY) {
+                    screenX + Constants.TILE_SIZE > 0 &&
+                    screenX < Constants.SCREEN_WIDTH &&
+                    screenY + Constants.TILE_SIZE > 0 &&
+                    screenY < Constants.SCREEN_HEIGHT) {
                 int drawX = Math.round(screenX);
                 int drawY = Math.round(screenY);
                 g2.drawImage(backgroundTiles[background].image, drawX, drawY, Constants.TILE_SIZE, Constants.TILE_SIZE, null);

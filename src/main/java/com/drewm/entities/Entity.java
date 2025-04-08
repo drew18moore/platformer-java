@@ -1,5 +1,6 @@
 package com.drewm.entities;
 
+import com.drewm.gamestates.Playing;
 import com.drewm.levels.LevelManager;
 import com.drewm.main.Window;
 import com.drewm.utils.Constants;
@@ -9,7 +10,9 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class Entity {
+    protected final Playing playing;
     public float worldX, worldY;
+    public int screenX, screenY;
     public int spriteWidth, spriteHeight;
     public int hitboxWidth, hitboxHeight, hitboxOffsetX, hitboxOffsetY;
 
@@ -28,7 +31,8 @@ public class Entity {
     public int spriteNum = 0;
     public boolean facingLeft = false;
 
-    public Entity(float worldX, float worldY, BufferedImage[] movementSprites, int spriteWidth, int spriteHeight) {
+    public Entity(float worldX, float worldY, BufferedImage[] movementSprites, int spriteWidth, int spriteHeight, Playing playing) {
+        this.playing = playing;
         this.worldX = worldX;
         this.worldY = worldY;
 
@@ -73,6 +77,7 @@ public class Entity {
         float nextWorldY = worldY + velocityY;
         if (!isColliding((int) worldX, (int) nextWorldY)) {
             worldY = nextWorldY;
+            screenY = Math.round(worldY - playing.camera.getCameraY());
         } else {
             if (velocityY > 0) isOnGround = true;
             velocityY = 0;

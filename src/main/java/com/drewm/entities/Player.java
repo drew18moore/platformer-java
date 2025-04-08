@@ -229,6 +229,7 @@ public class Player extends Entity {
         this.worldX = x;
         this.worldY = y;
         this.health = maxHealth;
+        this.healthBar = updateHudText("Health: ", health);
         this.pistol.setBulletsRemaining(Constants.STARTING_AMMO);
     }
 }

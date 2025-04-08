@@ -65,8 +65,8 @@ public class BasicZombie extends Entity {
     }
 
     public void draw(Graphics2D g2) {
-        float screenX = worldX - playing.player.worldX + playing.player.screenX;
-        float screenY = worldY - playing.player.worldY + playing.player.screenY;
+        float screenX = worldX - playing.camera.getCameraX();
+        float screenY = worldY - playing.camera.getCameraY();
         if (screenX + Constants.TILE_SIZE > 0 &&
                 screenX < Constants.SCREEN_WIDTH &&
                 screenY + Constants.TILE_SIZE > 0 &&

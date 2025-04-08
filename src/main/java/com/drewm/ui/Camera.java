@@ -38,6 +38,12 @@ public class Camera {
         } else if (playerBottomScreenY > DEADZONE_BOTTOM) {
             cameraY = hitboxBottomY - DEADZONE_BOTTOM;
         }
+
+        int maxCameraX = Constants.WORLD_MAP_NUM_TILE_WIDTH * Constants.TILE_SIZE - Constants.SCREEN_WIDTH;
+        int maxCameraY = Constants.WORLD_MAP_NUM_TILE_HEIGHT * Constants.TILE_SIZE - Constants.SCREEN_HEIGHT;
+
+        cameraX = Math.max(0, Math.min(cameraX, maxCameraX));
+        cameraY = Math.max(0, Math.min(cameraY, maxCameraY));
     }
 
     public float getCameraX() {

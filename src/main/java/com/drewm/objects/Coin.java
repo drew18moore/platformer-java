@@ -39,11 +39,14 @@ public class Coin {
     public void draw(Graphics2D g2) {
         float screenX = this.worldX - playing.camera.getCameraX();
         float screenY = this.worldY - playing.camera.getCameraY();
-        if (worldX + Constants.TILE_SIZE * 2 > playing.player.worldX - playing.player.screenX &&
-                worldX - Constants.TILE_SIZE * 2 < playing.player.worldX + playing.player.screenX &&
-                worldY + Constants.TILE_SIZE * 2 > playing.player.worldY - playing.player.screenY &&
-                worldY - Constants.TILE_SIZE * 2 < playing.player.worldY + Window.getWindow().playing.player.screenY) {
+        if (screenX + Constants.TILE_SIZE > 0 &&
+                screenX < Constants.SCREEN_WIDTH &&
+                screenY + Constants.TILE_SIZE > 0 &&
+                screenY < Constants.SCREEN_HEIGHT) {
+            System.out.println("RENDER");
             g2.drawImage(sprite, (int) screenX, (int) screenY, sprite.getWidth() * 2, sprite.getHeight() * 2, null);
+        } else {
+            System.out.println("NO RENDER");
         }
     }
 

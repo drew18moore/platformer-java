@@ -49,7 +49,7 @@ public class Constants {
 
     public static final float BASIC_ZOMBIE_SPEED = 0.5f;
 
-    public static final int WEAPON_SCALE = 2;
+    public static final int WEAPON_SCALE = 3;
 
     public static final int STARTING_AMMO = 5;
     public static final float BULLET_SPEED = 5f;

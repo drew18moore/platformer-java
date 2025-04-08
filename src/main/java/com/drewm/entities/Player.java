@@ -40,7 +40,7 @@ public class Player extends Entity {
         this.hitboxHeight = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 60;
         this.hitboxOffsetX = 40;
         this.hitboxOffsetY = 45;
-        this.showHitbox = true;
+        this.showHitbox = false;
 
         this.pistol = new Pistol(this, bullets);
 

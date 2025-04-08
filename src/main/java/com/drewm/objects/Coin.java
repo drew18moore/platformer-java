@@ -1,8 +1,6 @@
 package com.drewm.objects;
 
-import com.drewm.entities.Player;
 import com.drewm.gamestates.Playing;
-import com.drewm.main.Window;
 import com.drewm.utils.Constants;
 
 import javax.imageio.ImageIO;
@@ -43,10 +41,7 @@ public class Coin {
                 screenX < Constants.SCREEN_WIDTH &&
                 screenY + Constants.TILE_SIZE > 0 &&
                 screenY < Constants.SCREEN_HEIGHT) {
-            System.out.println("RENDER");
             g2.drawImage(sprite, (int) screenX, (int) screenY, sprite.getWidth() * 2, sprite.getHeight() * 2, null);
-        } else {
-            System.out.println("NO RENDER");
         }
     }
 

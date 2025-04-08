@@ -1,7 +1,6 @@
 package com.drewm.entities;
 
 import com.drewm.gamestates.Playing;
-import com.drewm.main.Window;
 import com.drewm.utils.Constants;
 
 import javax.imageio.ImageIO;
@@ -20,7 +19,7 @@ public class BasicZombie extends Entity {
         this.hitboxHeight = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 60;
         this.hitboxOffsetX = 40;
         this.hitboxOffsetY = 45;
-        this.showHitbox = true;
+        this.showHitbox = false;
         this.health = 30;
 
         try {

@@ -62,7 +62,6 @@ public class Player extends Entity {
     }
 
     public void update() {
-        System.out.println(this.worldX + "|" + this.worldY);
         super.update(jumpPressed);
         if (ownsPistol) this.pistol.update();
 
@@ -84,6 +83,8 @@ public class Player extends Entity {
             nextWorldX += speed;
             this.isMoving = true;
         }
+
+        if (isMoving) this.pistol.calculateAngle();
 
         if (isStandingOnSpike((int) worldX, (int) worldY + 1)) {
             System.out.println("SPIKE!!!");

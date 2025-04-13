@@ -19,6 +19,7 @@ public class Pistol {
     private BufferedImage sprite;
     public List<Bullet> bullets;
     private int bulletsRemaining = Constants.STARTING_AMMO;
+    public int mouseX, mouseY;
 
     private BufferedImage ammoCount;
 
@@ -136,9 +137,16 @@ public class Pistol {
     }
 
     public void mouseMoved(MouseEvent e) {
-        int mouseX = e.getX();
-        int mouseY = e.getY();
+        mouseX = e.getX();
+        mouseY = e.getY();
 
+        angle = Math.toDegrees(Math.atan2(mouseY - pivotScreenY, mouseX - pivotScreenX));
+
+        player.facingLeft = mouseX < player.screenX + player.hitboxOffsetX + player.hitboxWidth / 2;
+        if (player.facingLeft) angle += 180;
+    }
+
+    public void calculateAngle() {
         angle = Math.toDegrees(Math.atan2(mouseY - pivotScreenY, mouseX - pivotScreenX));
 
         player.facingLeft = mouseX < player.screenX + player.hitboxOffsetX + player.hitboxWidth / 2;

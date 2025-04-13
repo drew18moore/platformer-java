@@ -45,12 +45,12 @@ public class Pistol {
     private void calculatePivotScreenPosition() {
         int pistolScreenX;
         if (player.facingLeft) {
-            pistolScreenX = player.screenX + player.hitboxOffsetX;
+            pistolScreenX = player.screenX + player.hitboxOffsetX + player.spriteWidth * Constants.SCALE / 2;
         } else {
-            pistolScreenX = player.screenX + player.hitboxOffsetX + player.hitboxWidth;
+            pistolScreenX = player.screenX + player.hitboxOffsetX + player.hitboxWidth - player.spriteWidth * Constants.SCALE / 2;
         }
 
-        int pistolScreenY = player.screenY + player.hitboxOffsetY + player.hitboxHeight / 2;
+        int pistolScreenY = player.screenY + player.hitboxOffsetY + player.hitboxHeight / 3;
 
         pivotScreenX = pistolScreenX;
         pivotScreenY = pistolScreenY;
@@ -60,22 +60,29 @@ public class Pistol {
         float scale = Constants.WEAPON_SCALE;
         float radians = (float) Math.toRadians(angle);
 
-        float pistolWorldX = player.worldX + player.hitboxOffsetX;
-        if (!player.facingLeft) {
-            pistolWorldX += player.hitboxWidth;
+        // Find the pivot point in world coordinates
+        float pivotWorldX;
+        if (player.facingLeft) {
+            pivotWorldX = player.worldX + player.hitboxOffsetX + player.spriteWidth * Constants.SCALE / 2f;
+        } else {
+            pivotWorldX = player.worldX + player.hitboxOffsetX + player.hitboxWidth - player.spriteWidth * Constants.SCALE / 2f;
         }
 
-        float pistolWorldY = player.worldY + player.hitboxOffsetY + player.hitboxHeight / 2f;
-        float scaledMuzzleX = (sprite.getWidth() - 3) * scale;
+        float pivotWorldY = player.worldY + player.hitboxOffsetY + player.hitboxHeight / 3f;
 
-        if (player.facingLeft) scaledMuzzleX = -scaledMuzzleX;
+        // Muzzle offset in local weapon space (along the weapon length)
+        float muzzleOffsetX = (sprite.getWidth() - 3) * scale;
+        if (player.facingLeft) muzzleOffsetX = -muzzleOffsetX;
 
-        float rotatedX = scaledMuzzleX * (float) Math.cos(radians);
-        float rotatedY = scaledMuzzleX * (float) Math.sin(radians);
+        // Rotate the offset
+        float rotatedX = muzzleOffsetX * (float) Math.cos(radians);
+        float rotatedY = muzzleOffsetX * (float) Math.sin(radians);
 
-        muzzleWorldX = pistolWorldX + rotatedX;
-        muzzleWorldY = pistolWorldY + rotatedY;
+        // Add to the pivot world position
+        muzzleWorldX = pivotWorldX + rotatedX;
+        muzzleWorldY = pivotWorldY + rotatedY;
     }
+
 
 
     public void draw(Graphics2D g2) {

@@ -26,7 +26,7 @@ public class Player extends Entity {
     private long invincibilityStartTime = 0;
     private final int INVINCIBILITY_DURATION = 500;
 
-    public boolean ownsPistol = true;
+    public boolean ownsPistol = false;
     public Pistol pistol;
 
     private BufferedImage healthBar = updateHudText("Health: ", health);

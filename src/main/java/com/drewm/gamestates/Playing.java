@@ -4,6 +4,7 @@ import com.drewm.entities.BasicZombie;
 import com.drewm.entities.Player;
 import com.drewm.levels.LevelManager;
 import com.drewm.objects.Coin;
+import com.drewm.objects.Door;
 import com.drewm.ui.Button;
 import com.drewm.ui.Camera;
 import com.drewm.ui.Modal;
@@ -22,6 +23,7 @@ public class Playing implements Statemethods {
     public List<Bullet> bullets = new ArrayList<>();
     public Player player;
     public Camera camera = new Camera();
+    public Door currentDoor = null;
 
     private final Modal pauseMenu = new Modal("Game Paused", new Button[]{
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Resume", () -> {
@@ -102,6 +104,15 @@ public class Playing implements Statemethods {
                     coinIterator.remove();
                 }
             }
+
+            currentDoor = null;
+            for (Door door : this.levelManager.getDoors()) {
+                if (door.getScreenBounds().intersects(player.getBounds())) {
+                    currentDoor = door;
+                    break;
+                }
+            }
+
         } else {
             Modal activeModal = getActiveModal();
             if (activeModal != null) activeModal.update();
@@ -116,6 +127,7 @@ public class Playing implements Statemethods {
         this.levelManager.getBasicZombies().forEach(zombie -> zombie.draw(g2));
         bullets.forEach(bullet -> bullet.draw(g2));
         this.levelManager.getCoins().forEach(coin -> coin.draw(g2));
+        this.levelManager.getDoors().forEach(door -> door.draw(g2));
 
         Modal activeModal = getActiveModal();
         if (activeModal != null) activeModal.draw(g);
@@ -155,6 +167,11 @@ public class Playing implements Statemethods {
         }
         if (e.getKeyCode() == KeyEvent.VK_D) {
             player.rightPressed = true;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_W) {
+            if (currentDoor != null) {
+                currentDoor.tryOpen(player);
+            }
         }
         if (!showWinScreen && !showDeathScreen && e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             if (showBuyMenu) showBuyMenu = false;

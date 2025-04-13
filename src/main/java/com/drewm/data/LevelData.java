@@ -7,6 +7,7 @@ public record LevelData(
         List<int[]> background,
         List<EntityData> players,
         List<EntityData> enemies,
-        List<CoinData> coins
+        List<CoinData> coins,
+        List<DoorData> doors
 ) {
 }

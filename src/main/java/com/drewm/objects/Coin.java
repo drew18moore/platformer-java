@@ -44,7 +44,6 @@ public class Coin {
             return true;
         }
 
-        System.out.println(spriteCounter);
         spriteCounter++;
         if (spriteCounter > 24) {
             if (spriteNum >= 3) {

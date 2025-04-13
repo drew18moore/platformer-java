@@ -5,6 +5,7 @@ import com.drewm.entities.BasicZombie;
 import com.drewm.entities.Player;
 import com.drewm.gamestates.Playing;
 import com.drewm.objects.Coin;
+import com.drewm.objects.Door;
 import com.drewm.utils.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -21,6 +22,7 @@ public class LevelManager {
     private int[][] worldBackground;
     private List<BasicZombie> basicZombies;
     private List<Coin> coins;
+    private List<Door> doors;
     Tile[] tiles;
     Tile[] backgroundTiles;
 
@@ -72,6 +74,13 @@ public class LevelManager {
             for (CoinData coin : coins) {
                 this.coins.add(new Coin(coin.x(), coin.y(), this.playing));
             }
+
+            List<DoorData> doorsData = levelData.doors();
+            this.doors = new ArrayList<>();
+            for (DoorData door : doorsData) {
+                this.doors.add(new Door(door.x(), door.y(), this.playing));
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -164,6 +173,8 @@ public class LevelManager {
     public List<Coin> getCoins() {
         return coins;
     }
+
+    public List<Door> getDoors() { return doors; }
 
     public List<BasicZombie> getBasicZombies() {
         return basicZombies;

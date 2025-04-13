@@ -3,7 +3,7 @@ package com.drewm.utils;
 import java.awt.*;
 
 public class Constants {
-    public static final int SCALE = 3;
+    public static final int SCALE = 4;
     public static final int TILE_SIZE = 16 * SCALE;
     public static final int TILE_WIDTH = 16;
     public static final int TILE_HEIGHT = 12;
@@ -26,12 +26,16 @@ public class Constants {
     public static final float JUMP_FORCE = 7.0f;
 
     public static final int PLAYER_SPRITE_TILE_SIZE = 32;
+    public static final int PLAYER_SPRITE_WIDTH = 16;
+    public static final int PLAYER_SPRITE_HEIGHT = 32;
 
-    public static final int WORLD_MAP_NUM_TILE_WIDTH = 64;
-    public static final int WORLD_MAP_NUM_TILE_HEIGHT = 64;
+    public static final int WORLD_MAP_NUM_TILE_WIDTH = 32;
+    public static final int WORLD_MAP_NUM_TILE_HEIGHT = 32;
 
     public static final int WORLD_TILE_SET_NUM_TILE_WIDTH = 7;
     public static final int WORLD_TILE_SET_NUM_TILE_HEIGHT = 3;
+    public static final int WORLD_BACKGROUND_TILE_SET_NUM_TILE_WIDTH = 7;
+    public static final int WORLD_BACKGROUND_TILE_SET_NUM_TILE_HEIGHT = 3;
 
     public static final int WORLD_TILE_SET_NUM_TILES = WORLD_TILE_SET_NUM_TILE_WIDTH * WORLD_TILE_SET_NUM_TILE_HEIGHT;
 
@@ -47,7 +51,7 @@ public class Constants {
 
     public static final float BASIC_ZOMBIE_SPEED = 0.5f;
 
-    public static final int WEAPON_SCALE = 2;
+    public static final int WEAPON_SCALE = 3;
 
     public static final int STARTING_AMMO = 5;
     public static final float BULLET_SPEED = 5f;

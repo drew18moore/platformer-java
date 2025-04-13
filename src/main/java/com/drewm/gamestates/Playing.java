@@ -5,6 +5,7 @@ import com.drewm.entities.Player;
 import com.drewm.levels.LevelManager;
 import com.drewm.objects.Coin;
 import com.drewm.ui.Button;
+import com.drewm.ui.Camera;
 import com.drewm.ui.Modal;
 import com.drewm.utils.Constants;
 import com.drewm.weapons.Bullet;
@@ -20,6 +21,7 @@ public class Playing implements Statemethods {
     public LevelManager levelManager = new LevelManager(this);
     public List<Bullet> bullets = new ArrayList<>();
     public Player player;
+    public Camera camera = new Camera();
 
     private final Modal pauseMenu = new Modal("Game Paused", new Button[]{
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Resume", () -> {
@@ -67,13 +69,14 @@ public class Playing implements Statemethods {
     public boolean showDeathScreen = false;
 
     public Playing() {
-        this.levelManager.loadLevel("/maps/map0.json", false);
+        this.levelManager.loadLevel("/maps/map1-lg.json", false);
     }
 
     @Override
     public void update() {
         if (!isPaused && !showWinScreen && !showDeathScreen && !showBuyMenu) {
             player.update();
+            camera.update(player);
 
             Iterator<Bullet> bulletIterator = bullets.iterator();
             while(bulletIterator.hasNext()) {
@@ -190,14 +193,14 @@ public class Playing implements Statemethods {
     public void resetLevel() {
         this.levelManager = new LevelManager(this);
         this.bullets = new ArrayList<>();
-        this.levelManager.loadLevel("/maps/map0.json", false);
+        this.levelManager.loadLevel("/maps/map1-lg.json", false);
 
         resetBools();
     }
 
     public void respawn() {
         this.bullets.clear();
-        this.levelManager.loadLevel("/maps/map0.json", true);
+        this.levelManager.loadLevel("/maps/map1-lg.json", true);
 
         resetBools();
     }

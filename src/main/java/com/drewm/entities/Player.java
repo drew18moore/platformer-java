@@ -15,9 +15,6 @@ import java.io.IOException;
 import java.util.List;
 
 public class Player extends Entity {
-    private final Playing playing;
-    public final int screenX = (Constants.SCREEN_WIDTH/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
-    public final int screenY = (Constants.SCREEN_HEIGHT/2)-(Constants.PLAYER_SPRITE_TILE_SIZE* Constants.SCALE/2);
     public boolean leftPressed, rightPressed, jumpPressed;
 
     private int coins = 0;
@@ -36,28 +33,27 @@ public class Player extends Entity {
     private BufferedImage coinCount = updateHudText("Coins: ", coins);
 
     public Player(float worldX, float worldY, Playing playing, List<Bullet> bullets) {
-        super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
-        this.playing = playing;
+        super(worldX, worldY, null, Constants.PLAYER_SPRITE_WIDTH, Constants.PLAYER_SPRITE_HEIGHT, playing);
         this.useGravity = true;
 
-        this.hitboxWidth = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 60;
-        this.hitboxHeight = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 55;
-        this.hitboxOffsetX = 30;
-        this.hitboxOffsetY = 35;
+        this.hitboxWidth = Constants.PLAYER_SPRITE_WIDTH * Constants.SCALE;
+        this.hitboxHeight = Constants.PLAYER_SPRITE_HEIGHT * Constants.SCALE;
+        this.hitboxOffsetX = 0;
+        this.hitboxOffsetY = 0;
         this.showHitbox = true;
 
         this.pistol = new Pistol(this, bullets);
 
         try {
-            BufferedImage spriteSheet = ImageIO.read(getClass().getResourceAsStream("/sprites/knight.png"));
+            BufferedImage spriteSheet = ImageIO.read(getClass().getResourceAsStream("/sprites/player.png"));
 
             this.movementSprites = new BufferedImage[8];
             for (int i = 0; i < 8; i++) {
                 movementSprites[i] = spriteSheet.getSubimage(
-                        i * Constants.PLAYER_SPRITE_TILE_SIZE,
-                        2 * Constants.PLAYER_SPRITE_TILE_SIZE,
-                        Constants.PLAYER_SPRITE_TILE_SIZE,
-                        Constants.PLAYER_SPRITE_TILE_SIZE
+                        i * Constants.PLAYER_SPRITE_WIDTH,
+                        0,
+                        Constants.PLAYER_SPRITE_WIDTH,
+                        Constants.PLAYER_SPRITE_HEIGHT
                 );
             }
         } catch (IOException e) {
@@ -88,6 +84,8 @@ public class Player extends Entity {
             this.isMoving = true;
         }
 
+        if (isMoving) this.pistol.calculateAngle();
+
         if (isStandingOnSpike((int) worldX, (int) worldY + 1)) {
             System.out.println("SPIKE!!!");
             takeDamage(5);
@@ -95,6 +93,7 @@ public class Player extends Entity {
 
         if (!isColliding((int) nextWorldX, (int) worldY)) {
             worldX = nextWorldX;
+            screenX = Math.round(worldX - playing.camera.getCameraX());
         }
 
         if (isCollidingWithGoal((int) nextWorldX, (int) worldY)) {
@@ -231,6 +230,7 @@ public class Player extends Entity {
         this.worldX = x;
         this.worldY = y;
         this.health = maxHealth;
+        this.healthBar = updateHudText("Health: ", health);
         this.pistol.setBulletsRemaining(Constants.STARTING_AMMO);
     }
 }

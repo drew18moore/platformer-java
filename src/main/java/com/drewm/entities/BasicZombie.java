@@ -1,6 +1,6 @@
 package com.drewm.entities;
 
-import com.drewm.main.Window;
+import com.drewm.gamestates.Playing;
 import com.drewm.utils.Constants;
 
 import javax.imageio.ImageIO;
@@ -10,18 +10,16 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class BasicZombie extends Entity {
-    private final Player player;
-    public BasicZombie(float worldX, float worldY, Player player) {
-        super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE);
+    public BasicZombie(float worldX, float worldY, Playing playing) {
+        super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE, playing);
 
-        this.player = player;
         this.useGravity = true;
 
-        this.hitboxWidth = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 60;
-        this.hitboxHeight = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 55;
-        this.hitboxOffsetX = 30;
-        this.hitboxOffsetY = 35;
-        this.showHitbox = true;
+        this.hitboxWidth = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 80;
+        this.hitboxHeight = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 60;
+        this.hitboxOffsetX = 40;
+        this.hitboxOffsetY = 45;
+        this.showHitbox = false;
         this.health = 30;
 
         try {
@@ -55,22 +53,23 @@ public class BasicZombie extends Entity {
 
         if (!isColliding((int) nextWorldX, (int) worldY)) {
             worldX = nextWorldX;
+            screenX = Math.round(worldX - playing.camera.getCameraX());
         } else {
             this.facingLeft = !this.facingLeft;
         }
 
-        if (getBounds().intersects(player.getBounds())) {
-            player.takeDamage(5);
+        if (getBounds().intersects(playing.player.getBounds())) {
+            playing.player.takeDamage(5);
         }
     }
 
     public void draw(Graphics2D g2) {
-        float screenX = worldX - player.worldX + player.screenX;
-        float screenY = worldY - player.worldY + player.screenY;
-        if (worldX + Constants.TILE_SIZE * 2 > player.worldX - player.screenX &&
-                worldX - Constants.TILE_SIZE * 2 < player.worldX + player.screenX &&
-                worldY + Constants.TILE_SIZE * 2 > player.worldY - player.screenY &&
-                worldY - Constants.TILE_SIZE * 2 < player.worldY + Window.getWindow().playing.player.screenY) {
+        float screenX = worldX - playing.camera.getCameraX();
+        float screenY = worldY - playing.camera.getCameraY();
+        if (screenX + Constants.TILE_SIZE > 0 &&
+                screenX < Constants.SCREEN_WIDTH &&
+                screenY + Constants.TILE_SIZE > 0 &&
+                screenY < Constants.SCREEN_HEIGHT) {
             if (facingLeft) {
                 g2.drawImage(this.movementSprites[spriteNum], (int) screenX + this.spriteWidth * Constants.SCALE, (int) screenY, this.spriteWidth * -Constants.SCALE, this.spriteHeight * Constants.SCALE, null);
             } else {
@@ -86,8 +85,8 @@ public class BasicZombie extends Entity {
     }
 
     public Rectangle2D.Float getBounds() {
-        float screenX = worldX - player.worldX + player.screenX;
-        float screenY = worldY - player.worldY + player.screenY;
+        float screenX = worldX - playing.player.worldX + playing.player.screenX;
+        float screenY = worldY - playing.player.worldY + playing.player.screenY;
         return new Rectangle2D.Float(screenX + hitboxOffsetX, screenY + hitboxOffsetY, hitboxWidth, hitboxHeight);
     }
 

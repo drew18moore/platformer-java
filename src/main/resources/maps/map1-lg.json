@@ -73,7 +73,7 @@
     {
       "type": "player",
       "x": 192.0,
-      "y": 40.0,
+      "y": 64.0,
       "health": 10,
       "facingLeft": false
     }

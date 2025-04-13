@@ -26,34 +26,34 @@ public class Player extends Entity {
     private long invincibilityStartTime = 0;
     private final int INVINCIBILITY_DURATION = 500;
 
-    public boolean ownsPistol = false;
+    public boolean ownsPistol = true;
     public Pistol pistol;
 
     private BufferedImage healthBar = updateHudText("Health: ", health);
     private BufferedImage coinCount = updateHudText("Coins: ", coins);
 
     public Player(float worldX, float worldY, Playing playing, List<Bullet> bullets) {
-        super(worldX, worldY, null, Constants.PLAYER_SPRITE_TILE_SIZE, Constants.PLAYER_SPRITE_TILE_SIZE, playing);
+        super(worldX, worldY, null, Constants.PLAYER_SPRITE_WIDTH, Constants.PLAYER_SPRITE_HEIGHT, playing);
         this.useGravity = true;
 
-        this.hitboxWidth = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 80;
-        this.hitboxHeight = Constants.PLAYER_SPRITE_TILE_SIZE * Constants.SCALE - 60;
-        this.hitboxOffsetX = 40;
-        this.hitboxOffsetY = 45;
-        this.showHitbox = false;
+        this.hitboxWidth = Constants.PLAYER_SPRITE_WIDTH * Constants.SCALE;
+        this.hitboxHeight = Constants.PLAYER_SPRITE_HEIGHT * Constants.SCALE;
+        this.hitboxOffsetX = 0;
+        this.hitboxOffsetY = 0;
+        this.showHitbox = true;
 
         this.pistol = new Pistol(this, bullets);
 
         try {
-            BufferedImage spriteSheet = ImageIO.read(getClass().getResourceAsStream("/sprites/knight.png"));
+            BufferedImage spriteSheet = ImageIO.read(getClass().getResourceAsStream("/sprites/player.png"));
 
             this.movementSprites = new BufferedImage[8];
             for (int i = 0; i < 8; i++) {
                 movementSprites[i] = spriteSheet.getSubimage(
-                        i * Constants.PLAYER_SPRITE_TILE_SIZE,
-                        2 * Constants.PLAYER_SPRITE_TILE_SIZE,
-                        Constants.PLAYER_SPRITE_TILE_SIZE,
-                        Constants.PLAYER_SPRITE_TILE_SIZE
+                        i * Constants.PLAYER_SPRITE_WIDTH,
+                        0,
+                        Constants.PLAYER_SPRITE_WIDTH,
+                        Constants.PLAYER_SPRITE_HEIGHT
                 );
             }
         } catch (IOException e) {
@@ -62,6 +62,7 @@ public class Player extends Entity {
     }
 
     public void update() {
+        System.out.println(this.worldX + "|" + this.worldY);
         super.update(jumpPressed);
         if (ownsPistol) this.pistol.update();
 

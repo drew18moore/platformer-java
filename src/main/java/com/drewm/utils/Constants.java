@@ -26,6 +26,8 @@ public class Constants {
     public static final float JUMP_FORCE = 7.0f;
 
     public static final int PLAYER_SPRITE_TILE_SIZE = 32;
+    public static final int PLAYER_SPRITE_WIDTH = 16;
+    public static final int PLAYER_SPRITE_HEIGHT = 32;
 
     public static final int WORLD_MAP_NUM_TILE_WIDTH = 32;
     public static final int WORLD_MAP_NUM_TILE_HEIGHT = 32;

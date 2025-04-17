@@ -9,11 +9,17 @@ import java.awt.geom.Rectangle2D;
 
 public class Door {
     private final int worldX, worldY;
+    private final int destinationRoomIdx;
+    private final float destinationX;
+    private final float destinationY;
     private Playing playing;
 
-    public Door(int x, int y, Playing playing) {
+    public Door(int x, int y, int destinationRoomIdx, float destinationX, float destinationY, Playing playing) {
         this.worldX = x;
         this.worldY = y;
+        this.destinationRoomIdx = destinationRoomIdx;
+        this.destinationX = destinationX;
+        this.destinationY = destinationY;
         this.playing = playing;
     }
 
@@ -33,5 +39,17 @@ public class Door {
         float screenX = this.worldX - playing.player.worldX + playing.player.screenX;
         float screenY = this.worldY - playing.player.worldY + playing.player.screenY;
         return new Rectangle2D.Float(screenX, screenY, Constants.TILE_SIZE, Constants.TILE_SIZE * 2);
+    }
+
+    public int getDestinationRoomIdx() {
+        return this.destinationRoomIdx;
+    }
+
+    public float getDestinationX() {
+        return this.destinationX;
+    }
+
+    public float getDestinationY() {
+        return this.destinationY;
     }
 }

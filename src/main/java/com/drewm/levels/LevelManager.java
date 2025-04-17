@@ -18,6 +18,7 @@ import java.util.List;
 
 public class LevelManager {
     private final Playing playing;
+    private LevelData levelData;
     private int[][] worldMap;
     private int[][] worldBackground;
     private List<BasicZombie> basicZombies;
@@ -30,16 +31,16 @@ public class LevelManager {
         this.playing = playing;
     }
 
-    public void loadLevel(String filePath, boolean persistState) {
+    public void loadLevel(String filePath, int roomIdx, boolean persistState) {
         try {
             // Load tileset
             this.tiles = getTileSet("/tilesets/tileset0.png", Constants.WORLD_TILE_SET_NUM_TILE_WIDTH, Constants.WORLD_TILE_SET_NUM_TILE_HEIGHT);
             this.backgroundTiles = getTileSet("/tilesets/background-tileset0.png", Constants.WORLD_BACKGROUND_TILE_SET_NUM_TILE_WIDTH, Constants.WORLD_BACKGROUND_TILE_SET_NUM_TILE_HEIGHT);
 
             ObjectMapper objectMapper = new ObjectMapper();
-            LevelData levelData = objectMapper.readValue(getClass().getResourceAsStream(filePath), LevelData.class);
+            this.levelData = objectMapper.readValue(getClass().getResourceAsStream(filePath), LevelData.class);
 
-            Room startingRoom = levelData.rooms().get(0);
+            Room startingRoom = levelData.rooms().get(roomIdx);
             List<int[]> tileList = startingRoom.tiles();
             playing.roomNumTileWidth = tileList.get(0).length;
             playing.roomNumTileHeight = tileList.size();
@@ -81,7 +82,7 @@ public class LevelManager {
             List<DoorData> doorsData = startingRoom.doors();
             this.doors = new ArrayList<>();
             for (DoorData door : doorsData) {
-                this.doors.add(new Door(door.x(), door.y(), this.playing));
+                this.doors.add(new Door(door.x(), door.y(), door.destinationRoom(), door.destinationX(), door.destinationY(), this.playing));
             }
 
         } catch (IOException e) {

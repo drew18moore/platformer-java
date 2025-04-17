@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Playing implements Statemethods {
+    private String currentLevelFilePath = "/maps/map1-lg.json";
     public int roomNumTileWidth;
     public int roomNumTileHeight;
     public LevelManager levelManager = new LevelManager(this);
@@ -73,7 +74,7 @@ public class Playing implements Statemethods {
     public boolean showDeathScreen = false;
 
     public Playing() {
-        this.levelManager.loadLevel("/maps/map1-lg.json", false);
+        this.levelManager.loadLevel(currentLevelFilePath, 0, false);
     }
 
     @Override
@@ -172,7 +173,11 @@ public class Playing implements Statemethods {
         }
         if (e.getKeyCode() == KeyEvent.VK_W) {
             if (currentDoor != null) {
-                currentDoor.tryOpen(player);
+                float destinationX = this.currentDoor.getDestinationX();
+                float destinationY = this.currentDoor.getDestinationY();
+                this.levelManager.loadLevel(currentLevelFilePath, currentDoor.getDestinationRoomIdx(), true);
+                this.player.worldX = destinationX;
+                this.player.worldY = destinationY;
             }
         }
         if (!showWinScreen && !showDeathScreen && e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -212,14 +217,14 @@ public class Playing implements Statemethods {
     public void resetLevel() {
         this.levelManager = new LevelManager(this);
         this.bullets = new ArrayList<>();
-        this.levelManager.loadLevel("/maps/map1-lg.json", false);
+        this.levelManager.loadLevel(currentLevelFilePath, 0, false);
 
         resetBools();
     }
 
     public void respawn() {
         this.bullets.clear();
-        this.levelManager.loadLevel("/maps/map1-lg.json", true);
+        this.levelManager.loadLevel(currentLevelFilePath, 0, true);
 
         resetBools();
     }

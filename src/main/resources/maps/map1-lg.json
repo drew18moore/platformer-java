@@ -129,7 +129,7 @@
           "currentRoom": 0,
           "destinationRoom": 1,
           "destinationX": 448.0,
-          "destinationY": 448.0
+          "destinationY": 512.0
         }
       ]
     },
@@ -178,7 +178,7 @@
           "y": 512.0,
           "currentRoom": 1,
           "destinationRoom": 0,
-          "destinationX": 192.0,
+          "destinationX": 320.0,
           "destinationY": 128.0
         }
       ]

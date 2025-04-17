@@ -29,9 +29,6 @@ public class Constants {
     public static final int PLAYER_SPRITE_WIDTH = 16;
     public static final int PLAYER_SPRITE_HEIGHT = 32;
 
-    public static final int WORLD_MAP_NUM_TILE_WIDTH = 32;
-    public static final int WORLD_MAP_NUM_TILE_HEIGHT = 32;
-
     public static final int WORLD_TILE_SET_NUM_TILE_WIDTH = 7;
     public static final int WORLD_TILE_SET_NUM_TILE_HEIGHT = 3;
     public static final int WORLD_BACKGROUND_TILE_SET_NUM_TILE_WIDTH = 7;

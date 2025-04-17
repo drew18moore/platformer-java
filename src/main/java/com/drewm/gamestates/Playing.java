@@ -19,10 +19,12 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Playing implements Statemethods {
+    public int roomNumTileWidth;
+    public int roomNumTileHeight;
     public LevelManager levelManager = new LevelManager(this);
     public List<Bullet> bullets = new ArrayList<>();
     public Player player;
-    public Camera camera = new Camera();
+    public Camera camera = new Camera(this);
     public Door currentDoor = null;
 
     private final Modal pauseMenu = new Modal("Game Paused", new Button[]{

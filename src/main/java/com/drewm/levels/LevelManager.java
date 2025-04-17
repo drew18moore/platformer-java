@@ -39,22 +39,25 @@ public class LevelManager {
             ObjectMapper objectMapper = new ObjectMapper();
             LevelData levelData = objectMapper.readValue(getClass().getResourceAsStream(filePath), LevelData.class);
 
-            this.worldMap = new int[Constants.WORLD_MAP_NUM_TILE_HEIGHT][Constants.WORLD_MAP_NUM_TILE_WIDTH];
-            List<int[]> tileList = levelData.tiles();
+            Room startingRoom = levelData.rooms().get(0);
+            List<int[]> tileList = startingRoom.tiles();
+            playing.roomNumTileWidth = tileList.get(0).length;
+            playing.roomNumTileHeight = tileList.size();
+            this.worldMap = new int[playing.roomNumTileHeight][playing.roomNumTileWidth];
             for (int i = 0; i < tileList.size(); i++) {
                 int[] tileRow = tileList.get(i);
                 System.arraycopy(tileRow, 0, worldMap[i], 0, tileRow.length);
             }
 
-            this.worldBackground = new int[Constants.WORLD_MAP_NUM_TILE_HEIGHT][Constants.WORLD_MAP_NUM_TILE_WIDTH];
-            tileList = levelData.background();
+            this.worldBackground = new int[playing.roomNumTileHeight][playing.roomNumTileWidth];
+            tileList = startingRoom.background();
             for (int i = 0; i < tileList.size(); i++) {
                 int[] tileRow = tileList.get(i);
                 System.arraycopy(tileRow, 0, worldBackground[i], 0, tileRow.length);
             }
 
             // Load player
-            EntityData playerData = levelData.players().get(0);
+            EntityData playerData = startingRoom.players().get(0);
             if (persistState) {
                 playing.player.respawn(playerData.x(), playerData.y());
             } else {
@@ -62,20 +65,20 @@ public class LevelManager {
             }
 
             // Load enemies
-            List<EntityData> enemies = levelData.enemies();
+            List<EntityData> enemies = startingRoom.enemies();
             this.basicZombies = new ArrayList<>();
             for (EntityData enemy : enemies) {
                 this.basicZombies.add(new BasicZombie(enemy.x(), enemy.y(), this.playing));
             }
 
             // Load coins
-            List<CoinData> coins = levelData.coins();
+            List<CoinData> coins = startingRoom.coins();
             this.coins = new ArrayList<>();
             for (CoinData coin : coins) {
                 this.coins.add(new Coin(coin.x(), coin.y(), this.playing));
             }
 
-            List<DoorData> doorsData = levelData.doors();
+            List<DoorData> doorsData = startingRoom.doors();
             this.doors = new ArrayList<>();
             for (DoorData door : doorsData) {
                 this.doors.add(new Door(door.x(), door.y(), this.playing));
@@ -104,7 +107,7 @@ public class LevelManager {
         int col = worldX / Constants.TILE_SIZE;
         int row = worldY / Constants.TILE_SIZE;
 
-        if (col < 0 || col >= Constants.WORLD_MAP_NUM_TILE_WIDTH || row < 0 || row >= Constants.WORLD_MAP_NUM_TILE_HEIGHT) {
+        if (col < 0 || col >= playing.roomNumTileWidth || row < 0 || row >= playing.roomNumTileHeight) {
             return true;
         }
 
@@ -116,7 +119,7 @@ public class LevelManager {
         int col = worldX / Constants.TILE_SIZE;
         int row = worldY / Constants.TILE_SIZE;
 
-        if (col < 0 || col >= Constants.WORLD_MAP_NUM_TILE_WIDTH || row < 0 || row >= Constants.WORLD_MAP_NUM_TILE_HEIGHT) {
+        if (col < 0 || col >= playing.roomNumTileWidth || row < 0 || row >= playing.roomNumTileHeight) {
             return false;
         }
 
@@ -128,7 +131,7 @@ public class LevelManager {
         int col = worldX / Constants.TILE_SIZE;
         int row = worldY / Constants.TILE_SIZE;
 
-        if (col < 0 || col >= Constants.WORLD_MAP_NUM_TILE_WIDTH || row < 0 || row >= Constants.WORLD_MAP_NUM_TILE_HEIGHT) {
+        if (col < 0 || col >= playing.roomNumTileWidth || row < 0 || row >= playing.roomNumTileHeight) {
             return false;
         }
 
@@ -142,7 +145,7 @@ public class LevelManager {
         float cameraX = playing.camera.getCameraX();
         float cameraY = playing.camera.getCameraY();
 
-        while (worldCol < Constants.WORLD_MAP_NUM_TILE_WIDTH && worldRow < Constants.WORLD_MAP_NUM_TILE_HEIGHT) {
+        while (worldCol < playing.roomNumTileWidth && worldRow < playing.roomNumTileHeight) {
             int tile = this.worldMap[worldRow][worldCol];
             int background = this.worldBackground[worldRow][worldCol];
 
@@ -163,7 +166,7 @@ public class LevelManager {
             }
             worldCol++;
 
-            if (worldCol == Constants.WORLD_MAP_NUM_TILE_WIDTH) {
+            if (worldCol == playing.roomNumTileWidth) {
                 worldCol = 0;
                 worldRow++;
             }

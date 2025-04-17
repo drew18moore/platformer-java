@@ -57,7 +57,7 @@ public class LevelManager {
             }
 
             // Load player
-            EntityData playerData = startingRoom.players().get(0);
+            EntityData playerData = levelData.players().get(0);
             if (persistState) {
                 playing.player.respawn(playerData.x(), playerData.y());
             } else {

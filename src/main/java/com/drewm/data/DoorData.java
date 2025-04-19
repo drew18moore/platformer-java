@@ -6,6 +6,7 @@ public record DoorData(
         int currentRoom,
         int destinationRoom,
         float destinationX,
-        float destinationY
+        float destinationY,
+        LockType lockType
 ) {}
 

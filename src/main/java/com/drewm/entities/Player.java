@@ -29,6 +29,8 @@ public class Player extends Entity {
     public boolean ownsPistol = false;
     public Pistol pistol;
 
+    public boolean hasKeycard = true;
+
     private BufferedImage healthBar = updateHudText("Health: ", health);
     private BufferedImage coinCount = updateHudText("Coins: ", coins);
 

@@ -1,5 +1,6 @@
 package com.drewm.gamestates;
 
+import com.drewm.data.LockType;
 import com.drewm.entities.BasicZombie;
 import com.drewm.entities.Player;
 import com.drewm.levels.LevelManager;
@@ -173,11 +174,13 @@ public class Playing implements Statemethods {
         }
         if (e.getKeyCode() == KeyEvent.VK_W) {
             if (currentDoor != null) {
-                float destinationX = this.currentDoor.getDestinationX();
-                float destinationY = this.currentDoor.getDestinationY();
-                this.levelManager.loadLevel(currentLevelFilePath, currentDoor.getDestinationRoomIdx(), true);
-                this.player.worldX = destinationX;
-                this.player.worldY = destinationY;
+                if (currentDoor.getLockType() == LockType.NONE || (currentDoor.getLockType() == LockType.KEYCARD && player.hasKeycard)) {
+                    float destinationX = this.currentDoor.getDestinationX();
+                    float destinationY = this.currentDoor.getDestinationY();
+                    this.levelManager.loadLevel(currentLevelFilePath, currentDoor.getDestinationRoomIdx(), true);
+                    this.player.worldX = destinationX;
+                    this.player.worldY = destinationY;
+                }
             }
         }
         if (!showWinScreen && !showDeathScreen && e.getKeyCode() == KeyEvent.VK_ESCAPE) {

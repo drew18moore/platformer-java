@@ -82,7 +82,7 @@ public class LevelManager {
             List<DoorData> doorsData = startingRoom.doors();
             this.doors = new ArrayList<>();
             for (DoorData door : doorsData) {
-                this.doors.add(new Door(door.x(), door.y(), door.destinationRoom(), door.destinationX(), door.destinationY(), this.playing));
+                this.doors.add(new Door(door.x(), door.y(), door.destinationRoom(), door.destinationX(), door.destinationY(), door.lockType(), this.playing));
             }
 
         } catch (IOException e) {

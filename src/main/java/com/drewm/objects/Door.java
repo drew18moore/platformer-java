@@ -1,6 +1,6 @@
 package com.drewm.objects;
 
-import com.drewm.entities.Player;
+import com.drewm.data.LockType;
 import com.drewm.gamestates.Playing;
 import com.drewm.utils.Constants;
 
@@ -8,27 +8,22 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class Door {
+    private final Playing playing;
     private final int worldX, worldY;
     private final int destinationRoomIdx;
     private final float destinationX;
     private final float destinationY;
-    private Playing playing;
+    private final LockType lockType;
 
-    public Door(int x, int y, int destinationRoomIdx, float destinationX, float destinationY, Playing playing) {
+    public Door(int x, int y, int destinationRoomIdx, float destinationX, float destinationY, LockType lockType, Playing playing) {
         this.worldX = x;
         this.worldY = y;
         this.destinationRoomIdx = destinationRoomIdx;
         this.destinationX = destinationX;
         this.destinationY = destinationY;
+        this.lockType = lockType;
         this.playing = playing;
     }
-
-    public boolean tryOpen(Player player) {
-        System.out.println("DOOR");
-
-        return false;
-    }
-
 
     public void draw(Graphics2D g2) {
         Rectangle2D.Float rect = getScreenBounds();
@@ -51,5 +46,9 @@ public class Door {
 
     public float getDestinationY() {
         return this.destinationY;
+    }
+
+    public LockType getLockType() {
+        return this.lockType;
     }
 }

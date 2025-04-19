@@ -4,7 +4,7 @@ import com.drewm.data.LockType;
 import com.drewm.entities.BasicZombie;
 import com.drewm.entities.Player;
 import com.drewm.levels.LevelManager;
-import com.drewm.objects.Coin;
+import com.drewm.objects.Collectable;
 import com.drewm.objects.Door;
 import com.drewm.ui.Button;
 import com.drewm.ui.Camera;
@@ -101,11 +101,11 @@ public class Playing implements Statemethods {
                 }
             }
 
-            Iterator<Coin> coinIterator = this.levelManager.getCoins().iterator();
-            while(coinIterator.hasNext()) {
-                Coin coin = coinIterator.next();
-                if (coin.update()) {
-                    coinIterator.remove();
+            Iterator<Collectable> collectableIterator = this.levelManager.getCollectables().iterator();
+            while(collectableIterator.hasNext()) {
+                Collectable collectable = collectableIterator.next();
+                if (collectable.update()) {
+                    collectableIterator.remove();
                 }
             }
 
@@ -130,7 +130,7 @@ public class Playing implements Statemethods {
         player.draw(g2);
         this.levelManager.getBasicZombies().forEach(zombie -> zombie.draw(g2));
         bullets.forEach(bullet -> bullet.draw(g2));
-        this.levelManager.getCoins().forEach(coin -> coin.draw(g2));
+        this.levelManager.getCollectables().forEach(collectable -> collectable.draw(g2));
         this.levelManager.getDoors().forEach(door -> door.draw(g2));
 
         Modal activeModal = getActiveModal();

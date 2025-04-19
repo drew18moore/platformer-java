@@ -4,6 +4,6 @@ import java.util.List;
 
 public record LevelData(
         List<EntityData> players,
-        List<Room> rooms
+        List<RoomData> rooms
 ) {
 }

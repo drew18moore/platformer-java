@@ -4,8 +4,9 @@ import com.drewm.data.*;
 import com.drewm.entities.BasicZombie;
 import com.drewm.entities.Player;
 import com.drewm.gamestates.Playing;
-import com.drewm.objects.Coin;
+import com.drewm.objects.Collectable;
 import com.drewm.objects.Door;
+import com.drewm.objects.ItemType;
 import com.drewm.utils.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -22,7 +23,7 @@ public class LevelManager {
     private int[][] worldMap;
     private int[][] worldBackground;
     private List<BasicZombie> basicZombies;
-    private List<Coin> coins;
+    private List<Collectable> collectables;
     private List<Door> doors;
     Tile[] tiles;
     Tile[] backgroundTiles;
@@ -40,7 +41,7 @@ public class LevelManager {
             ObjectMapper objectMapper = new ObjectMapper();
             this.levelData = objectMapper.readValue(getClass().getResourceAsStream(filePath), LevelData.class);
 
-            Room startingRoom = levelData.rooms().get(roomIdx);
+            RoomData startingRoom = levelData.rooms().get(roomIdx);
             List<int[]> tileList = startingRoom.tiles();
             playing.roomNumTileWidth = tileList.get(0).length;
             playing.roomNumTileHeight = tileList.size();
@@ -73,10 +74,10 @@ public class LevelManager {
             }
 
             // Load coins
-            List<CoinData> coins = startingRoom.coins();
-            this.coins = new ArrayList<>();
-            for (CoinData coin : coins) {
-                this.coins.add(new Coin(coin.x(), coin.y(), this.playing));
+            List<CollectableData> collectables = startingRoom.collectables();
+            this.collectables = new ArrayList<>();
+            for (CollectableData collectable : collectables) {
+                this.collectables.add(new Collectable(collectable.x(), collectable.y(), collectable.itemType(), this.playing));
             }
 
             List<DoorData> doorsData = startingRoom.doors();
@@ -174,8 +175,8 @@ public class LevelManager {
         }
     }
 
-    public List<Coin> getCoins() {
-        return coins;
+    public List<Collectable> getCollectables() {
+        return collectables;
     }
 
     public List<Door> getDoors() { return doors; }

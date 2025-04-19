@@ -2,11 +2,11 @@ package com.drewm.data;
 
 import java.util.List;
 
-public record Room(
+public record RoomData(
         List<int[]> tiles,
         List<int[]> background,
         List<EntityData> enemies,
-        List<CoinData> coins,
+        List<CollectableData> collectables,
         List<DoorData> doors
 ) {
 }

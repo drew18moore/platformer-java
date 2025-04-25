@@ -128,7 +128,7 @@ public class Player extends Entity {
         g2.drawImage(healthBar, 0, 0, null);
         g2.drawImage(coinCount, Constants.SCREEN_WIDTH - coinCount.getWidth(), 0, null);
         if (hasKeycard && keycardIcon != null) {
-            g2.drawImage(keycardIcon, 0, Constants.SCREEN_HEIGHT - (keycardIcon.getHeight() * Constants.SCALE), keycardIcon.getWidth() * Constants.SCALE, keycardIcon.getHeight() * Constants.SCALE, null);
+            g2.drawImage(keycardIcon, 0, Window.getWindow().getSize().height - Window.getWindow().getInsets().top - (keycardIcon.getHeight() * Constants.SCALE), keycardIcon.getWidth() * Constants.SCALE, keycardIcon.getHeight() * Constants.SCALE, null);
         }
         if (ownsPistol) this.pistol.draw(g2);
     }

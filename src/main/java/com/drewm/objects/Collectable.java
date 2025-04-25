@@ -31,7 +31,6 @@ public class Collectable {
                 case KEYCARD -> spritePath = "/sprites/keycard.png";
                 default -> throw new IllegalStateException("Unexpected value: " + itemType);
             }
-            System.out.println("PATH: " + spritePath);
             BufferedImage spriteSheet = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(spritePath)));
 
             this.spriteFrames = new BufferedImage[spriteSheet.getWidth()/Constants.TILE_WIDTH];

@@ -16,17 +16,16 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 public class Playing implements Statemethods {
     private String currentLevelFilePath = "/maps/map1-lg.json";
-    public int roomNumTileWidth;
-    public int roomNumTileHeight;
-    public LevelManager levelManager = new LevelManager(this);
     public List<Bullet> bullets = new ArrayList<>();
+    public LevelManager levelManager = new LevelManager(this);
     public Player player;
-    public Camera camera = new Camera(this);
+    public Camera camera;
     public Door currentDoor = null;
 
     private final Modal pauseMenu = new Modal("Game Paused", new Button[]{
@@ -75,7 +74,7 @@ public class Playing implements Statemethods {
     public boolean showDeathScreen = false;
 
     public Playing() {
-        this.levelManager.loadLevel(currentLevelFilePath, 0, false);
+        this.camera = new Camera(this.levelManager);
     }
 
     @Override
@@ -87,12 +86,12 @@ public class Playing implements Statemethods {
             Iterator<Bullet> bulletIterator = bullets.iterator();
             while(bulletIterator.hasNext()) {
                 Bullet bullet = bulletIterator.next();
-                if (bullet.update(this.levelManager.getBasicZombies())) {
+                if (bullet.update(this.levelManager.getCurrentRoom().getBasicZombies())) {
                     bulletIterator.remove();
                 }
             }
 
-            Iterator<BasicZombie> zombieIterator = this.levelManager.getBasicZombies().iterator();
+            Iterator<BasicZombie> zombieIterator = this.levelManager.getCurrentRoom().getBasicZombies().iterator();
             while (zombieIterator.hasNext()) {
                 BasicZombie zombie = zombieIterator.next();
                 zombie.update();
@@ -101,7 +100,7 @@ public class Playing implements Statemethods {
                 }
             }
 
-            Iterator<Collectable> collectableIterator = this.levelManager.getCollectables().iterator();
+            Iterator<Collectable> collectableIterator = this.levelManager.getCurrentRoom().getCollectables().iterator();
             while(collectableIterator.hasNext()) {
                 Collectable collectable = collectableIterator.next();
                 if (collectable.update()) {
@@ -110,7 +109,7 @@ public class Playing implements Statemethods {
             }
 
             currentDoor = null;
-            for (Door door : this.levelManager.getDoors()) {
+            for (Door door : this.levelManager.getCurrentRoom().getDoors()) {
                 if (door.getScreenBounds().intersects(player.getBounds())) {
                     currentDoor = door;
                     break;
@@ -128,10 +127,10 @@ public class Playing implements Statemethods {
         Graphics2D g2 = (Graphics2D) g;
         levelManager.draw(g2);
         player.draw(g2);
-        this.levelManager.getBasicZombies().forEach(zombie -> zombie.draw(g2));
+        this.levelManager.getCurrentRoom().getBasicZombies().forEach(zombie -> zombie.draw(g2));
         bullets.forEach(bullet -> bullet.draw(g2));
-        this.levelManager.getCollectables().forEach(collectable -> collectable.draw(g2));
-        this.levelManager.getDoors().forEach(door -> door.draw(g2));
+        this.levelManager.getCurrentRoom().getCollectables().forEach(collectable -> collectable.draw(g2));
+        this.levelManager.getCurrentRoom().getDoors().forEach(door -> door.draw(g2));
 
         Modal activeModal = getActiveModal();
         if (activeModal != null) activeModal.draw(g);
@@ -177,7 +176,7 @@ public class Playing implements Statemethods {
                 if (currentDoor.getLockType() == LockType.NONE || (currentDoor.getLockType() == LockType.KEYCARD && player.hasKeycard)) {
                     float destinationX = this.currentDoor.getDestinationX();
                     float destinationY = this.currentDoor.getDestinationY();
-                    this.levelManager.loadLevel(currentLevelFilePath, currentDoor.getDestinationRoomIdx(), true);
+                    this.levelManager.setCurrentRoomIdx(this.currentDoor.getDestinationRoomIdx());
                     this.player.worldX = destinationX;
                     this.player.worldY = destinationY;
                 }
@@ -219,16 +218,20 @@ public class Playing implements Statemethods {
 
     public void resetLevel() {
         this.levelManager = new LevelManager(this);
-        this.bullets = new ArrayList<>();
-        this.levelManager.loadLevel(currentLevelFilePath, 0, false);
+        this.bullets.clear();
 
         resetBools();
     }
 
     public void respawn() {
         this.bullets.clear();
-        this.levelManager.loadLevel(currentLevelFilePath, 0, true);
+        levelManager.loadRooms(getCurrentLevelFilePath(), true);
+        player.respawn(levelManager.getPlayerSpawnX(), levelManager.getPlayerSpawnY());
 
         resetBools();
+    }
+
+    public String getCurrentLevelFilePath() {
+        return this.currentLevelFilePath;
     }
 }

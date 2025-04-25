@@ -89,7 +89,6 @@ public class Player extends Entity {
         if (isMoving) this.pistol.calculateAngle();
 
         if (isStandingOnSpike((int) worldX, (int) worldY + 1)) {
-            System.out.println("SPIKE!!!");
             takeDamage(5);
         }
 

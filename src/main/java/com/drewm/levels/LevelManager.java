@@ -6,7 +6,6 @@ import com.drewm.entities.Player;
 import com.drewm.gamestates.Playing;
 import com.drewm.objects.Collectable;
 import com.drewm.objects.Door;
-import com.drewm.objects.ItemType;
 import com.drewm.utils.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -15,77 +14,82 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LevelManager {
     private final Playing playing;
-    private LevelData levelData;
-    private int[][] worldMap;
-    private int[][] worldBackground;
-    private List<BasicZombie> basicZombies;
-    private List<Collectable> collectables;
-    private List<Door> doors;
     Tile[] tiles;
     Tile[] backgroundTiles;
+    int currentRoomIdx;
+    float playerSpawnWorldX, playerSpawnWorldY;
+    Map<Integer, Room> rooms;
 
     public LevelManager(Playing playing) {
         this.playing = playing;
+        loadRooms(playing.getCurrentLevelFilePath(), false);
     }
 
-    public void loadLevel(String filePath, int roomIdx, boolean persistState) {
+    public void loadRooms(String filePath, boolean persistPlayerState) {
         try {
-            // Load tileset
+            this.rooms = new HashMap<>();
+            this.currentRoomIdx = 0;
+            // Load tilesets
             this.tiles = getTileSet("/tilesets/tileset0.png", Constants.WORLD_TILE_SET_NUM_TILE_WIDTH, Constants.WORLD_TILE_SET_NUM_TILE_HEIGHT);
             this.backgroundTiles = getTileSet("/tilesets/background-tileset0.png", Constants.WORLD_BACKGROUND_TILE_SET_NUM_TILE_WIDTH, Constants.WORLD_BACKGROUND_TILE_SET_NUM_TILE_HEIGHT);
 
             ObjectMapper objectMapper = new ObjectMapper();
-            this.levelData = objectMapper.readValue(getClass().getResourceAsStream(filePath), LevelData.class);
+            LevelData levelData = objectMapper.readValue(getClass().getResourceAsStream(filePath), LevelData.class);
 
-            RoomData startingRoom = levelData.rooms().get(roomIdx);
-            List<int[]> tileList = startingRoom.tiles();
-            playing.roomNumTileWidth = tileList.get(0).length;
-            playing.roomNumTileHeight = tileList.size();
-            this.worldMap = new int[playing.roomNumTileHeight][playing.roomNumTileWidth];
-            for (int i = 0; i < tileList.size(); i++) {
-                int[] tileRow = tileList.get(i);
-                System.arraycopy(tileRow, 0, worldMap[i], 0, tileRow.length);
+            for (int i = 0; i < levelData.rooms().size(); i++) {
+                RoomData room = levelData.rooms().get(i);
+                List<int[]> tileList = room.tiles();
+                int roomNumTileWidth = tileList.get(0).length;
+                int roomNumTileHeight = tileList.size();
+                int[][] worldMap = new int[roomNumTileHeight][roomNumTileWidth];
+                for (int j = 0; j < tileList.size(); j++) {
+                    int[] tileRow = tileList.get(j);
+                    System.arraycopy(tileRow, 0, worldMap[j], 0, tileRow.length);
+                }
+
+                int[][] worldBackground = new int[roomNumTileHeight][roomNumTileWidth];
+                tileList = room.background();
+                for (int j = 0; j < tileList.size(); j++) {
+                    int[] tileRow = tileList.get(j);
+                    System.arraycopy(tileRow, 0, worldBackground[j], 0, tileRow.length);
+                }
+
+                // Load player
+                if (!persistPlayerState) {
+                    EntityData playerData = levelData.players().get(0);
+                    this.playerSpawnWorldX = playerData.x();
+                    this.playerSpawnWorldY = playerData.y();
+                    playing.player = new Player(playerData.x(), playerData.y(), this.playing, this.playing.bullets);
+                }
+
+                // Load enemies
+                List<EntityData> enemies = room.enemies();
+                List<BasicZombie> basicZombies = new ArrayList<>();
+                for (EntityData enemy : enemies) {
+                    basicZombies.add(new BasicZombie(enemy.x(), enemy.y(), this.playing));
+                }
+
+                // Load coins
+                List<CollectableData> collectablesData = room.collectables();
+                List<Collectable> collectables = new ArrayList<>();
+                for (CollectableData collectable : collectablesData) {
+                    collectables.add(new Collectable(collectable.x(), collectable.y(), collectable.itemType(), this.playing));
+                }
+
+                List<DoorData> doorsData = room.doors();
+                List<Door> doors = new ArrayList<>();
+                for (DoorData door : doorsData) {
+                    doors.add(new Door(door.x(), door.y(), door.destinationRoom(), door.destinationX(), door.destinationY(), door.lockType(), this.playing));
+                }
+
+                rooms.put(i, new Room(worldMap, roomNumTileWidth, roomNumTileHeight, worldBackground, basicZombies, collectables, doors));
             }
-
-            this.worldBackground = new int[playing.roomNumTileHeight][playing.roomNumTileWidth];
-            tileList = startingRoom.background();
-            for (int i = 0; i < tileList.size(); i++) {
-                int[] tileRow = tileList.get(i);
-                System.arraycopy(tileRow, 0, worldBackground[i], 0, tileRow.length);
-            }
-
-            // Load player
-            EntityData playerData = levelData.players().get(0);
-            if (persistState) {
-                playing.player.respawn(playerData.x(), playerData.y());
-            } else {
-                playing.player = new Player(playerData.x(), playerData.y(), this.playing, this.playing.bullets);
-            }
-
-            // Load enemies
-            List<EntityData> enemies = startingRoom.enemies();
-            this.basicZombies = new ArrayList<>();
-            for (EntityData enemy : enemies) {
-                this.basicZombies.add(new BasicZombie(enemy.x(), enemy.y(), this.playing));
-            }
-
-            // Load coins
-            List<CollectableData> collectables = startingRoom.collectables();
-            this.collectables = new ArrayList<>();
-            for (CollectableData collectable : collectables) {
-                this.collectables.add(new Collectable(collectable.x(), collectable.y(), collectable.itemType(), this.playing));
-            }
-
-            List<DoorData> doorsData = startingRoom.doors();
-            this.doors = new ArrayList<>();
-            for (DoorData door : doorsData) {
-                this.doors.add(new Door(door.x(), door.y(), door.destinationRoom(), door.destinationX(), door.destinationY(), door.lockType(), this.playing));
-            }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -109,11 +113,11 @@ public class LevelManager {
         int col = worldX / Constants.TILE_SIZE;
         int row = worldY / Constants.TILE_SIZE;
 
-        if (col < 0 || col >= playing.roomNumTileWidth || row < 0 || row >= playing.roomNumTileHeight) {
+        if (col < 0 || col >= getCurrentRoom().getRoomNumTileWidth() || row < 0 || row >= getCurrentRoom().getRoomNumTileHeight()) {
             return true;
         }
 
-        int tileIndex = worldMap[row][col];
+        int tileIndex = getCurrentRoom().getWorldMap()[row][col];
         return tileIndex >= 0 && tiles[tileIndex].collision;
     }
 
@@ -121,11 +125,11 @@ public class LevelManager {
         int col = worldX / Constants.TILE_SIZE;
         int row = worldY / Constants.TILE_SIZE;
 
-        if (col < 0 || col >= playing.roomNumTileWidth || row < 0 || row >= playing.roomNumTileHeight) {
+        if (col < 0 || col >= getCurrentRoom().getRoomNumTileWidth() || row < 0 || row >= getCurrentRoom().getRoomNumTileHeight()) {
             return false;
         }
 
-        int tileIndex = worldMap[row][col];
+        int tileIndex = getCurrentRoom().getWorldMap()[row][col];
         return tileIndex >= 0 && tiles[tileIndex].isGoal;
     }
 
@@ -133,11 +137,11 @@ public class LevelManager {
         int col = worldX / Constants.TILE_SIZE;
         int row = worldY / Constants.TILE_SIZE;
 
-        if (col < 0 || col >= playing.roomNumTileWidth || row < 0 || row >= playing.roomNumTileHeight) {
+        if (col < 0 || col >= getCurrentRoom().getRoomNumTileWidth() || row < 0 || row >= getCurrentRoom().getRoomNumTileHeight()) {
             return false;
         }
 
-        int tileIndex = worldMap[row][col];
+        int tileIndex = getCurrentRoom().getWorldMap()[row][col];
         return tileIndex >= 0 && tiles[tileIndex].isSpike;
     }
 
@@ -147,9 +151,9 @@ public class LevelManager {
         float cameraX = playing.camera.getCameraX();
         float cameraY = playing.camera.getCameraY();
 
-        while (worldCol < playing.roomNumTileWidth && worldRow < playing.roomNumTileHeight) {
-            int tile = this.worldMap[worldRow][worldCol];
-            int background = this.worldBackground[worldRow][worldCol];
+        while (worldCol < getCurrentRoom().getRoomNumTileWidth() && worldRow < getCurrentRoom().getRoomNumTileHeight()) {
+            int tile = getCurrentRoom().getWorldMap()[worldRow][worldCol];
+            int background = getCurrentRoom().getWorldBackground()[worldRow][worldCol];
 
             int worldX = worldCol * Constants.TILE_SIZE;
             int worldY = worldRow * Constants.TILE_SIZE;
@@ -168,24 +172,30 @@ public class LevelManager {
             }
             worldCol++;
 
-            if (worldCol == playing.roomNumTileWidth) {
+            if (worldCol == getCurrentRoom().getRoomNumTileWidth()) {
                 worldCol = 0;
                 worldRow++;
             }
         }
     }
 
-    public List<Collectable> getCollectables() {
-        return collectables;
+    public void respawn() {
+
     }
 
-    public List<Door> getDoors() { return doors; }
-
-    public List<BasicZombie> getBasicZombies() {
-        return basicZombies;
+    public Room getCurrentRoom() {
+        return rooms.get(currentRoomIdx);
     }
 
-    public int[][] getWorldMap() {
-        return worldMap;
+    public void setCurrentRoomIdx(int idx) {
+        this.currentRoomIdx = idx;
+    }
+
+    public float getPlayerSpawnX() {
+        return playerSpawnWorldX;
+    }
+
+    public float getPlayerSpawnY() {
+        return playerSpawnWorldY;
     }
 }

@@ -33,6 +33,7 @@ public class Player extends Entity {
 
     private BufferedImage healthBar = updateHudText("Health: ", health);
     private BufferedImage coinCount = updateHudText("Coins: ", coins);
+    private BufferedImage keycardIcon = null;
 
     public Player(float worldX, float worldY, Playing playing, List<Bullet> bullets) {
         super(worldX, worldY, null, Constants.PLAYER_SPRITE_WIDTH, Constants.PLAYER_SPRITE_HEIGHT, playing);
@@ -126,6 +127,9 @@ public class Player extends Entity {
 
         g2.drawImage(healthBar, 0, 0, null);
         g2.drawImage(coinCount, Constants.SCREEN_WIDTH - coinCount.getWidth(), 0, null);
+        if (hasKeycard && keycardIcon != null) {
+            g2.drawImage(keycardIcon, 0, Constants.SCREEN_HEIGHT - (keycardIcon.getHeight() * Constants.SCALE), keycardIcon.getWidth() * Constants.SCALE, keycardIcon.getHeight() * Constants.SCALE, null);
+        }
         if (ownsPistol) this.pistol.draw(g2);
     }
 
@@ -233,5 +237,9 @@ public class Player extends Entity {
         this.health = maxHealth;
         this.healthBar = updateHudText("Health: ", health);
         this.pistol.setBulletsRemaining(Constants.STARTING_AMMO);
+    }
+
+    public void setKeycardIcon(BufferedImage img) {
+        this.keycardIcon = img;
     }
 }

@@ -29,8 +29,11 @@ public class Player extends Entity {
     public boolean ownsPistol = false;
     public Pistol pistol;
 
+    public boolean hasKeycard = false;
+
     private BufferedImage healthBar = updateHudText("Health: ", health);
     private BufferedImage coinCount = updateHudText("Coins: ", coins);
+    private BufferedImage keycardIcon = null;
 
     public Player(float worldX, float worldY, Playing playing, List<Bullet> bullets) {
         super(worldX, worldY, null, Constants.PLAYER_SPRITE_WIDTH, Constants.PLAYER_SPRITE_HEIGHT, playing);
@@ -87,7 +90,6 @@ public class Player extends Entity {
         if (isMoving) this.pistol.calculateAngle();
 
         if (isStandingOnSpike((int) worldX, (int) worldY + 1)) {
-            System.out.println("SPIKE!!!");
             takeDamage(5);
         }
 
@@ -125,6 +127,9 @@ public class Player extends Entity {
 
         g2.drawImage(healthBar, 0, 0, null);
         g2.drawImage(coinCount, Constants.SCREEN_WIDTH - coinCount.getWidth(), 0, null);
+        if (hasKeycard && keycardIcon != null) {
+            g2.drawImage(keycardIcon, 0, Window.getWindow().getSize().height - Window.getWindow().getInsets().top - (keycardIcon.getHeight() * Constants.SCALE), keycardIcon.getWidth() * Constants.SCALE, keycardIcon.getHeight() * Constants.SCALE, null);
+        }
         if (ownsPistol) this.pistol.draw(g2);
     }
 
@@ -206,6 +211,7 @@ public class Player extends Entity {
 
     public void buyAmmo() {
         if (ownsPistol && this.spendCoins(1)) {
+            this.pistol.setMaxBullets(pistol.getMaxBullets()+1);
             this.pistol.setBulletsRemaining(pistol.getBulletsRemaining()+1);
         }
     }
@@ -231,6 +237,10 @@ public class Player extends Entity {
         this.worldY = y;
         this.health = maxHealth;
         this.healthBar = updateHudText("Health: ", health);
-        this.pistol.setBulletsRemaining(Constants.STARTING_AMMO);
+        this.pistol.setBulletsRemaining(pistol.getMaxBullets());
+    }
+
+    public void setKeycardIcon(BufferedImage img) {
+        this.keycardIcon = img;
     }
 }

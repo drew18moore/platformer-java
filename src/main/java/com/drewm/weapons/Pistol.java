@@ -18,7 +18,8 @@ public class Pistol {
     private double angle;
     private BufferedImage sprite;
     public List<Bullet> bullets;
-    private int bulletsRemaining = Constants.STARTING_AMMO;
+    private int maxBullets = Constants.STARTING_AMMO;
+    private int bulletsRemaining = maxBullets;
     public int mouseX, mouseY;
 
     private BufferedImage ammoCount;
@@ -160,6 +161,9 @@ public class Pistol {
     public void keyReleased(KeyEvent e) {
 
     }
+
+    public int getMaxBullets() { return this.maxBullets; }
+    public void setMaxBullets(int maxBullets) { this.maxBullets = maxBullets; }
 
     public int getBulletsRemaining() {
         return this.bulletsRemaining;

@@ -8,23 +8,32 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Objects;
 
-public class Coin {
+public class Collectable {
     private final Playing playing;
     public float worldX, worldY;
     private BufferedImage[] spriteFrames;
+    private ItemType itemType;
     public int spriteCounter = 0;
     public int spriteNum = 0;
 
-    public Coin(float x, float y, Playing playing) {
+    public Collectable(float x, float y, ItemType type, Playing playing) {
         this.playing = playing;
         this.worldX = x;
         this.worldY = y;
+        this.itemType = type;
 
         try {
-            BufferedImage spriteSheet = ImageIO.read(getClass().getResourceAsStream("/sprites/coin.png"));
+            String spritePath;
+            switch(itemType) {
+                case COIN -> spritePath = "/sprites/coin.png";
+                case KEYCARD -> spritePath = "/sprites/keycard.png";
+                default -> throw new IllegalStateException("Unexpected value: " + itemType);
+            }
+            BufferedImage spriteSheet = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(spritePath)));
 
-            this.spriteFrames = new BufferedImage[4];
+            this.spriteFrames = new BufferedImage[spriteSheet.getWidth()/Constants.TILE_WIDTH];
             for (int i = 0; i < spriteFrames.length; i++) {
                 spriteFrames[i] = spriteSheet.getSubimage(
                         i * Constants.TILE_WIDTH,
@@ -40,14 +49,20 @@ public class Coin {
 
     public boolean update() {
         if (getScreenBounds().intersects(playing.player.getBounds())) {
-            playing.player.earnCoins(1);
+            switch(itemType) {
+                case COIN -> playing.player.earnCoins(1);
+                case KEYCARD -> {
+                    playing.player.setKeycardIcon(this.spriteFrames[0]);
+                    playing.player.hasKeycard = true;
+                }
+                default -> throw new IllegalStateException("Unexpected value: " + itemType);
+            }
             return true;
         }
 
-        System.out.println(spriteCounter);
         spriteCounter++;
         if (spriteCounter > 24) {
-            if (spriteNum >= 3) {
+            if (spriteNum >= spriteFrames.length - 1) {
                 spriteNum = 0;
             } else {
                 spriteNum++;
@@ -72,5 +87,9 @@ public class Coin {
         float screenX = this.worldX - playing.player.worldX + playing.player.screenX;
         float screenY = this.worldY - playing.player.worldY + playing.player.screenY;
         return new Rectangle2D.Float(screenX, screenY, spriteFrames[0].getWidth() * Constants.SCALE, spriteFrames[0].getHeight() * Constants.SCALE);
+    }
+
+    public ItemType getItemType() {
+        return this.itemType;
     }
 }

@@ -1,9 +1,12 @@
 package com.drewm.ui;
 
 import com.drewm.entities.Player;
+import com.drewm.gamestates.Playing;
+import com.drewm.levels.LevelManager;
 import com.drewm.utils.Constants;
 
 public class Camera {
+    private final LevelManager levelManager;
     private float cameraX;
     private float cameraY;
 
@@ -14,6 +17,10 @@ public class Camera {
     private final int DEADZONE_RIGHT = DEADZONE_LEFT + DEADZONE_WIDTH;
     private final int DEADZONE_TOP = (Constants.SCREEN_HEIGHT - DEADZONE_HEIGHT) / 2;
     private final int DEADZONE_BOTTOM = DEADZONE_TOP + DEADZONE_HEIGHT;
+
+    public Camera(LevelManager levelManager) {
+        this.levelManager = levelManager;
+    }
 
     public void update(Player player) {
         float hitboxWorldX = player.worldX + player.hitboxOffsetX;
@@ -39,8 +46,8 @@ public class Camera {
             cameraY = hitboxBottomY - DEADZONE_BOTTOM;
         }
 
-        int maxCameraX = Constants.WORLD_MAP_NUM_TILE_WIDTH * Constants.TILE_SIZE - Constants.SCREEN_WIDTH;
-        int maxCameraY = Constants.WORLD_MAP_NUM_TILE_HEIGHT * Constants.TILE_SIZE - Constants.SCREEN_HEIGHT;
+        int maxCameraX = levelManager.getCurrentRoom().getRoomNumTileWidth() * Constants.TILE_SIZE - Constants.SCREEN_WIDTH;
+        int maxCameraY = levelManager.getCurrentRoom().getRoomNumTileHeight() * Constants.TILE_SIZE - Constants.SCREEN_HEIGHT;
 
         cameraX = Math.max(0, Math.min(cameraX, maxCameraX));
         cameraY = Math.max(0, Math.min(cameraY, maxCameraY));

@@ -138,7 +138,6 @@ public class Entity {
     }
 
     public void takeDamage(int amount) {
-        System.out.println("HIT");
         this.health -= amount;
     }
 }

@@ -7,8 +7,8 @@ import com.drewm.objects.Door;
 import java.util.List;
 
 public class Room {
-    private int roomNumTileWidth;
-    private int roomNumTileHeight;
+    private final int roomNumTileWidth;
+    private final int roomNumTileHeight;
     private int[][] worldMap;
     private int[][] worldBackground;
     private List<BasicZombie> basicZombies;

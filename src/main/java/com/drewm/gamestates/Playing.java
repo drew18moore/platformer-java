@@ -16,7 +16,6 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -96,6 +95,7 @@ public class Playing implements Statemethods {
                 BasicZombie zombie = zombieIterator.next();
                 zombie.update();
                 if (zombie.health <= 0) {
+                    zombie.handleDrop();
                     zombieIterator.remove();
                 }
             }

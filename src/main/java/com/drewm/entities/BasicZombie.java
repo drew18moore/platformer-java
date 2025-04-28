@@ -1,6 +1,8 @@
 package com.drewm.entities;
 
 import com.drewm.gamestates.Playing;
+import com.drewm.objects.Collectable;
+import com.drewm.objects.ItemType;
 import com.drewm.utils.Constants;
 
 import javax.imageio.ImageIO;
@@ -8,6 +10,7 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import static com.drewm.utils.RandomGenerator.RANDOM;
 
 public class BasicZombie extends Entity {
     public BasicZombie(float worldX, float worldY, Playing playing) {
@@ -92,5 +95,15 @@ public class BasicZombie extends Entity {
 
     public Rectangle2D.Float getWorldBounds() {
         return new Rectangle2D.Float(worldX + hitboxOffsetX, worldY + hitboxOffsetY, hitboxWidth, hitboxHeight);
+    }
+
+    public void handleDrop() {
+        float dropChance = RANDOM.nextFloat();
+
+        if (dropChance < 0.3f) {
+            playing.levelManager.getCurrentRoom().getCollectables().add(
+                    new Collectable(worldX + hitboxOffsetX, worldY + hitboxOffsetY, ItemType.COIN, playing)
+            );
+        }
     }
 }

@@ -179,10 +179,6 @@ public class LevelManager {
         }
     }
 
-    public void respawn() {
-
-    }
-
     public Room getCurrentRoom() {
         return rooms.get(currentRoomIdx);
     }

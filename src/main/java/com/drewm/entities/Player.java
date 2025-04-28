@@ -211,6 +211,7 @@ public class Player extends Entity {
 
     public void buyAmmo() {
         if (ownsPistol && this.spendCoins(1)) {
+            this.pistol.setMaxBullets(pistol.getMaxBullets()+1);
             this.pistol.setBulletsRemaining(pistol.getBulletsRemaining()+1);
         }
     }
@@ -236,7 +237,7 @@ public class Player extends Entity {
         this.worldY = y;
         this.health = maxHealth;
         this.healthBar = updateHudText("Health: ", health);
-        this.pistol.setBulletsRemaining(Constants.STARTING_AMMO);
+        this.pistol.setBulletsRemaining(pistol.getMaxBullets());
     }
 
     public void setKeycardIcon(BufferedImage img) {

@@ -6,6 +6,7 @@ import com.drewm.entities.Player;
 import com.drewm.gamestates.Playing;
 import com.drewm.objects.Collectable;
 import com.drewm.objects.Door;
+import com.drewm.objects.ItemType;
 import com.drewm.utils.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -194,4 +195,14 @@ public class LevelManager {
     public float getPlayerSpawnY() {
         return playerSpawnWorldY;
     }
+
+    public boolean isKeycardAlreadyDropped() {
+        for (Collectable c : getCurrentRoom().getCollectables()) {
+            if (c.getItemType() == ItemType.KEYCARD) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

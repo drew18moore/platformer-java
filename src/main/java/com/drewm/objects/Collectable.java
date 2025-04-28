@@ -88,4 +88,8 @@ public class Collectable {
         float screenY = this.worldY - playing.player.worldY + playing.player.screenY;
         return new Rectangle2D.Float(screenX, screenY, spriteFrames[0].getWidth() * Constants.SCALE, spriteFrames[0].getHeight() * Constants.SCALE);
     }
+
+    public ItemType getItemType() {
+        return this.itemType;
+    }
 }

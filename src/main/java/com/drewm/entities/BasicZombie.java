@@ -104,6 +104,10 @@ public class BasicZombie extends Entity {
             playing.levelManager.getCurrentRoom().getCollectables().add(
                     new Collectable(worldX + hitboxOffsetX, worldY + hitboxOffsetY, ItemType.COIN, playing)
             );
+        } else if (dropChance < 0.4f && !playing.player.hasKeycard && !playing.levelManager.isKeycardAlreadyDropped()) {
+            playing.levelManager.getCurrentRoom().getCollectables().add(
+                    new Collectable(worldX + hitboxOffsetX, worldY + hitboxOffsetY, ItemType.KEYCARD, playing)
+            );
         }
     }
 }

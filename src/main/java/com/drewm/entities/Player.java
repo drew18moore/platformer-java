@@ -230,6 +230,13 @@ public class Player extends Entity {
         }
     }
 
+    public void buyTimeUpgrade() {
+        if (spendCoins(10)) {
+            this.maxTimeLimitSeconds += 5;
+            this.currentTimeLeft = this.maxTimeLimitSeconds;
+        }
+    }
+
     public boolean spendCoins(int amount) {
         if (coins >= amount) {
             coins -= amount;

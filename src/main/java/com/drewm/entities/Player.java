@@ -26,6 +26,10 @@ public class Player extends Entity {
     private long invincibilityStartTime = 0;
     private final int INVINCIBILITY_DURATION = 500;
 
+    private int maxTimeLimitSeconds = 5;
+    private int currentTimeLeft = 0;
+    private long lastCheck = System.currentTimeMillis();
+
     public boolean ownsPistol = false;
     public Pistol pistol;
 
@@ -46,6 +50,7 @@ public class Player extends Entity {
         this.showHitbox = true;
 
         this.pistol = new Pistol(this, bullets);
+        this.currentTimeLeft = maxTimeLimitSeconds;
 
         try {
             BufferedImage spriteSheet = ImageIO.read(getClass().getResourceAsStream("/sprites/player.png"));
@@ -102,8 +107,14 @@ public class Player extends Entity {
             this.playing.showWinScreen = true;
         }
 
-        if (health <= 0) {
+        if (health <= 0 || currentTimeLeft <= 0) {
             playing.showDeathScreen = true;
+        }
+
+        if (System.currentTimeMillis() - lastCheck >= 1000) {
+            lastCheck = System.currentTimeMillis();
+            currentTimeLeft -= 1;
+            System.out.println(currentTimeLeft);
         }
     }
 
@@ -238,6 +249,7 @@ public class Player extends Entity {
         this.health = maxHealth;
         this.healthBar = updateHudText("Health: ", health);
         this.pistol.setBulletsRemaining(pistol.getMaxBullets());
+        this.currentTimeLeft = maxTimeLimitSeconds;
     }
 
     public void setKeycardIcon(BufferedImage img) {

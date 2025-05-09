@@ -96,7 +96,7 @@ public class Player extends Entity {
         if (isMoving) this.pistol.calculateAngle();
 
         if (isStandingOnSpike((int) worldX, (int) worldY + 1)) {
-            takeDamage(5);
+            takeDamage(1);
         }
 
         if (!isColliding((int) nextWorldX, (int) worldY)) {
@@ -204,7 +204,7 @@ public class Player extends Entity {
 
     public void upgradeHealth() {
         if (spendCoins(5)) {
-            maxHealth += 20;
+            maxHealth += 1;
             health = maxHealth;
             this.healthBar = updateHudText("Health: ", health);
         }

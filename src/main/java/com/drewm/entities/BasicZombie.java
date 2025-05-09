@@ -62,7 +62,7 @@ public class BasicZombie extends Entity {
         }
 
         if (getBounds().intersects(playing.player.getBounds())) {
-            playing.player.takeDamage(5);
+            playing.player.takeDamage(1);
         }
     }
 

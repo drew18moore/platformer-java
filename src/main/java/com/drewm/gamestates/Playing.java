@@ -57,16 +57,6 @@ public class Playing implements Statemethods {
                 resetLevel();
             })
     });
-    private final Modal deathScreen = new Modal("You Died!", new Button[]{
-            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Respawn", () -> {
-                this.respawn();
-                this.showBuyMenu = true;
-            }),
-            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu", () -> {
-                Gamestate.state = Gamestate.MENU;
-                resetLevel();
-            })
-    });
     public boolean isPaused = false;
     public boolean showBuyMenu = false;
     public boolean showWinScreen = false;
@@ -204,7 +194,6 @@ public class Playing implements Statemethods {
     private Modal getActiveModal() {
         if (isPaused) return pauseMenu;
         if (showBuyMenu) return buyMenu;
-        if (showDeathScreen) return deathScreen;
         if (showWinScreen) return winScreen;
         return null;
     }

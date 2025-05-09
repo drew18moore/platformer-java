@@ -109,7 +109,8 @@ public class Player extends Entity {
         }
 
         if (health <= 0 || currentTimeLeft <= 0) {
-            playing.showDeathScreen = true;
+            playing.respawn();
+            playing.showBuyMenu = true;
         }
 
         if (System.currentTimeMillis() - lastCheck >= 1000) {

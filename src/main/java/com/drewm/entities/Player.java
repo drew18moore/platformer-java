@@ -17,7 +17,7 @@ import java.util.List;
 public class Player extends Entity {
     public boolean leftPressed, rightPressed, jumpPressed;
 
-    private int coins = 0;
+    private int coins = 10;
     private int maxHealth = Constants.PLAYER_STARTING_MAX_HEALTH;
     private int health = maxHealth;
     private float speed = Constants.PLAYER_STARTING_SPEED;

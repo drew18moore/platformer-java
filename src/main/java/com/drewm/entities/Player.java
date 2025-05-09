@@ -37,6 +37,7 @@ public class Player extends Entity {
 
     private BufferedImage healthBar = updateHudText("Health: ", health);
     private BufferedImage coinCount = updateHudText("Coins: ", coins);
+    private BufferedImage timeLeft = updateHudText("", currentTimeLeft);
     private BufferedImage keycardIcon = null;
 
     public Player(float worldX, float worldY, Playing playing, List<Bullet> bullets) {
@@ -114,7 +115,7 @@ public class Player extends Entity {
         if (System.currentTimeMillis() - lastCheck >= 1000) {
             lastCheck = System.currentTimeMillis();
             currentTimeLeft -= 1;
-            System.out.println(currentTimeLeft);
+            timeLeft = updateHudText("", currentTimeLeft);
         }
     }
 
@@ -138,6 +139,7 @@ public class Player extends Entity {
 
         g2.drawImage(healthBar, 0, 0, null);
         g2.drawImage(coinCount, Constants.SCREEN_WIDTH - coinCount.getWidth(), 0, null);
+        g2.drawImage(timeLeft, (Constants.SCREEN_WIDTH - timeLeft.getWidth()) / 2, 0, null);
         if (hasKeycard && keycardIcon != null) {
             g2.drawImage(keycardIcon, 0, Window.getWindow().getSize().height - Window.getWindow().getInsets().top - (keycardIcon.getHeight() * Constants.SCALE), keycardIcon.getWidth() * Constants.SCALE, keycardIcon.getHeight() * Constants.SCALE, null);
         }

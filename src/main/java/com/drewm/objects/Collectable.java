@@ -50,7 +50,7 @@ public class Collectable {
     public boolean update() {
         if (getScreenBounds().intersects(playing.player.getBounds())) {
             switch(itemType) {
-                case COIN -> playing.player.earnCoins(1);
+                case COIN -> playing.player.earnCoins(playing.player.getCoinMultiplier());
                 case KEYCARD -> {
                     playing.player.setKeycardIcon(this.spriteFrames[0]);
                     playing.player.hasKeycard = true;

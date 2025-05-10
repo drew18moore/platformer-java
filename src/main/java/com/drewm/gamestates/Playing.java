@@ -51,6 +51,9 @@ public class Playing implements Statemethods {
             }),
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 70 + Constants.BTN_HEIGHT_SCALED * 5, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Time upgrade [10 coins]", () -> {
                 player.buyTimeUpgrade();
+            }),
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 80 + Constants.BTN_HEIGHT_SCALED * 6, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Coin multiplier upgrade [20 coins]", () -> {
+                player.buyCoinMultiplier();
             })
     });
     private final Modal winScreen = new Modal("You Win!", new Button[]{

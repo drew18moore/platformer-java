@@ -17,6 +17,7 @@ import java.util.List;
 public class Player extends Entity {
     public boolean leftPressed, rightPressed, jumpPressed;
 
+    private int coinMultiplier = 1;
     private int coins = 10;
     private int maxHealth = Constants.PLAYER_STARTING_MAX_HEALTH;
     private int health = maxHealth;
@@ -249,6 +250,14 @@ public class Player extends Entity {
     public void earnCoins(int amount) {
         coins += amount;
         this.coinCount = updateHudText("Coins: ", coins);
+    }
+
+    public void buyCoinMultiplier() {
+        if (spendCoins(20)) this.coinMultiplier++;
+    }
+
+    public int getCoinMultiplier() {
+        return this.coinMultiplier;
     }
 
     public int getCoins() { return coins; }

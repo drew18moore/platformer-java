@@ -2,9 +2,11 @@ package com.drewm.ui;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.function.Supplier;
 
 public class Button {
     public int x, y, width, height, index;
+    private Supplier<Boolean> enabledSupplier;
     public Runnable onClick;
 
     public boolean mouseOver, mousePressed;
@@ -12,6 +14,10 @@ public class Button {
     private BufferedImage[] imgs;
 
     public Button(int x, int y, int width, int height, String label, Runnable onClick) {
+        this(x, y, width, height, label, onClick, () -> true);
+    }
+
+    public Button(int x, int y, int width, int height, String label, Runnable onClick, Supplier<Boolean> enabledSupplier) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -19,6 +25,7 @@ public class Button {
         this.onClick = onClick;
         loadImgs(label);
         this.bounds = new Rectangle(x, y, width, height);
+        this.enabledSupplier = enabledSupplier;
     }
 
     private void loadImgs(String label) {
@@ -57,6 +64,10 @@ public class Button {
         mousePressed = false;
     }
 
+    public boolean isEnabled() {
+        return enabledSupplier.get();
+    }
+
     public void update() {
         index = 0;
         if (mouseOver) index = 1;
@@ -64,6 +75,12 @@ public class Button {
     }
 
     public void draw(Graphics g) {
-        g.drawImage(imgs[index], x, y, width, height, null);
+        int drawIndex = isEnabled() ? index : 0;
+        g.drawImage(imgs[drawIndex], x, y, width, height, null);
+
+        if (!isEnabled()) {
+            g.setColor(new Color(0, 0, 0, 100)); // overlay grey-out
+            g.fillRect(x, y, width, height);
+        }
     }
 }

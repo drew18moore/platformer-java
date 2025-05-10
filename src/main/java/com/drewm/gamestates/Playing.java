@@ -39,22 +39,22 @@ public class Playing implements Statemethods {
     private final Modal buyMenu = new Modal("Buy Menu", new Button[]{
             new Button((Constants.SCREEN_WIDTH - (int) (Constants.SCREEN_WIDTH * 0.5f)) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, (int) (Constants.SCREEN_WIDTH * 0.5f), Constants.BTN_HEIGHT_SCALED, "Health Upgrade [5 coins]", () -> {
                 player.upgradeHealth();
-            }),
+            }, () -> player.getCoins() >= 5),
             new Button((Constants.SCREEN_WIDTH - (int) (Constants.SCREEN_WIDTH * 0.5f)) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, (int) (Constants.SCREEN_WIDTH * 0.5f), Constants.BTN_HEIGHT_SCALED, "Speed Upgrade [5 coins]", () -> {
                 player.upgradeSpeed();
-            }),
+            }, () -> player.getCoins() >= 5),
             new Button((Constants.SCREEN_WIDTH - (int) (Constants.SCREEN_WIDTH * 0.5f)) / 2, Constants.MODAL_BG_Y + 50 + Constants.BTN_HEIGHT_SCALED * 3, (int) (Constants.SCREEN_WIDTH * 0.5f), Constants.BTN_HEIGHT_SCALED, "Buy Pistol [5 coins]", () -> {
                 player.buyPistol();
-            }),
+            }, () -> player.getCoins() >= 5),
             new Button((Constants.SCREEN_WIDTH - (int) (Constants.SCREEN_WIDTH * 0.5f)) / 2, Constants.MODAL_BG_Y + 60 + Constants.BTN_HEIGHT_SCALED * 4, (int) (Constants.SCREEN_WIDTH * 0.5f), Constants.BTN_HEIGHT_SCALED, "Buy Ammo [1 coin]", () -> {
                 player.buyAmmo();
-            }),
+            }, () -> player.ownsPistol && player.getCoins() >= 1),
             new Button((Constants.SCREEN_WIDTH - (int) (Constants.SCREEN_WIDTH * 0.5f)) / 2, Constants.MODAL_BG_Y + 70 + Constants.BTN_HEIGHT_SCALED * 5, (int) (Constants.SCREEN_WIDTH * 0.5f), Constants.BTN_HEIGHT_SCALED, "Time upgrade [10 coins]", () -> {
                 player.buyTimeUpgrade();
-            }),
+            }, () -> player.getCoins() >= 10),
             new Button((Constants.SCREEN_WIDTH - (int) (Constants.SCREEN_WIDTH * 0.5f)) / 2, Constants.MODAL_BG_Y + 80 + Constants.BTN_HEIGHT_SCALED * 6, (int) (Constants.SCREEN_WIDTH * 0.5f), Constants.BTN_HEIGHT_SCALED, "Coin multiplier upgrade [20 coins]", () -> {
                 player.buyCoinMultiplier();
-            })
+            }, () -> player.getCoins() >= 20)
     });
     private final Modal winScreen = new Modal("You Win!", new Button[]{
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Restart", this::resetLevel),

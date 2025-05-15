@@ -45,10 +45,10 @@ public class Player extends Entity {
         super(worldX, worldY, null, Constants.PLAYER_SPRITE_WIDTH, Constants.PLAYER_SPRITE_HEIGHT, playing);
         this.useGravity = true;
 
-        this.hitboxWidth = Constants.PLAYER_SPRITE_WIDTH * Constants.SCALE;
-        this.hitboxHeight = Constants.PLAYER_SPRITE_HEIGHT * Constants.SCALE;
-        this.hitboxOffsetX = 0;
-        this.hitboxOffsetY = 0;
+        this.hitboxWidth = Constants.PLAYER_SPRITE_WIDTH * Constants.SCALE - 10;
+        this.hitboxHeight = Constants.PLAYER_SPRITE_HEIGHT * Constants.SCALE - 10;
+        this.hitboxOffsetX = 5;
+        this.hitboxOffsetY = 5;
         this.showHitbox = true;
 
         this.pistol = new Pistol(this, bullets);

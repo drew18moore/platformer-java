@@ -18,7 +18,7 @@ public class Player extends Entity {
     public boolean leftPressed, rightPressed, jumpPressed;
 
     private int coinMultiplier = 1;
-    private int coins = 10;
+    private int coins = 1000;
     private int maxHealth = Constants.PLAYER_STARTING_MAX_HEALTH;
     private int health = maxHealth;
     private float speed = Constants.PLAYER_STARTING_SPEED;
@@ -215,6 +215,12 @@ public class Player extends Entity {
     public void upgradeSpeed() {
         if (spendCoins(5)) {
             speed += 0.2f;
+        }
+    }
+
+    public void upgradeJumpPower() {
+        if (spendCoins(5)) {
+            jumpPower += 0.5f;
         }
     }
 

@@ -24,6 +24,7 @@ public class Entity {
     public boolean isOnGround = false;
     public boolean isMoving = false;
 
+    public float jumpPower = Constants.STARTING_JUMP_FORCE;
     public int health = 100;
 
     BufferedImage[] movementSprites;
@@ -78,7 +79,7 @@ public class Entity {
 
         if (jumpPressed && isOnGround) {
             System.out.println("JUMP!");
-            velocityY = -Constants.JUMP_FORCE;
+            velocityY = -jumpPower;
         }
 
         float nextWorldY = worldY + velocityY;

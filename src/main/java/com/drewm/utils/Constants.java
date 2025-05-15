@@ -23,7 +23,7 @@ public class Constants {
     public static final float GRAVITY_ASCEND = 0.15f;
     public static final float GRAVITY_DESCEND = 0.25f;
     public static final float TERMINAL_VELOCITY = 5.0f;
-    public static final float JUMP_FORCE = 7.0f;
+    public static final float STARTING_JUMP_FORCE = 3.0f;
 
     public static final int PLAYER_SPRITE_TILE_SIZE = 32;
     public static final int PLAYER_SPRITE_WIDTH = 16;

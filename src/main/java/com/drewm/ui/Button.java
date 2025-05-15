@@ -1,5 +1,7 @@
 package com.drewm.ui;
 
+import com.drewm.utils.Constants;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.function.Supplier;
@@ -15,6 +17,18 @@ public class Button {
 
     public Button(int x, int y, int width, int height, String label, Runnable onClick) {
         this(x, y, width, height, label, onClick, () -> true);
+    }
+
+    public Button(int idx, String label, Runnable onClick, Supplier<Boolean> enabledSupplier) {
+        this(
+                (Constants.SCREEN_WIDTH - (int) (Constants.SCREEN_WIDTH * 0.5f)) / 2,
+                Constants.MODAL_BG_Y + Constants.BTN_HEIGHT_SCALED * idx,
+                (int) (Constants.SCREEN_WIDTH * 0.5f),
+                Constants.BTN_HEIGHT_SCALED,
+                label,
+                onClick,
+                enabledSupplier
+        );
     }
 
     public Button(int x, int y, int width, int height, String label, Runnable onClick, Supplier<Boolean> enabledSupplier) {

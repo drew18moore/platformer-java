@@ -123,9 +123,17 @@ public class Playing implements Statemethods {
         Graphics2D g2 = (Graphics2D) g;
         levelManager.draw(g2);
         player.draw(g2);
-        this.levelManager.getCurrentRoom().getBasicZombies().forEach(zombie -> zombie.draw(g2));
-        bullets.forEach(bullet -> bullet.draw(g2));
-        this.levelManager.getCurrentRoom().getCollectables().forEach(collectable -> collectable.draw(g2));
+        for (BasicZombie zombie : new ArrayList<>(levelManager.getCurrentRoom().getBasicZombies())) {
+            zombie.draw(g2);
+        }
+
+        for (Collectable c : new ArrayList<>(levelManager.getCurrentRoom().getCollectables())) {
+            c.draw(g2);
+        }
+
+        for (Bullet b : new ArrayList<>(bullets)) {
+            b.draw(g2);
+        }
         this.levelManager.getCurrentRoom().getDoors().forEach(door -> door.draw(g2));
 
         Modal activeModal = getActiveModal();

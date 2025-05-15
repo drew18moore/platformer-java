@@ -57,6 +57,13 @@ public class Entity {
     }
 
     public void update(boolean jumpPressed) {
+        int feetY = (int) (worldY + hitboxOffsetY + hitboxHeight);
+        int leftX = (int) (worldX + hitboxOffsetX + 1); // small padding
+        int rightX = (int) (worldX + hitboxOffsetX + hitboxWidth - 1);
+
+        this.isOnGround = playing.levelManager.isSolidTile(leftX, feetY + 1) ||
+                playing.levelManager.isSolidTile(rightX, feetY + 1);
+
         if (useGravity) {
             if (velocityY < 0) {
                 velocityY += Constants.GRAVITY_ASCEND;
@@ -70,8 +77,8 @@ public class Entity {
         }
 
         if (jumpPressed && isOnGround) {
+            System.out.println("JUMP!");
             velocityY = -Constants.JUMP_FORCE;
-            isOnGround = false;
         }
 
         float nextWorldY = worldY + velocityY;

@@ -34,8 +34,8 @@ public class LevelManager {
 
     public void loadRooms(String filePath, boolean persistPlayerState) {
         try {
-            this.rooms = new HashMap<>();
             this.currentRoomIdx = 0;
+            this.rooms = new HashMap<>();
             // Load tilesets
             this.tiles = getTileSet("/tilesets/tileset0.png", Constants.WORLD_TILE_SET_NUM_TILE_WIDTH, Constants.WORLD_TILE_SET_NUM_TILE_HEIGHT);
             this.backgroundTiles = getTileSet("/tilesets/background-tileset0.png", Constants.WORLD_BACKGROUND_TILE_SET_NUM_TILE_WIDTH, Constants.WORLD_BACKGROUND_TILE_SET_NUM_TILE_HEIGHT);

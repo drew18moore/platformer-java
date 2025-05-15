@@ -28,40 +28,39 @@ public class Playing implements Statemethods {
     public Door currentDoor = null;
 
     private final Modal pauseMenu = new Modal("Game Paused", new Button[]{
-            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Resume", () -> {
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Resume", () -> {
                 isPaused = false;
             }),
-            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu", () -> {
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu", () -> {
                 Gamestate.state = Gamestate.MENU;
                 resetLevel();
             })
     });
     private final Modal buyMenu = new Modal("Buy Menu", new Button[]{
-            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Health Upgrade [5 coins]", () -> {
+            new Button(1, "Health Upgrade [5 coins]", () -> {
                 player.upgradeHealth();
-            }),
-            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Speed Upgrade [5 coins]", () -> {
+            }, () -> player.getCoins() >= 5),
+            new Button(2, "Speed Upgrade [5 coins]", () -> {
                 player.upgradeSpeed();
-            }),
-            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 50 + Constants.BTN_HEIGHT_SCALED * 3, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Buy Pistol [5 coins]", () -> {
+            }, () -> player.getCoins() >= 5),
+            new Button(3, "Jump Power Upgrade [5 coins]", () -> {
+                player.upgradeJumpPower();
+            }, () -> player.getCoins() >= 5),
+            new Button(4, "Buy Pistol [5 coins]", () -> {
                 player.buyPistol();
-            }),
-            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 60 + Constants.BTN_HEIGHT_SCALED * 4, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Buy Ammo [1 coin]", () -> {
+            }, () -> player.getCoins() >= 5),
+            new Button(5, "Buy Ammo [1 coin]", () -> {
                 player.buyAmmo();
-            })
+            }, () -> player.ownsPistol && player.getCoins() >= 1),
+            new Button(6, "Time upgrade [10 coins]", () -> {
+                player.buyTimeUpgrade();
+            }, () -> player.getCoins() >= 10),
+            new Button(7, "Coin multiplier upgrade [20 coins]", () -> {
+                player.buyCoinMultiplier();
+            }, () -> player.getCoins() >= 20)
     });
     private final Modal winScreen = new Modal("You Win!", new Button[]{
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Restart", this::resetLevel),
-            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu", () -> {
-                Gamestate.state = Gamestate.MENU;
-                resetLevel();
-            })
-    });
-    private final Modal deathScreen = new Modal("You Died!", new Button[]{
-            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Respawn", () -> {
-                this.respawn();
-                this.showBuyMenu = true;
-            }),
             new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu", () -> {
                 Gamestate.state = Gamestate.MENU;
                 resetLevel();
@@ -127,9 +126,17 @@ public class Playing implements Statemethods {
         Graphics2D g2 = (Graphics2D) g;
         levelManager.draw(g2);
         player.draw(g2);
-        this.levelManager.getCurrentRoom().getBasicZombies().forEach(zombie -> zombie.draw(g2));
-        bullets.forEach(bullet -> bullet.draw(g2));
-        this.levelManager.getCurrentRoom().getCollectables().forEach(collectable -> collectable.draw(g2));
+        for (BasicZombie zombie : new ArrayList<>(levelManager.getCurrentRoom().getBasicZombies())) {
+            zombie.draw(g2);
+        }
+
+        for (Collectable c : new ArrayList<>(levelManager.getCurrentRoom().getCollectables())) {
+            c.draw(g2);
+        }
+
+        for (Bullet b : new ArrayList<>(bullets)) {
+            b.draw(g2);
+        }
         this.levelManager.getCurrentRoom().getDoors().forEach(door -> door.draw(g2));
 
         Modal activeModal = getActiveModal();
@@ -204,7 +211,6 @@ public class Playing implements Statemethods {
     private Modal getActiveModal() {
         if (isPaused) return pauseMenu;
         if (showBuyMenu) return buyMenu;
-        if (showDeathScreen) return deathScreen;
         if (showWinScreen) return winScreen;
         return null;
     }

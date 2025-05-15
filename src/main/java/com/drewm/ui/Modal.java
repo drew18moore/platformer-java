@@ -55,7 +55,7 @@ public class Modal {
 
     public void draw(Graphics g) {
         g.drawImage(backgroundImg, bgX, bgY, bgW, bgH, null);
-        g.drawImage(headerText, bgX + (bgW - Constants.BTN_WIDTH_SCALED) / 2, bgY + 20, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, null);
+        g.drawImage(headerText, bgX + (bgW - Constants.BTN_WIDTH_SCALED) / 2, bgY, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, null);
 
         for (Button b: buttons) {
             b.draw(g);

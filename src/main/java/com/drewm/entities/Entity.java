@@ -24,6 +24,7 @@ public class Entity {
     public boolean isOnGround = false;
     public boolean isMoving = false;
 
+    public float jumpPower = Constants.STARTING_JUMP_FORCE;
     public int health = 100;
 
     BufferedImage[] movementSprites;
@@ -57,6 +58,13 @@ public class Entity {
     }
 
     public void update(boolean jumpPressed) {
+        int feetY = (int) (worldY + hitboxOffsetY + hitboxHeight);
+        int leftX = (int) (worldX + hitboxOffsetX + 1); // small padding
+        int rightX = (int) (worldX + hitboxOffsetX + hitboxWidth - 1);
+
+        this.isOnGround = playing.levelManager.isSolidTile(leftX, feetY + 1) ||
+                playing.levelManager.isSolidTile(rightX, feetY + 1);
+
         if (useGravity) {
             if (velocityY < 0) {
                 velocityY += Constants.GRAVITY_ASCEND;
@@ -70,8 +78,8 @@ public class Entity {
         }
 
         if (jumpPressed && isOnGround) {
-            velocityY = -Constants.JUMP_FORCE;
-            isOnGround = false;
+            System.out.println("JUMP!");
+            velocityY = -jumpPower;
         }
 
         float nextWorldY = worldY + velocityY;

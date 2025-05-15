@@ -17,13 +17,13 @@ public class Constants {
     public static final int UPS = 200;
 
     public static final float PLAYER_STARTING_SPEED = 0.8f;
-    public static final int PLAYER_STARTING_MAX_HEALTH = 10;
+    public static final int PLAYER_STARTING_MAX_HEALTH = 1;
     public static final int PLAYER_HEALTH_FONT_SIZE = 25;
 
     public static final float GRAVITY_ASCEND = 0.15f;
     public static final float GRAVITY_DESCEND = 0.25f;
     public static final float TERMINAL_VELOCITY = 5.0f;
-    public static final float JUMP_FORCE = 7.0f;
+    public static final float STARTING_JUMP_FORCE = 3.0f;
 
     public static final int PLAYER_SPRITE_TILE_SIZE = 32;
     public static final int PLAYER_SPRITE_WIDTH = 16;
@@ -50,6 +50,6 @@ public class Constants {
 
     public static final int WEAPON_SCALE = 3;
 
-    public static final int STARTING_AMMO = 5;
+    public static final int STARTING_AMMO = 1;
     public static final float BULLET_SPEED = 5f;
 }

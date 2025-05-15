@@ -3,7 +3,7 @@
     {
       "type": "player",
       "x": 192.0,
-      "y": 128.0,
+      "y": 1664.0,
       "health": 10,
       "facingLeft": false
     }

@@ -21,7 +21,7 @@ public class Bullet {
     public float velocityX, velocityY;
     public double angle;
     public boolean facingLeft;
-    private final int damage = 10;
+    private final int damage = 1;
 
     public Bullet(float x, float y, double angle, boolean facingLeft, float speed, Player player) {
         this.player = player;

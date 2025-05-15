@@ -17,7 +17,8 @@ import java.util.List;
 public class Player extends Entity {
     public boolean leftPressed, rightPressed, jumpPressed;
 
-    private int coins = 0;
+    private int coinMultiplier = 1;
+    private int coins = 1000;
     private int maxHealth = Constants.PLAYER_STARTING_MAX_HEALTH;
     private int health = maxHealth;
     private float speed = Constants.PLAYER_STARTING_SPEED;
@@ -26,6 +27,10 @@ public class Player extends Entity {
     private long invincibilityStartTime = 0;
     private final int INVINCIBILITY_DURATION = 500;
 
+    private int maxTimeLimitSeconds = 5;
+    private int currentTimeLeft = 0;
+    private long lastCheck = System.currentTimeMillis();
+
     public boolean ownsPistol = false;
     public Pistol pistol;
 
@@ -33,19 +38,21 @@ public class Player extends Entity {
 
     private BufferedImage healthBar = updateHudText("Health: ", health);
     private BufferedImage coinCount = updateHudText("Coins: ", coins);
+    private BufferedImage timeLeft = updateHudText("", currentTimeLeft);
     private BufferedImage keycardIcon = null;
 
     public Player(float worldX, float worldY, Playing playing, List<Bullet> bullets) {
         super(worldX, worldY, null, Constants.PLAYER_SPRITE_WIDTH, Constants.PLAYER_SPRITE_HEIGHT, playing);
         this.useGravity = true;
 
-        this.hitboxWidth = Constants.PLAYER_SPRITE_WIDTH * Constants.SCALE;
-        this.hitboxHeight = Constants.PLAYER_SPRITE_HEIGHT * Constants.SCALE;
-        this.hitboxOffsetX = 0;
-        this.hitboxOffsetY = 0;
+        this.hitboxWidth = Constants.PLAYER_SPRITE_WIDTH * Constants.SCALE - 10;
+        this.hitboxHeight = Constants.PLAYER_SPRITE_HEIGHT * Constants.SCALE - 10;
+        this.hitboxOffsetX = 5;
+        this.hitboxOffsetY = 5;
         this.showHitbox = true;
 
         this.pistol = new Pistol(this, bullets);
+        this.currentTimeLeft = maxTimeLimitSeconds;
 
         try {
             BufferedImage spriteSheet = ImageIO.read(getClass().getResourceAsStream("/sprites/player.png"));
@@ -90,7 +97,7 @@ public class Player extends Entity {
         if (isMoving) this.pistol.calculateAngle();
 
         if (isStandingOnSpike((int) worldX, (int) worldY + 1)) {
-            takeDamage(5);
+            takeDamage(1);
         }
 
         if (!isColliding((int) nextWorldX, (int) worldY)) {
@@ -102,8 +109,15 @@ public class Player extends Entity {
             this.playing.showWinScreen = true;
         }
 
-        if (health <= 0) {
-            playing.showDeathScreen = true;
+        if (health <= 0 || currentTimeLeft <= 0) {
+            playing.respawn();
+            playing.showBuyMenu = true;
+        }
+
+        if (System.currentTimeMillis() - lastCheck >= 1000) {
+            lastCheck = System.currentTimeMillis();
+            currentTimeLeft -= 1;
+            timeLeft = updateHudText("", currentTimeLeft);
         }
     }
 
@@ -127,6 +141,7 @@ public class Player extends Entity {
 
         g2.drawImage(healthBar, 0, 0, null);
         g2.drawImage(coinCount, Constants.SCREEN_WIDTH - coinCount.getWidth(), 0, null);
+        g2.drawImage(timeLeft, (Constants.SCREEN_WIDTH - timeLeft.getWidth()) / 2, 0, null);
         if (hasKeycard && keycardIcon != null) {
             g2.drawImage(keycardIcon, 0, Window.getWindow().getSize().height - Window.getWindow().getInsets().top - (keycardIcon.getHeight() * Constants.SCALE), keycardIcon.getWidth() * Constants.SCALE, keycardIcon.getHeight() * Constants.SCALE, null);
         }
@@ -190,7 +205,7 @@ public class Player extends Entity {
 
     public void upgradeHealth() {
         if (spendCoins(5)) {
-            maxHealth += 20;
+            maxHealth += 1;
             health = maxHealth;
             this.healthBar = updateHudText("Health: ", health);
         }
@@ -200,6 +215,12 @@ public class Player extends Entity {
     public void upgradeSpeed() {
         if (spendCoins(5)) {
             speed += 0.2f;
+        }
+    }
+
+    public void upgradeJumpPower() {
+        if (spendCoins(5)) {
+            jumpPower += 0.5f;
         }
     }
 
@@ -213,6 +234,13 @@ public class Player extends Entity {
         if (ownsPistol && this.spendCoins(1)) {
             this.pistol.setMaxBullets(pistol.getMaxBullets()+1);
             this.pistol.setBulletsRemaining(pistol.getBulletsRemaining()+1);
+        }
+    }
+
+    public void buyTimeUpgrade() {
+        if (spendCoins(10)) {
+            this.maxTimeLimitSeconds += 5;
+            this.currentTimeLeft = this.maxTimeLimitSeconds;
         }
     }
 
@@ -230,6 +258,14 @@ public class Player extends Entity {
         this.coinCount = updateHudText("Coins: ", coins);
     }
 
+    public void buyCoinMultiplier() {
+        if (spendCoins(20)) this.coinMultiplier++;
+    }
+
+    public int getCoinMultiplier() {
+        return this.coinMultiplier;
+    }
+
     public int getCoins() { return coins; }
 
     public void respawn(float x, float y) {
@@ -238,6 +274,7 @@ public class Player extends Entity {
         this.health = maxHealth;
         this.healthBar = updateHudText("Health: ", health);
         this.pistol.setBulletsRemaining(pistol.getMaxBullets());
+        this.currentTimeLeft = maxTimeLimitSeconds;
     }
 
     public void setKeycardIcon(BufferedImage img) {

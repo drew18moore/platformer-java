@@ -23,7 +23,7 @@ public class BasicZombie extends Entity {
         this.hitboxOffsetX = 40;
         this.hitboxOffsetY = 45;
         this.showHitbox = false;
-        this.health = 30;
+        this.health = 1;
 
         try {
             BufferedImage spriteSheet = ImageIO.read(getClass().getResourceAsStream("/sprites/zombie-basic.png"));
@@ -62,7 +62,7 @@ public class BasicZombie extends Entity {
         }
 
         if (getBounds().intersects(playing.player.getBounds())) {
-            playing.player.takeDamage(5);
+            playing.player.takeDamage(1);
         }
     }
 

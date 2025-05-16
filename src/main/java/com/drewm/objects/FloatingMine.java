@@ -19,7 +19,7 @@ public class FloatingMine {
     private BufferedImage[] spriteFrames;
     private int spriteCounter = 0;
     private int spriteNum = 0;
-    private float speed = 0.5f;
+    private float speed = 1f;
 
     public FloatingMine(float startX, float startY, float endX, float endY, Playing playing) {
         this.playing = playing;

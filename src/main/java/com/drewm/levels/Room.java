@@ -3,6 +3,7 @@ package com.drewm.levels;
 import com.drewm.entities.BasicZombie;
 import com.drewm.objects.Collectable;
 import com.drewm.objects.Door;
+import com.drewm.objects.FloatingMine;
 
 import java.util.List;
 
@@ -14,13 +15,15 @@ public class Room {
     private List<BasicZombie> basicZombies;
     private List<Collectable> collectables;
     private List<Door> doors;
+    private List<FloatingMine> floatingMines;
 
-    public Room(int[][] worldMap, int roomNumTileWidth, int roomNumTileHeight, int[][] worldBackground, List<BasicZombie> basicZombies, List<Collectable> collectables, List<Door> doors) {
+    public Room(int[][] worldMap, int roomNumTileWidth, int roomNumTileHeight, int[][] worldBackground, List<BasicZombie> basicZombies, List<Collectable> collectables, List<Door> doors, List<FloatingMine> floatingMines) {
         this.worldMap = worldMap;
         this.worldBackground = worldBackground;
         this.basicZombies = basicZombies;
         this.collectables = collectables;
         this.doors = doors;
+        this.floatingMines = floatingMines;
 
         this.roomNumTileWidth = roomNumTileWidth;
         this.roomNumTileHeight = roomNumTileHeight;
@@ -65,6 +68,10 @@ public class Room {
     public void setDoors(List<Door> doors) {
         this.doors = doors;
     }
+
+    public List<FloatingMine> getFloatingMines() { return floatingMines; }
+
+    public void setFloatingMines(List<FloatingMine> floatingMines) { this.floatingMines = floatingMines; }
 
     public int getRoomNumTileWidth() {
         return roomNumTileWidth;

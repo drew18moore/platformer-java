@@ -152,6 +152,14 @@
           "destinationY": 512.0,
           "lockType": "NONE"
         }
+      ],
+      "floatingMines": [
+        {
+          "startX": 960.0,
+          "startY": 1664.0,
+          "endX": 960.0,
+          "endY": 1472.0
+        }
       ]
     },
     {
@@ -212,7 +220,8 @@
           "destinationY": 128.0,
           "lockType": "KEYCARD"
         }
-      ]
+      ],
+      "floatingMines": []
     }
   ]
 }

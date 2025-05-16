@@ -6,6 +6,7 @@ import com.drewm.entities.Player;
 import com.drewm.levels.LevelManager;
 import com.drewm.objects.Collectable;
 import com.drewm.objects.Door;
+import com.drewm.objects.FloatingMine;
 import com.drewm.ui.Button;
 import com.drewm.ui.Camera;
 import com.drewm.ui.Modal;
@@ -115,6 +116,15 @@ public class Playing implements Statemethods {
                 }
             }
 
+            Iterator<FloatingMine> floatingMineIterator = this.levelManager.getCurrentRoom().getFloatingMines().iterator();
+            while(floatingMineIterator.hasNext()) {
+                FloatingMine floatingMine = floatingMineIterator.next();
+                if (floatingMine.update()) {
+                    floatingMineIterator.remove();
+                    player.takeDamage(1);
+                }
+            }
+
         } else {
             Modal activeModal = getActiveModal();
             if (activeModal != null) activeModal.update();
@@ -138,6 +148,10 @@ public class Playing implements Statemethods {
             b.draw(g2);
         }
         this.levelManager.getCurrentRoom().getDoors().forEach(door -> door.draw(g2));
+
+        for (FloatingMine fm : new ArrayList<>(levelManager.getCurrentRoom().getFloatingMines())) {
+            fm.draw(g2);
+        }
 
         Modal activeModal = getActiveModal();
         if (activeModal != null) activeModal.draw(g);

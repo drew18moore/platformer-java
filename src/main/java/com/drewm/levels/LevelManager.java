@@ -6,6 +6,7 @@ import com.drewm.entities.Player;
 import com.drewm.gamestates.Playing;
 import com.drewm.objects.Collectable;
 import com.drewm.objects.Door;
+import com.drewm.objects.FloatingMine;
 import com.drewm.objects.ItemType;
 import com.drewm.utils.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -83,13 +84,21 @@ public class LevelManager {
                     collectables.add(new Collectable(collectable.x(), collectable.y(), collectable.itemType(), this.playing));
                 }
 
+                // Load doors
                 List<DoorData> doorsData = room.doors();
                 List<Door> doors = new ArrayList<>();
                 for (DoorData door : doorsData) {
                     doors.add(new Door(door.x(), door.y(), door.destinationRoom(), door.destinationX(), door.destinationY(), door.lockType(), this.playing));
                 }
 
-                rooms.put(i, new Room(worldMap, roomNumTileWidth, roomNumTileHeight, worldBackground, basicZombies, collectables, doors));
+                // Load floating mines
+                List<FloatingMineData> floatingMineData = room.floatingMines();
+                List<FloatingMine> floatingMines = new ArrayList<>();
+                for (FloatingMineData floatingMine : floatingMineData) {
+                    floatingMines.add(new FloatingMine(floatingMine.startX(), floatingMine.startY(), floatingMine.endX(), floatingMine.endY(), playing));
+                }
+
+                rooms.put(i, new Room(worldMap, roomNumTileWidth, roomNumTileHeight, worldBackground, basicZombies, collectables, doors, floatingMines));
             }
         } catch (IOException e) {
             e.printStackTrace();

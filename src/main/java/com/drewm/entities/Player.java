@@ -214,13 +214,13 @@ public class Player extends Entity {
 
     public void upgradeSpeed() {
         if (spendCoins(5)) {
-            speed += 0.2f;
+            speed += 0.5f;
         }
     }
 
     public void upgradeJumpPower() {
         if (spendCoins(5)) {
-            jumpPower += 0.5f;
+            jumpPower += 0.75f;
         }
     }
 
@@ -239,7 +239,7 @@ public class Player extends Entity {
 
     public void buyTimeUpgrade() {
         if (spendCoins(10)) {
-            this.maxTimeLimitSeconds += 5;
+            this.maxTimeLimitSeconds += 10;
             this.currentTimeLeft = this.maxTimeLimitSeconds;
         }
     }

@@ -280,4 +280,8 @@ public class Player extends Entity {
     public void setKeycardIcon(BufferedImage img) {
         this.keycardIcon = img;
     }
+
+    public void setCurrentTimeLeft(int ammount) {
+        this.currentTimeLeft = ammount;
+    }
 }

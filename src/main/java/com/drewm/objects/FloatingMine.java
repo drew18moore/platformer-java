@@ -116,5 +116,11 @@ public class FloatingMine {
         }
     }
 
+    public float getWorldX() {
+        return worldX;
+    }
 
+    public float getWorldY() {
+        return worldY;
+    }
 }

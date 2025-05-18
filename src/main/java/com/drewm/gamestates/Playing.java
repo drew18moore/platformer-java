@@ -6,6 +6,7 @@ import com.drewm.entities.Player;
 import com.drewm.levels.LevelManager;
 import com.drewm.objects.Collectable;
 import com.drewm.objects.Door;
+import com.drewm.objects.Explosion;
 import com.drewm.objects.FloatingMine;
 import com.drewm.ui.Button;
 import com.drewm.ui.Camera;
@@ -24,6 +25,8 @@ public class Playing implements Statemethods {
     private String currentLevelFilePath = "/maps/map1-lg.json";
     public List<Bullet> bullets = new ArrayList<>();
     public LevelManager levelManager = new LevelManager(this);
+    private final List<Explosion> explosions = new ArrayList<>();
+
     public Player player;
     public Camera camera;
     public Door currentDoor = null;
@@ -120,8 +123,18 @@ public class Playing implements Statemethods {
             while(floatingMineIterator.hasNext()) {
                 FloatingMine floatingMine = floatingMineIterator.next();
                 if (floatingMine.update()) {
+                    explosions.add(new Explosion(floatingMine.getWorldX() + 16 * Constants.SCALE, floatingMine.getWorldY() + 16 * Constants.SCALE));
                     floatingMineIterator.remove();
                     player.takeDamage(1);
+                }
+            }
+
+            Iterator<Explosion> explosionIterator = explosions.iterator();
+            while (explosionIterator.hasNext()) {
+                Explosion explosion = explosionIterator.next();
+                explosion.update();
+                if (explosion.isFinished()) {
+                    explosionIterator.remove();
                 }
             }
 
@@ -151,6 +164,10 @@ public class Playing implements Statemethods {
 
         for (FloatingMine fm : new ArrayList<>(levelManager.getCurrentRoom().getFloatingMines())) {
             fm.draw(g2);
+        }
+
+        for (Explosion explosion : explosions) {
+            explosion.draw(g2, camera.getCameraX(), camera.getCameraY());
         }
 
         Modal activeModal = getActiveModal();
@@ -203,6 +220,9 @@ public class Playing implements Statemethods {
                 }
             }
         }
+        if (!showWinScreen && !showDeathScreen && !showBuyMenu && e.getKeyCode() == KeyEvent.VK_R) {
+            player.setCurrentTimeLeft(0);
+        }
         if (!showWinScreen && !showDeathScreen && e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             if (showBuyMenu) showBuyMenu = false;
             else this.isPaused = !this.isPaused;
@@ -253,5 +273,9 @@ public class Playing implements Statemethods {
 
     public String getCurrentLevelFilePath() {
         return this.currentLevelFilePath;
+    }
+
+    public List<Explosion> getExplosions() {
+        return explosions;
     }
 }

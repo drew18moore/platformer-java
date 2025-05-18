@@ -8,6 +8,7 @@ public record RoomData(
         List<EntityData> enemies,
         List<CollectableData> collectables,
         List<DoorData> doors,
-        List<FloatingMineData> floatingMines
+        List<FloatingMineData> floatingMines,
+        List<SawBladeData> sawBlades
 ) {
 }

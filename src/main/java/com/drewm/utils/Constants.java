@@ -3,7 +3,7 @@ package com.drewm.utils;
 import java.awt.*;
 
 public class Constants {
-    public static final int SCALE = 4;
+    public static final int SCALE = 5;
     public static final int TILE_SIZE = 16 * SCALE;
     public static final int TILE_WIDTH = 16;
     public static final int TILE_HEIGHT = 12;

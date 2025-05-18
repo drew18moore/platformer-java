@@ -4,10 +4,7 @@ import com.drewm.data.*;
 import com.drewm.entities.BasicZombie;
 import com.drewm.entities.Player;
 import com.drewm.gamestates.Playing;
-import com.drewm.objects.Collectable;
-import com.drewm.objects.Door;
-import com.drewm.objects.FloatingMine;
-import com.drewm.objects.ItemType;
+import com.drewm.objects.*;
 import com.drewm.utils.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -98,7 +95,14 @@ public class LevelManager {
                     floatingMines.add(new FloatingMine(floatingMine.startX(), floatingMine.startY(), floatingMine.endX(), floatingMine.endY(), playing));
                 }
 
-                rooms.put(i, new Room(worldMap, roomNumTileWidth, roomNumTileHeight, worldBackground, basicZombies, collectables, doors, floatingMines));
+                // Load saw blades
+                List<SawBladeData> sawBladeData = room.sawBlades();
+                List<SawBlade> sawBlades = new ArrayList<>();
+                for (SawBladeData sawBlade : sawBladeData) {
+                    sawBlades.add(new SawBlade(sawBlade.startX(), sawBlade.endX(), sawBlade.y(), sawBlade.upsideDown(), playing));
+                }
+
+                rooms.put(i, new Room(worldMap, roomNumTileWidth, roomNumTileHeight, worldBackground, basicZombies, collectables, doors, floatingMines, sawBlades));
             }
         } catch (IOException e) {
             e.printStackTrace();

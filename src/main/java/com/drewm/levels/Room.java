@@ -4,6 +4,7 @@ import com.drewm.entities.BasicZombie;
 import com.drewm.objects.Collectable;
 import com.drewm.objects.Door;
 import com.drewm.objects.FloatingMine;
+import com.drewm.objects.SawBlade;
 
 import java.util.List;
 
@@ -16,14 +17,16 @@ public class Room {
     private List<Collectable> collectables;
     private List<Door> doors;
     private List<FloatingMine> floatingMines;
+    private List<SawBlade> sawBlades;
 
-    public Room(int[][] worldMap, int roomNumTileWidth, int roomNumTileHeight, int[][] worldBackground, List<BasicZombie> basicZombies, List<Collectable> collectables, List<Door> doors, List<FloatingMine> floatingMines) {
+    public Room(int[][] worldMap, int roomNumTileWidth, int roomNumTileHeight, int[][] worldBackground, List<BasicZombie> basicZombies, List<Collectable> collectables, List<Door> doors, List<FloatingMine> floatingMines, List<SawBlade> sawBlades) {
         this.worldMap = worldMap;
         this.worldBackground = worldBackground;
         this.basicZombies = basicZombies;
         this.collectables = collectables;
         this.doors = doors;
         this.floatingMines = floatingMines;
+        this.sawBlades = sawBlades;
 
         this.roomNumTileWidth = roomNumTileWidth;
         this.roomNumTileHeight = roomNumTileHeight;
@@ -72,6 +75,10 @@ public class Room {
     public List<FloatingMine> getFloatingMines() { return floatingMines; }
 
     public void setFloatingMines(List<FloatingMine> floatingMines) { this.floatingMines = floatingMines; }
+
+    public List<SawBlade> getSawBlades() { return sawBlades; }
+
+    public void setSawBlades(List<SawBlade> sawBlades) { this.sawBlades = sawBlades; }
 
     public int getRoomNumTileWidth() {
         return roomNumTileWidth;

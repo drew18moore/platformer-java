@@ -4,10 +4,7 @@ import com.drewm.data.LockType;
 import com.drewm.entities.BasicZombie;
 import com.drewm.entities.Player;
 import com.drewm.levels.LevelManager;
-import com.drewm.objects.Collectable;
-import com.drewm.objects.Door;
-import com.drewm.objects.Explosion;
-import com.drewm.objects.FloatingMine;
+import com.drewm.objects.*;
 import com.drewm.ui.Button;
 import com.drewm.ui.Camera;
 import com.drewm.ui.Modal;
@@ -129,6 +126,13 @@ public class Playing implements Statemethods {
                 }
             }
 
+            for (SawBlade sawBlade : this.levelManager.getCurrentRoom().getSawBlades()) {
+                sawBlade.update();
+                if (sawBlade.getScreenBounds().intersects(player.getBounds())) {
+                    player.takeDamage(1);
+                }
+            }
+
             Iterator<Explosion> explosionIterator = explosions.iterator();
             while (explosionIterator.hasNext()) {
                 Explosion explosion = explosionIterator.next();
@@ -164,6 +168,10 @@ public class Playing implements Statemethods {
 
         for (FloatingMine fm : new ArrayList<>(levelManager.getCurrentRoom().getFloatingMines())) {
             fm.draw(g2);
+        }
+
+        for (SawBlade sb : new ArrayList<>(this.levelManager.getCurrentRoom().getSawBlades())) {
+            sb.draw(g2);
         }
 
         for (Explosion explosion : explosions) {

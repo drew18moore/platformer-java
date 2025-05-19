@@ -58,9 +58,9 @@ public class Laser {
 
         float screenX = x - playing.camera.getCameraX();
         float screenY = y - playing.camera.getCameraY();
-        if (screenX + Constants.TILE_SIZE > 0 &&
+        if (screenX + width > 0 &&
                 screenX < Constants.SCREEN_WIDTH &&
-                screenY + Constants.TILE_SIZE > 0 &&
+                screenY + height > 0 &&
                 screenY < Constants.SCREEN_HEIGHT) {
             AffineTransform oldTransform = g2.getTransform();
 

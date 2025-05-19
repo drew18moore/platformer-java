@@ -84,9 +84,9 @@ public class FloatingMine {
     public void draw(Graphics2D g2) {
         float screenX = this.worldX - playing.camera.getCameraX();
         float screenY = this.worldY - playing.camera.getCameraY();
-        if (screenX + Constants.TILE_SIZE > 0 &&
+        if (screenX + Constants.TILE_SIZE * 2 > 0 &&
                 screenX < Constants.SCREEN_WIDTH &&
-                screenY + Constants.TILE_SIZE > 0 &&
+                screenY + Constants.TILE_SIZE * 2 > 0 &&
                 screenY < Constants.SCREEN_HEIGHT) {
             g2.drawImage(spriteFrames[spriteNum], (int) screenX, (int) screenY, spriteFrames[0].getWidth() * Constants.SCALE, spriteFrames[0].getHeight() * Constants.SCALE, null);
             g2.drawRect((int) screenX, (int) screenY, spriteFrames[0].getWidth() * Constants.SCALE, spriteFrames[0].getHeight() * Constants.SCALE);

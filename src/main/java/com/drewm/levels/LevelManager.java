@@ -116,7 +116,7 @@ public class LevelManager {
         int t = 0;
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                tiles[t] = new Tile(tileSet.getSubimage(j * Constants.TILE_WIDTH, i * Constants.TILE_WIDTH, Constants.TILE_WIDTH, Constants.TILE_WIDTH), t != 11 && t != 6, t == 6, t == 13);
+                tiles[t] = new Tile(tileSet.getSubimage(j * Constants.TILE_WIDTH, i * Constants.TILE_WIDTH, Constants.TILE_WIDTH, Constants.TILE_WIDTH), t != 12 && t != 6, t == 6, t == 14);
                 t++;
             }
         }

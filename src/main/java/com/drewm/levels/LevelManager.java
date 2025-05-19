@@ -106,7 +106,7 @@ public class LevelManager {
                 List<LaserData> laserData = room.lasers();
                 List<Laser> lasers = new ArrayList<>();
                 for (LaserData laser : laserData) {
-                    lasers.add(new Laser(laser.x1(), laser.y1(), laser.x2(), laser.y2(), 2000, playing));
+                    lasers.add(new Laser(laser.x1(), laser.y1(), laser.x2(), laser.y2(), laser.activationIntervalMS(), laser.delayMS(), playing));
                 }
 
                 rooms.put(i, new Room(worldMap, roomNumTileWidth, roomNumTileHeight, worldBackground, basicZombies, collectables, doors, floatingMines, sawBlades, lasers));

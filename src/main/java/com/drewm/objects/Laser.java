@@ -16,15 +16,19 @@ public class Laser {
     private boolean active;
     private long activationInterval;
     private long lastToggleTime;
+    private long delayMS;
+    private boolean delayPassed;
     private BufferedImage sprite;
 
-    public Laser(float x1, float y1, float x2, float y2, long activationIntervalMS, Playing playing) {
+    public Laser(float x1, float y1, float x2, float y2, long activationIntervalMS, long delayMS, Playing playing) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
         this.activationInterval = activationIntervalMS;
         this.lastToggleTime = System.currentTimeMillis();
+        this.delayMS = delayMS;
+        this.delayPassed = false;
         this.active = true;
         this.playing = playing;
 
@@ -36,8 +40,17 @@ public class Laser {
     }
 
     public void update() {
-        System.out.println(active);
         long currentTimeMS = System.currentTimeMillis();
+
+        if (!delayPassed) {
+            if (currentTimeMS - lastToggleTime >= delayMS) {
+                delayPassed = true;
+                lastToggleTime = currentTimeMS;
+                active = true;
+            }
+            return;
+        }
+
         if (currentTimeMS - lastToggleTime >= activationInterval) {
             active = !active;
             lastToggleTime = currentTimeMS;

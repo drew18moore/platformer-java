@@ -9,6 +9,7 @@ public record RoomData(
         List<CollectableData> collectables,
         List<DoorData> doors,
         List<FloatingMineData> floatingMines,
-        List<SawBladeData> sawBlades
+        List<SawBladeData> sawBlades,
+        List<LaserData> lasers
 ) {
 }

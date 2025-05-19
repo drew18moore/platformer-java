@@ -102,7 +102,14 @@ public class LevelManager {
                     sawBlades.add(new SawBlade(sawBlade.startX(), sawBlade.endX(), sawBlade.y(), sawBlade.upsideDown(), playing));
                 }
 
-                rooms.put(i, new Room(worldMap, roomNumTileWidth, roomNumTileHeight, worldBackground, basicZombies, collectables, doors, floatingMines, sawBlades));
+                // Load lasers
+                List<LaserData> laserData = room.lasers();
+                List<Laser> lasers = new ArrayList<>();
+                for (LaserData laser : laserData) {
+                    lasers.add(new Laser(laser.x1(), laser.y1(), laser.x2(), laser.y2(), 2000, playing));
+                }
+
+                rooms.put(i, new Room(worldMap, roomNumTileWidth, roomNumTileHeight, worldBackground, basicZombies, collectables, doors, floatingMines, sawBlades, lasers));
             }
         } catch (IOException e) {
             e.printStackTrace();

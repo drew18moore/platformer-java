@@ -102,7 +102,14 @@ public class LevelManager {
                     sawBlades.add(new SawBlade(sawBlade.startX(), sawBlade.endX(), sawBlade.y(), sawBlade.upsideDown(), playing));
                 }
 
-                rooms.put(i, new Room(worldMap, roomNumTileWidth, roomNumTileHeight, worldBackground, basicZombies, collectables, doors, floatingMines, sawBlades));
+                // Load lasers
+                List<LaserData> laserData = room.lasers();
+                List<Laser> lasers = new ArrayList<>();
+                for (LaserData laser : laserData) {
+                    lasers.add(new Laser(laser.x1(), laser.y1(), laser.x2(), laser.y2(), laser.activationIntervalMS(), laser.delayMS(), playing));
+                }
+
+                rooms.put(i, new Room(worldMap, roomNumTileWidth, roomNumTileHeight, worldBackground, basicZombies, collectables, doors, floatingMines, sawBlades, lasers));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -116,7 +123,7 @@ public class LevelManager {
         int t = 0;
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                tiles[t] = new Tile(tileSet.getSubimage(j * Constants.TILE_WIDTH, i * Constants.TILE_WIDTH, Constants.TILE_WIDTH, Constants.TILE_WIDTH), t != 11 && t != 6, t == 6, t == 13);
+                tiles[t] = new Tile(tileSet.getSubimage(j * Constants.TILE_WIDTH, i * Constants.TILE_WIDTH, Constants.TILE_WIDTH, Constants.TILE_WIDTH), t != 12 && t != 6, t == 6, t == 14);
                 t++;
             }
         }

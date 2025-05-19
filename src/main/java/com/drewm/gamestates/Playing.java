@@ -133,6 +133,13 @@ public class Playing implements Statemethods {
                 }
             }
 
+            for (Laser laser : this.levelManager.getCurrentRoom().getLasers()) {
+                laser.update();
+                if (laser.isActive() && laser.getScreenBounds().intersects(player.getBounds())) {
+                    player.takeDamage(1);
+                }
+            }
+
             Iterator<Explosion> explosionIterator = explosions.iterator();
             while (explosionIterator.hasNext()) {
                 Explosion explosion = explosionIterator.next();
@@ -172,6 +179,10 @@ public class Playing implements Statemethods {
 
         for (SawBlade sb : new ArrayList<>(this.levelManager.getCurrentRoom().getSawBlades())) {
             sb.draw(g2);
+        }
+
+        for (Laser l : new ArrayList<>(this.levelManager.getCurrentRoom().getLasers())) {
+            l.draw(g2);
         }
 
         for (Explosion explosion : explosions) {

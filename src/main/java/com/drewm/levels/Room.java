@@ -1,10 +1,7 @@
 package com.drewm.levels;
 
 import com.drewm.entities.BasicZombie;
-import com.drewm.objects.Collectable;
-import com.drewm.objects.Door;
-import com.drewm.objects.FloatingMine;
-import com.drewm.objects.SawBlade;
+import com.drewm.objects.*;
 
 import java.util.List;
 
@@ -18,8 +15,9 @@ public class Room {
     private List<Door> doors;
     private List<FloatingMine> floatingMines;
     private List<SawBlade> sawBlades;
+    private List<Laser> lasers;
 
-    public Room(int[][] worldMap, int roomNumTileWidth, int roomNumTileHeight, int[][] worldBackground, List<BasicZombie> basicZombies, List<Collectable> collectables, List<Door> doors, List<FloatingMine> floatingMines, List<SawBlade> sawBlades) {
+    public Room(int[][] worldMap, int roomNumTileWidth, int roomNumTileHeight, int[][] worldBackground, List<BasicZombie> basicZombies, List<Collectable> collectables, List<Door> doors, List<FloatingMine> floatingMines, List<SawBlade> sawBlades, List<Laser> lasers) {
         this.worldMap = worldMap;
         this.worldBackground = worldBackground;
         this.basicZombies = basicZombies;
@@ -27,6 +25,7 @@ public class Room {
         this.doors = doors;
         this.floatingMines = floatingMines;
         this.sawBlades = sawBlades;
+        this.lasers = lasers;
 
         this.roomNumTileWidth = roomNumTileWidth;
         this.roomNumTileHeight = roomNumTileHeight;
@@ -79,6 +78,10 @@ public class Room {
     public List<SawBlade> getSawBlades() { return sawBlades; }
 
     public void setSawBlades(List<SawBlade> sawBlades) { this.sawBlades = sawBlades; }
+
+    public List<Laser> getLasers() { return lasers; }
+
+    public void setLasers(List<Laser> lasers) { this.lasers = lasers; }
 
     public int getRoomNumTileWidth() {
         return roomNumTileWidth;

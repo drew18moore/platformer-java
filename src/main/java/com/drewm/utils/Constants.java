@@ -11,7 +11,7 @@ public class Constants {
     public static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     public static final int SCREEN_WIDTH = SCREEN_SIZE.width;
     public static final int SCREEN_HEIGHT = SCREEN_SIZE.height;
-    public static final String SCREEN_TITLE = "Platformer";
+    public static final String SCREEN_TITLE = "Jimmy Overdrive";
 
     public static final int FPS = 120;
     public static final int UPS = 200;
@@ -37,7 +37,7 @@ public class Constants {
     public static final int WORLD_TILE_SET_NUM_TILES = WORLD_TILE_SET_NUM_TILE_WIDTH * WORLD_TILE_SET_NUM_TILE_HEIGHT;
 
     public static final int BTN_WIDTH = 100;
-    public static final int BTN_HEIGHT = 25;
+    public static final int BTN_HEIGHT = 15;
     public static final int BTN_WIDTH_SCALED = BTN_WIDTH * SCALE;
     public static final int BTN_HEIGHT_SCALED = BTN_HEIGHT * SCALE;
 

@@ -1393,7 +1393,17 @@
           "itemType": "COIN"
         }
       ],
-      "doors": [],
+      "doors": [
+        {
+          "x": 4320.0,
+          "y": 3440.0,
+          "destinationRoom": -1,
+          "destinationX": -1,
+          "destinationY": -1,
+          "lockType": "NONE",
+          "isGoal": true
+        }
+      ],
       "floatingMines": [
         {
           "startX": 3600.0,

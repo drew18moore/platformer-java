@@ -29,40 +29,40 @@ public class Playing implements Statemethods {
     public Door currentDoor = null;
 
     private final Modal pauseMenu = new Modal("Game Paused", new Button[]{
-            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Resume", () -> {
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, () -> "Resume", () -> {
                 isPaused = false;
             }),
-            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu", () -> {
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, () -> "Main Menu", () -> {
                 Gamestate.state = Gamestate.MENU;
                 resetLevel();
             })
     });
     private final Modal buyMenu = new Modal("Buy Menu", new Button[]{
-            new Button(1, "Health Upgrade [5 coins]", () -> {
+            new Button(1, () -> "Health Upgrade [" + player.getHealthUpgradeCost() + "coins]", () -> {
                 player.upgradeHealth();
-            }, () -> player.getCoins() >= 5),
-            new Button(2, "Speed Upgrade [5 coins]", () -> {
+            }, () -> player.getCoins() >= player.getHealthUpgradeCost()),
+            new Button(2, () -> "Speed Upgrade [" + player.getSpeedUpgradeCost() + "coins]", () -> {
                 player.upgradeSpeed();
-            }, () -> player.getCoins() >= 5),
-            new Button(3, "Jump Power Upgrade [5 coins]", () -> {
+            }, () -> player.getCoins() >= player.getSpeedUpgradeCost()),
+            new Button(3, () -> "Jump Power Upgrade [" + player.getJumpUpgradeCost() + "coins]", () -> {
                 player.upgradeJumpPower();
-            }, () -> player.getCoins() >= 5),
-            new Button(4, "Buy Pistol [5 coins]", () -> {
+            }, () -> player.getCoins() >= player.getJumpUpgradeCost()),
+            new Button(4, () -> "Buy Pistol [" + 5 + "coins]", () -> {
                 player.buyPistol();
             }, () -> player.getCoins() >= 5),
-            new Button(5, "Buy Ammo [1 coin]", () -> {
+            new Button(5, () -> "Buy Ammo [" + player.getAmmoUpgradeCost() + "coin]", () -> {
                 player.buyAmmo();
-            }, () -> player.ownsPistol && player.getCoins() >= 1),
-            new Button(6, "Time upgrade [10 coins]", () -> {
+            }, () -> player.ownsPistol && player.getCoins() >= player.getAmmoUpgradeCost()),
+            new Button(6, () -> "Time upgrade [" + player.getTimeUpgradeCost() + " coins]", () -> {
                 player.buyTimeUpgrade();
-            }, () -> player.getCoins() >= 10),
-            new Button(7, "Coin multiplier upgrade [20 coins]", () -> {
+            }, () -> player.getCoins() >= player.getTimeUpgradeCost()),
+            new Button(7, () -> "Coin multiplier upgrade [" + player.getCoinMultiplierUpgradeCost() + " coins]", () -> {
                 player.buyCoinMultiplier();
-            }, () -> player.getCoins() >= 20)
+            }, () -> player.getCoins() >= player.getCoinMultiplierUpgradeCost())
     });
     private final Modal winScreen = new Modal("You Win!", new Button[]{
-            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Restart", this::resetLevel),
-            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Main Menu", () -> {
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 30 + Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, () -> "Restart", this::resetLevel),
+            new Button(Constants.MODAL_BG_X + (Constants.MODAL_BG_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.MODAL_BG_Y + 40 + Constants.BTN_HEIGHT_SCALED * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, () -> "Main Menu", () -> {
                 Gamestate.state = Gamestate.MENU;
                 resetLevel();
             })

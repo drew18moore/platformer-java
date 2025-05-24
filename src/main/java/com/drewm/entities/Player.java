@@ -23,6 +23,11 @@ public class Player extends Entity {
     private int health = maxHealth;
     private float speed = Constants.PLAYER_STARTING_SPEED;
 
+    private int healthUpgradeLvl = 1;
+    private int speedUpgradeLvl = 1;
+    private int jumpUpgradeLvl = 1;
+    private int timeUpgradeLvl = 1;
+
     public boolean invincible = false;
     private long invincibilityStartTime = 0;
     private final int INVINCIBILITY_DURATION = 500;
@@ -203,24 +208,61 @@ public class Player extends Entity {
         }
     }
 
+    public int getHealthUpgradeCost() {
+        return 50*this.healthUpgradeLvl;
+    }
+
+    public int getSpeedUpgradeCost() {
+        return (int) Math.pow(2, this.speedUpgradeLvl);
+    }
+
+    public int getJumpUpgradeCost() {
+        return (int) Math.pow(3, this.jumpUpgradeLvl);
+    }
+
+    public int getTimeUpgradeCost() {
+        return 10*this.timeUpgradeLvl;
+    }
+
+    public int getCoinMultiplierUpgradeCost() {
+        return 20*this.coinMultiplier;
+    }
+
+    public int getAmmoUpgradeCost() {
+        return 30*this.pistol.getMaxBullets();
+    }
+
     public void upgradeHealth() {
-        if (spendCoins(5)) {
+        if (spendCoins(getHealthUpgradeCost())) {
             maxHealth += 1;
             health = maxHealth;
             this.healthBar = updateHudText("Health: ", health);
+            this.healthUpgradeLvl++;
         }
 
     }
 
+    /**
+     * speed: 1, 2, 5, 8, 10, 20, 60, 400, 800, 1000
+     * jump: 3, 10, 15, 20, 25, 50, 75, 100, 150, 200
+     * double jump: 600exp
+     * time: 10, 15(8sec), 20(14sec), 25(20sec), 30(26sec), 35(32sec), 40, 45(44sec), 50(50sec), 60(56sec), 70(62sec), 80(68sec), 90(74sec), 100(80sec), 120(86sec), 140(92sec), 160(98sec), 180(104sec)
+     * health: 50, 150, 200, 300
+     * multi: 20, 30, 40, 60, 80, 100, 150, 200, 250, 300
+     * ammo: 20, 40, 70, 100, 150, 200, 250, 300, 400
+     */
+
     public void upgradeSpeed() {
-        if (spendCoins(5)) {
+        if (spendCoins(getSpeedUpgradeCost())) {
             speed += 0.5f;
+            this.speedUpgradeLvl++;
         }
     }
 
     public void upgradeJumpPower() {
-        if (spendCoins(5)) {
-            jumpPower += 0.75f;
+        if (spendCoins(getJumpUpgradeCost())) {
+            jumpPower += 2.0f;
+            this.jumpUpgradeLvl++;
         }
     }
 
@@ -231,16 +273,17 @@ public class Player extends Entity {
     }
 
     public void buyAmmo() {
-        if (ownsPistol && this.spendCoins(1)) {
+        if (ownsPistol && this.spendCoins(getAmmoUpgradeCost())) {
             this.pistol.setMaxBullets(pistol.getMaxBullets()+1);
             this.pistol.setBulletsRemaining(pistol.getBulletsRemaining()+1);
         }
     }
 
     public void buyTimeUpgrade() {
-        if (spendCoins(10)) {
+        if (spendCoins(getTimeUpgradeCost())) {
             this.maxTimeLimitSeconds += 10;
             this.currentTimeLeft = this.maxTimeLimitSeconds;
+            this.timeUpgradeLvl++;
         }
     }
 
@@ -259,7 +302,7 @@ public class Player extends Entity {
     }
 
     public void buyCoinMultiplier() {
-        if (spendCoins(20)) this.coinMultiplier++;
+        if (spendCoins(getCoinMultiplierUpgradeCost())) this.coinMultiplier++;
     }
 
     public int getCoinMultiplier() {

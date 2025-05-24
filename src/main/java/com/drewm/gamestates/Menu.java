@@ -31,9 +31,9 @@ public class Menu implements Statemethods {
     }
 
     private void loadBtns() {
-        btns[0] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, this.titleText.getHeight(), Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, "Play", () -> { Gamestate.state = Gamestate.PLAYING; });
-        btns[1] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, this.titleText.getHeight() + Constants.BTN_HEIGHT_SCALED + 10, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED,  "Options", () -> { Gamestate.state = Gamestate.OPTIONS; });
-        btns[2] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, this.titleText.getHeight() + (Constants.BTN_HEIGHT_SCALED + 10) * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED,  "Quit", () -> { Gamestate.state = Gamestate.QUIT; });
+        btns[0] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, this.titleText.getHeight(), Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, () -> "Play", () -> { Gamestate.state = Gamestate.PLAYING; });
+        btns[1] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, this.titleText.getHeight() + Constants.BTN_HEIGHT_SCALED + 10, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED,  () -> "Options", () -> { Gamestate.state = Gamestate.OPTIONS; });
+        btns[2] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, this.titleText.getHeight() + (Constants.BTN_HEIGHT_SCALED + 10) * 2, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED,  () -> "Quit", () -> { Gamestate.state = Gamestate.QUIT; });
     }
     @Override
     public void update() {

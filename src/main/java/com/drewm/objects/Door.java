@@ -14,6 +14,8 @@ public class Door {
     private final float destinationX;
     private final float destinationY;
     private final LockType lockType;
+    private final boolean isGoal;
+    private final boolean drawHitbox = false;
 
     public Door(int x, int y, int destinationRoomIdx, float destinationX, float destinationY, LockType lockType, Playing playing) {
         this.worldX = x;
@@ -23,11 +25,23 @@ public class Door {
         this.destinationY = destinationY;
         this.lockType = lockType;
         this.playing = playing;
+        this.isGoal = false;
+    }
+
+    public Door(int x, int y, boolean isGoal, LockType lockType, Playing playing) {
+        this.worldX = x;
+        this.worldY = y;
+        this.destinationRoomIdx = -1;
+        this.destinationX = -1;
+        this.destinationY = -1;
+        this.lockType = lockType;
+        this.playing = playing;
+        this.isGoal = isGoal;
     }
 
     public void draw(Graphics2D g2) {
         Rectangle2D.Float rect = getScreenBounds();
-        g2.drawRect((int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height);
+        if (drawHitbox) g2.drawRect((int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height);
     }
 
     public Rectangle2D.Float getScreenBounds() {
@@ -51,4 +65,6 @@ public class Door {
     public LockType getLockType() {
         return this.lockType;
     }
+
+    public boolean getIsGoal() { return this.isGoal; }
 }

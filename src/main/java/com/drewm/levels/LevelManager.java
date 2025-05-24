@@ -85,7 +85,11 @@ public class LevelManager {
                 List<DoorData> doorsData = room.doors();
                 List<Door> doors = new ArrayList<>();
                 for (DoorData door : doorsData) {
-                    doors.add(new Door(door.x(), door.y(), door.destinationRoom(), door.destinationX(), door.destinationY(), door.lockType(), this.playing));
+                    if (door.isGoal()) {
+                        doors.add(new Door(door.x(), door.y(), door.isGoal(), door.lockType(), this.playing));
+                    } else {
+                        doors.add(new Door(door.x(), door.y(), door.destinationRoom(), door.destinationX(), door.destinationY(), door.lockType(), this.playing));
+                    }
                 }
 
                 // Load floating mines

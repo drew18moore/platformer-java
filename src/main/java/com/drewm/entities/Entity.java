@@ -78,7 +78,6 @@ public class Entity {
         }
 
         if (jumpPressed && isOnGround) {
-            System.out.println("JUMP!");
             velocityY = -jumpPower;
         }
 

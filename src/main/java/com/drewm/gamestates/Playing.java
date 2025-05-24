@@ -230,12 +230,16 @@ public class Playing implements Statemethods {
         }
         if (e.getKeyCode() == KeyEvent.VK_W) {
             if (currentDoor != null) {
-                if (currentDoor.getLockType() == LockType.NONE || (currentDoor.getLockType() == LockType.KEYCARD && player.hasKeycard)) {
-                    float destinationX = this.currentDoor.getDestinationX();
-                    float destinationY = this.currentDoor.getDestinationY();
-                    this.levelManager.setCurrentRoomIdx(this.currentDoor.getDestinationRoomIdx());
-                    this.player.worldX = destinationX;
-                    this.player.worldY = destinationY;
+                if (currentDoor.getIsGoal()) {
+                    this.showWinScreen = true;
+                } else {
+                    if (currentDoor.getLockType() == LockType.NONE || (currentDoor.getLockType() == LockType.KEYCARD && player.hasKeycard)) {
+                        float destinationX = this.currentDoor.getDestinationX();
+                        float destinationY = this.currentDoor.getDestinationY();
+                        this.levelManager.setCurrentRoomIdx(this.currentDoor.getDestinationRoomIdx());
+                        this.player.worldX = destinationX;
+                        this.player.worldY = destinationY;
+                    }
                 }
             }
         }

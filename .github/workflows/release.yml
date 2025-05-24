@@ -23,19 +23,21 @@ jobs:
       - name: Install Maven
         uses: stCarolas/setup-maven@v4
         with:
-          maven-version: '3.9.4'  # or whatever version you want
+          maven-version: '3.9.4'
 
       - run: mvn clean package -DskipTests
 
-      - run: |
-          mkdir staging
+      - name: Prepare Artifacts
+        run: |
+          mkdir -p staging
           mv target/platformer-java-1.0-SNAPSHOT.jar target/platformer-java-${{ env.build-number }}.jar
           cp target/*.jar staging
 
-      - uses: actions/upload-artifact@v3
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
         with:
           name: Package
-          path: staging
+          path: staging/
           retention-days: 1
 
       - uses: marvinpinto/action-automatic-releases@latest

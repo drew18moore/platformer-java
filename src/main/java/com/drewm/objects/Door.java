@@ -15,6 +15,7 @@ public class Door {
     private final float destinationY;
     private final LockType lockType;
     private final boolean isGoal;
+    private final boolean drawHitbox = false;
 
     public Door(int x, int y, int destinationRoomIdx, float destinationX, float destinationY, LockType lockType, Playing playing) {
         this.worldX = x;
@@ -40,7 +41,7 @@ public class Door {
 
     public void draw(Graphics2D g2) {
         Rectangle2D.Float rect = getScreenBounds();
-        g2.drawRect((int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height);
+        if (drawHitbox) g2.drawRect((int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height);
     }
 
     public Rectangle2D.Float getScreenBounds() {

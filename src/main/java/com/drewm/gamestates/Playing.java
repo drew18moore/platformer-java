@@ -231,10 +231,8 @@ public class Playing implements Statemethods {
         if (e.getKeyCode() == KeyEvent.VK_W) {
             if (currentDoor != null) {
                 if (currentDoor.getIsGoal()) {
-                    System.out.println("H");
                     this.showWinScreen = true;
                 } else {
-                    System.out.println("I");
                     if (currentDoor.getLockType() == LockType.NONE || (currentDoor.getLockType() == LockType.KEYCARD && player.hasKeycard)) {
                         float destinationX = this.currentDoor.getDestinationX();
                         float destinationY = this.currentDoor.getDestinationY();

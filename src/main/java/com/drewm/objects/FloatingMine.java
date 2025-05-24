@@ -20,6 +20,7 @@ public class FloatingMine {
     private int spriteCounter = 0;
     private int spriteNum = 0;
     private float speed = 1f;
+    private final boolean showHitbox = false;
 
     public FloatingMine(float startX, float startY, float endX, float endY, Playing playing) {
         this.playing = playing;
@@ -89,7 +90,7 @@ public class FloatingMine {
                 screenY + Constants.TILE_SIZE * 2 > 0 &&
                 screenY < Constants.SCREEN_HEIGHT) {
             g2.drawImage(spriteFrames[spriteNum], (int) screenX, (int) screenY, spriteFrames[0].getWidth() * Constants.SCALE, spriteFrames[0].getHeight() * Constants.SCALE, null);
-            g2.drawRect((int) screenX, (int) screenY, spriteFrames[0].getWidth() * Constants.SCALE, spriteFrames[0].getHeight() * Constants.SCALE);
+            if (showHitbox) g2.drawRect((int) screenX, (int) screenY, spriteFrames[0].getWidth() * Constants.SCALE, spriteFrames[0].getHeight() * Constants.SCALE);
         }
     }
 

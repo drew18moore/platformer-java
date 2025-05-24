@@ -220,7 +220,7 @@ public class Player extends Entity {
 
     public void upgradeJumpPower() {
         if (spendCoins(5)) {
-            jumpPower += 0.75f;
+            jumpPower += 2.0f;
         }
     }
 

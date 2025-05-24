@@ -8,46 +8,52 @@ import java.util.function.Supplier;
 
 public class Button {
     public int x, y, width, height, index;
+    private Supplier<String> labelSupplier;
     private Supplier<Boolean> enabledSupplier;
     public Runnable onClick;
 
     public boolean mouseOver, mousePressed;
     public Rectangle bounds;
     private BufferedImage[] imgs;
+    private String lastRenderedLabel = "";
 
-    public Button(int x, int y, int width, int height, String label, Runnable onClick) {
-        this(x, y, width, height, label, onClick, () -> true);
+    public Button(int x, int y, int width, int height, Supplier<String> labelSupplier, Runnable onClick) {
+        this(x, y, width, height, labelSupplier, onClick, () -> true);
     }
 
-    public Button(int idx, String label, Runnable onClick, Supplier<Boolean> enabledSupplier) {
+    public Button(int idx, Supplier<String> labelSupplier, Runnable onClick, Supplier<Boolean> enabledSupplier) {
         this(
                 (Constants.SCREEN_WIDTH - (int) (Constants.SCREEN_WIDTH * 0.5f)) / 2,
                 Constants.MODAL_BG_Y + Constants.BTN_HEIGHT_SCALED * idx,
                 (int) (Constants.SCREEN_WIDTH * 0.5f),
                 Constants.BTN_HEIGHT_SCALED,
-                label,
+                labelSupplier,
                 onClick,
                 enabledSupplier
         );
     }
 
-    public Button(int x, int y, int width, int height, String label, Runnable onClick, Supplier<Boolean> enabledSupplier) {
+    public Button(int x, int y, int width, int height, Supplier<String> labelSupplier, Runnable onClick, Supplier<Boolean> enabledSupplier) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.onClick = onClick;
-        loadImgs(label);
         this.bounds = new Rectangle(x, y, width, height);
+        this.labelSupplier = labelSupplier;
         this.enabledSupplier = enabledSupplier;
+        updateLabelGraphics();
     }
 
-    private void loadImgs(String label) {
-        imgs = new BufferedImage[3];
-
-        imgs[0] = createBtnImg(label, width, height, Color.DARK_GRAY, Color.WHITE);
-        imgs[1] = createBtnImg(label, width, height, Color.GRAY, Color.YELLOW);
-        imgs[2] = createBtnImg(label, width, height, Color.BLACK, Color.RED);
+    private void updateLabelGraphics() {
+        String currentLabel = labelSupplier.get();
+        if (!currentLabel.equals(lastRenderedLabel)) {
+            lastRenderedLabel = currentLabel;
+            imgs = new BufferedImage[3];
+            imgs[0] = createBtnImg(currentLabel, width, height, Color.DARK_GRAY, Color.WHITE);
+            imgs[1] = createBtnImg(currentLabel, width, height, Color.GRAY, Color.YELLOW);
+            imgs[2] = createBtnImg(currentLabel, width, height, Color.BLACK, Color.RED);
+        }
     }
 
     private BufferedImage createBtnImg(String label, int width, int height, Color bgColor, Color textColor) {
@@ -86,6 +92,7 @@ public class Button {
         index = 0;
         if (mouseOver) index = 1;
         if (mousePressed) index = 2;
+        updateLabelGraphics();
     }
 
     public void draw(Graphics g) {

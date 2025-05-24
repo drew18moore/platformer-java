@@ -1,4 +1,8 @@
 name: Java CI to create and upload release on pull request
+
+permissions:
+  contents: write
+
 on:
   push:
     branches: [ "main" ]

@@ -34,11 +34,11 @@ public class Options implements Statemethods {
     }
 
     private void loadBtns() {
-        btns[0] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, window.getIsFullscreen() ? "Disable Fullscreen" : "Enable Fullscreen", () -> {
+        btns[0] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.BTN_HEIGHT_SCALED, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED, () -> window.getIsFullscreen() ? "Disable Fullscreen" : "Enable Fullscreen", () -> {
             window.setIsFullscreen(!window.getIsFullscreen());
             loadBtns();
         });
-        btns[1] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.BTN_HEIGHT_SCALED * 2 + 10, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED,  "Back", () -> { Gamestate.state = Gamestate.MENU; });
+        btns[1] = new Button((Constants.SCREEN_WIDTH - Constants.BTN_WIDTH_SCALED) / 2, Constants.BTN_HEIGHT_SCALED * 2 + 10, Constants.BTN_WIDTH_SCALED, Constants.BTN_HEIGHT_SCALED,  () -> "Back", () -> { Gamestate.state = Gamestate.MENU; });
     }
     @Override
     public void update() {

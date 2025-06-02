@@ -21,6 +21,7 @@ public class SawBlade {
     private int spriteCounter = 0;
     private int spriteNum = 0;
     private float speed = 1f;
+    private boolean showHitbox = true;
 
     public SawBlade(float startX, float endX, float y, boolean upsideDown, Playing playing) {
         this.playing = playing;
@@ -93,6 +94,7 @@ public class SawBlade {
                 screenY + Constants.TILE_SIZE > 0 &&
                 screenY < Constants.SCREEN_HEIGHT) {
             g2.drawImage(spriteFrames[spriteNum], (int) screenX, (int) screenY, spriteFrames[0].getWidth() * Constants.SCALE, spriteFrames[0].getHeight() * Constants.SCALE, null);
+            if (showHitbox) g2.draw(getScreenBounds());
         }
     }
 

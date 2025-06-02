@@ -54,7 +54,7 @@ public class Player extends Entity {
         this.hitboxHeight = Constants.PLAYER_SPRITE_HEIGHT * Constants.SCALE - 10;
         this.hitboxOffsetX = 5;
         this.hitboxOffsetY = 5;
-        this.showHitbox = false;
+        this.showHitbox = true;
 
         this.pistol = new Pistol(this, bullets);
         this.currentTimeLeft = maxTimeLimitSeconds;

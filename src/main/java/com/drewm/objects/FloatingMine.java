@@ -5,6 +5,7 @@ import com.drewm.utils.Constants;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class FloatingMine {
     private int spriteCounter = 0;
     private int spriteNum = 0;
     private float speed = 1f;
-    private final boolean showHitbox = false;
+    private final boolean showHitbox = true;
 
     public FloatingMine(float startX, float startY, float endX, float endY, Playing playing) {
         this.playing = playing;
@@ -90,14 +91,14 @@ public class FloatingMine {
                 screenY + Constants.TILE_SIZE * 2 > 0 &&
                 screenY < Constants.SCREEN_HEIGHT) {
             g2.drawImage(spriteFrames[spriteNum], (int) screenX, (int) screenY, spriteFrames[0].getWidth() * Constants.SCALE, spriteFrames[0].getHeight() * Constants.SCALE, null);
-            if (showHitbox) g2.drawRect((int) screenX, (int) screenY, spriteFrames[0].getWidth() * Constants.SCALE, spriteFrames[0].getHeight() * Constants.SCALE);
+            if (showHitbox) g2.draw(getScreenBounds());
         }
     }
 
-    public Rectangle2D.Float getScreenBounds() {
+    public Ellipse2D.Float getScreenBounds() {
         float screenX = this.worldX - playing.player.worldX + playing.player.screenX;
         float screenY = this.worldY - playing.player.worldY + playing.player.screenY;
-        return new Rectangle2D.Float(screenX, screenY, spriteFrames[0].getWidth() * Constants.SCALE, spriteFrames[0].getHeight() * Constants.SCALE);
+        return new Ellipse2D.Float(screenX + 3 * Constants.SCALE, screenY, (spriteFrames[0].getWidth() - 6) * Constants.SCALE, spriteFrames[0].getWidth() * Constants.SCALE);
     }
 
     private float distanceTo(float targetX, float targetY) {

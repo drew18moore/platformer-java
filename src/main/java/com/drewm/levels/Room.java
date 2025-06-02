@@ -16,8 +16,20 @@ public class Room {
     private List<FloatingMine> floatingMines;
     private List<SawBlade> sawBlades;
     private List<Laser> lasers;
+    private List<MovingPlatform> movingPlatforms;
 
-    public Room(int[][] worldMap, int roomNumTileWidth, int roomNumTileHeight, int[][] worldBackground, List<BasicZombie> basicZombies, List<Collectable> collectables, List<Door> doors, List<FloatingMine> floatingMines, List<SawBlade> sawBlades, List<Laser> lasers) {
+    public Room(int[][] worldMap,
+                int roomNumTileWidth,
+                int roomNumTileHeight,
+                int[][] worldBackground,
+                List<BasicZombie> basicZombies,
+                List<Collectable> collectables,
+                List<Door> doors,
+                List<FloatingMine> floatingMines,
+                List<SawBlade> sawBlades,
+                List<Laser> lasers,
+                List<MovingPlatform> movingPlatforms
+    ) {
         this.worldMap = worldMap;
         this.worldBackground = worldBackground;
         this.basicZombies = basicZombies;
@@ -26,6 +38,7 @@ public class Room {
         this.floatingMines = floatingMines;
         this.sawBlades = sawBlades;
         this.lasers = lasers;
+        this.movingPlatforms = movingPlatforms;
 
         this.roomNumTileWidth = roomNumTileWidth;
         this.roomNumTileHeight = roomNumTileHeight;
@@ -90,4 +103,6 @@ public class Room {
     public int getRoomNumTileHeight() {
         return roomNumTileHeight;
     }
+
+    public List<MovingPlatform> getMovingPlatforms() { return movingPlatforms; }
 }

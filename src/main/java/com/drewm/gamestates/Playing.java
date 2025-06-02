@@ -149,6 +149,10 @@ public class Playing implements Statemethods {
                 }
             }
 
+            for (MovingPlatform movingPlatform : this.levelManager.getCurrentRoom().getMovingPlatforms()) {
+                movingPlatform.update();
+            }
+
         } else {
             Modal activeModal = getActiveModal();
             if (activeModal != null) activeModal.update();
@@ -187,6 +191,10 @@ public class Playing implements Statemethods {
 
         for (Explosion explosion : explosions) {
             explosion.draw(g2, camera.getCameraX(), camera.getCameraY());
+        }
+
+        for (MovingPlatform movingPlatform : this.levelManager.getCurrentRoom().getMovingPlatforms()) {
+            movingPlatform.draw(g2);
         }
 
         Modal activeModal = getActiveModal();

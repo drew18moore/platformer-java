@@ -15,7 +15,7 @@ public class MovingPlatform {
     private boolean horizontal;
     private boolean forward = true;
 
-    public MovingPlatform(float worldX, float worldY, float width, float height, float speed, float min, float max, boolean horizontal, boolean forward, Playing playing) {
+    public MovingPlatform(float worldX, float worldY, float width, float height, float speed, float min, float max, boolean horizontal, Playing playing) {
         this.worldX = worldX;
         this.worldY = worldY;
         this.width = width;
@@ -24,7 +24,6 @@ public class MovingPlatform {
         this.min = min;
         this.max = max;
         this.horizontal = horizontal;
-        this.forward = forward;
         this.playing = playing;
     }
 

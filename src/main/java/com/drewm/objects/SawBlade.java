@@ -42,15 +42,15 @@ public class SawBlade {
         this.upsideDown = upsideDown;
 
         try {
-            BufferedImage spriteSheet = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/sprites/saw-blade.png")));
+            BufferedImage spriteSheet = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/sprites/saw-blade-sm.png")));
 
             this.spriteFrames = new BufferedImage[4];
             for (int i = 0; i < spriteFrames.length; i++) {
                 BufferedImage frame = spriteSheet.getSubimage(
-                        i * Constants.TILE_WIDTH * 2,
+                        i * Constants.TILE_WIDTH,
                         0,
-                        Constants.TILE_WIDTH * 2,
-                        Constants.TILE_WIDTH
+                        Constants.TILE_WIDTH,
+                        Constants.TILE_WIDTH / 2
                 );
 
                 if (upsideDown) {

@@ -19,7 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Playing implements Statemethods {
-    private String currentLevelFilePath = "/maps/map1-lg.json";
+    private String currentLevelFilePath = "/maps/map1.json";
     public List<Bullet> bullets = new ArrayList<>();
     public LevelManager levelManager = new LevelManager(this);
     private final List<Explosion> explosions = new ArrayList<>();

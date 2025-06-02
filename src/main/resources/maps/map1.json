@@ -1465,6 +1465,18 @@
           "activationIntervalMS": 2000,
           "delayMS": 0
         }
+      ],
+      "movingPlatforms": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "speed": 0,
+          "min": 0,
+          "max": 0,
+          "movingHorizontal": true
+        }
       ]
     }
   ]

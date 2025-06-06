@@ -18,7 +18,6 @@ public class Entity {
 
     public float velocityY = 0;
 
-    public boolean isSolid = false;
     public boolean useGravity = false;
     public boolean showHitbox = false;
     public boolean isOnGround = false;
@@ -58,49 +57,17 @@ public class Entity {
     }
 
     public void update(boolean jumpPressed) {
-        int feetY = (int) (worldY + hitboxOffsetY + hitboxHeight);
-        int leftX = (int) (worldX + hitboxOffsetX + 1); // small padding
-        int rightX = (int) (worldX + hitboxOffsetX + hitboxWidth - 1);
 
-        this.isOnGround = playing.levelManager.isSolidTile(leftX, feetY + 1) ||
-                playing.levelManager.isSolidTile(rightX, feetY + 1);
-
-        if (useGravity) {
-            if (velocityY < 0) {
-                velocityY += Constants.GRAVITY_ASCEND;
-            } else {
-                velocityY += Constants.GRAVITY_DESCEND;
-            }
-
-            if (velocityY > Constants.TERMINAL_VELOCITY) {
-                velocityY = Constants.TERMINAL_VELOCITY;
-            }
-        }
+        applyGravity();
 
         if (jumpPressed && isOnGround) {
-            velocityY = -jumpPower;
+            jump();
         }
 
-        float nextWorldY = worldY + velocityY;
-        if (!isColliding((int) worldX, (int) nextWorldY)) {
-            worldY = nextWorldY;
-            screenY = Math.round(worldY - playing.camera.getCameraY());
-        } else {
-            if (velocityY > 0) isOnGround = true;
-            velocityY = 0;
-        }
+        moveVertically();
+        updateGroundStatus();
 
-        if (isMoving) {
-            spriteCounter++;
-            if (spriteCounter > 12) {
-                if (spriteNum >= 7) {
-                    spriteNum = 0;
-                } else {
-                    spriteNum++;
-                }
-                spriteCounter = 0;
-            }
-        }
+        updateSpriteAnimation();
     }
 
 
@@ -115,6 +82,53 @@ public class Entity {
             Rectangle2D.Float hitbox = getBounds();
             g2.setColor(Color.RED);
             g2.drawRect((int) hitbox.x, (int) hitbox.y, (int) hitbox.width, (int) hitbox.height);
+        }
+    }
+
+    private void updateGroundStatus() {
+        int feetY = (int) (worldY + hitboxOffsetY + hitboxHeight - 1);
+        int leftX = (int) (worldX + hitboxOffsetX + 1); // small padding
+        int rightX = (int) (worldX + hitboxOffsetX + hitboxWidth - 1);
+
+        this.isOnGround = playing.levelManager.isSolidTile(leftX, feetY + 2) ||
+                playing.levelManager.isSolidTile(rightX, feetY + 2);
+    }
+
+    private void applyGravity() {
+        if (!useGravity || isOnGround) return;
+
+
+        velocityY += (velocityY < 0) ? Constants.GRAVITY_ASCEND : Constants.GRAVITY_DESCEND;
+
+        if (velocityY > Constants.TERMINAL_VELOCITY) {
+            velocityY = Constants.TERMINAL_VELOCITY;
+        }
+    }
+
+    private void jump() {
+        velocityY = -jumpPower;
+        isOnGround = false;
+    }
+
+    private void moveVertically() {
+        float nextWorldY = worldY + velocityY;
+
+        if (!isColliding((int) worldX, (int) nextWorldY)) {
+            worldY = nextWorldY;
+        } else {
+            if (velocityY > 0) isOnGround = true;
+            velocityY = 0;
+        }
+        screenY = Math.round(worldY - playing.camera.getCameraY());
+    }
+
+    private void updateSpriteAnimation() {
+        if (!isMoving) return;
+
+        spriteCounter++;
+        if (spriteCounter > 12) {
+            spriteNum = (spriteNum + 1) % movementSprites.length;
+            spriteCounter = 0;
         }
     }
 

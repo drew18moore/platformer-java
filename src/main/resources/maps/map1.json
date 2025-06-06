@@ -2,8 +2,8 @@
   "players": [
     {
       "type": "player",
-      "x": 1520.0,
-      "y": 960.0,
+      "x": 2960.0,
+      "y": 1920.0,
       "health": 10,
       "facingLeft": false
     }
@@ -1468,11 +1468,11 @@
       ],
       "movingPlatforms": [
         {
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0,
-          "speed": 0,
+          "x": 2800,
+          "y": 2080,
+          "width": 16,
+          "height": 4,
+          "speed": 1.0,
           "min": 0,
           "max": 0,
           "movingHorizontal": true

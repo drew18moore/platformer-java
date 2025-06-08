@@ -3,6 +3,7 @@ package com.drewm.entities;
 import com.drewm.gamestates.Playing;
 import com.drewm.levels.LevelManager;
 import com.drewm.main.Window;
+import com.drewm.objects.MovingPlatform;
 import com.drewm.utils.Constants;
 
 import java.awt.*;
@@ -12,6 +13,7 @@ import java.awt.image.BufferedImage;
 public class Entity {
     protected final Playing playing;
     public float worldX, worldY;
+    private float previousWorldY;
     public int screenX, screenY;
     public int spriteWidth, spriteHeight;
     public int hitboxWidth, hitboxHeight, hitboxOffsetX, hitboxOffsetY;
@@ -57,6 +59,7 @@ public class Entity {
     }
 
     public void update(boolean jumpPressed) {
+        previousWorldY = worldY;
 
         applyGravity();
 
@@ -79,19 +82,38 @@ public class Entity {
         }
 
         if (showHitbox) {
-            Rectangle2D.Float hitbox = getBounds();
+            Rectangle2D.Float hitbox = getScreenBounds();
             g2.setColor(Color.RED);
             g2.drawRect((int) hitbox.x, (int) hitbox.y, (int) hitbox.width, (int) hitbox.height);
         }
     }
 
     private void updateGroundStatus() {
+        // Check regular tiles
         int feetY = (int) (worldY + hitboxOffsetY + hitboxHeight - 1);
-        int leftX = (int) (worldX + hitboxOffsetX + 1); // small padding
+        int leftX = (int) (worldX + hitboxOffsetX + 1);
         int rightX = (int) (worldX + hitboxOffsetX + hitboxWidth - 1);
 
-        this.isOnGround = playing.levelManager.isSolidTile(leftX, feetY + 2) ||
+        boolean onSolidTile = playing.levelManager.isSolidTile(leftX, feetY + 2) ||
                 playing.levelManager.isSolidTile(rightX, feetY + 2);
+
+        // Check one-way platforms
+        boolean onOneWayPlatform = false;
+        Rectangle2D.Float entityBounds = getBounds();
+
+        for (MovingPlatform platform : playing.levelManager.getCurrentRoom().getMovingPlatforms()) {
+            float platformTop = platform.getWorldY();
+            float entityBottom = entityBounds.y + entityBounds.height;
+
+            if (Math.abs(entityBottom - platformTop) <= 2 &&
+                    entityBounds.x < platform.getWorldX() + platform.getBounds().width &&
+                    entityBounds.x + entityBounds.width > platform.getWorldX()) {
+                onOneWayPlatform = true;
+                break;
+            }
+        }
+
+        this.isOnGround = onSolidTile || onOneWayPlatform;
     }
 
     private void applyGravity() {
@@ -110,11 +132,36 @@ public class Entity {
         isOnGround = false;
     }
 
+    private MovingPlatform checkOneWayPlatformCollision(float nextWorldY) {
+        Rectangle2D.Float nextBounds = new Rectangle2D.Float(
+                worldX + hitboxOffsetX,
+                nextWorldY + hitboxOffsetY,
+                hitboxWidth,
+                hitboxHeight
+        );
+
+        for (MovingPlatform platform : playing.levelManager.getCurrentRoom().getMovingPlatforms()) {
+            if (platform.canLandOn(nextBounds, velocityY, previousWorldY + hitboxOffsetY)) {
+                return platform;
+            }
+        }
+
+        return null;
+    }
+
     private void moveVertically() {
         float nextWorldY = worldY + velocityY;
 
-        if (!isColliding((int) worldX, (int) nextWorldY)) {
-            worldY = nextWorldY;
+        if (!isColliding((int) worldX, Math.round(nextWorldY))) {
+            MovingPlatform platform = checkOneWayPlatformCollision(nextWorldY);
+
+            if (platform != null) {
+                worldY = platform.getLandingY() - (hitboxOffsetY + hitboxHeight);
+                velocityY = 0;
+                isOnGround = true;
+            } else {
+                worldY = nextWorldY;
+            }
         } else {
             if (velocityY > 0) isOnGround = true;
             velocityY = 0;
@@ -134,6 +181,10 @@ public class Entity {
 
     public Rectangle2D.Float getBounds() {
         return new Rectangle2D.Float(worldX + hitboxOffsetX, worldY + hitboxOffsetY, hitboxWidth, hitboxHeight);
+    }
+
+    public Rectangle2D.Float getScreenBounds() {
+        return new Rectangle2D.Float(screenX + hitboxOffsetX, screenY + hitboxOffsetY, hitboxWidth, hitboxHeight);
     }
 
     public boolean isColliding(int worldX, int worldY) {

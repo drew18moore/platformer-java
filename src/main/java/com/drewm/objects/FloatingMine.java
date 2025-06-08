@@ -52,7 +52,7 @@ public class FloatingMine {
     }
 
     public boolean update() {
-        if (getScreenBounds().intersects(playing.player.getBounds())) {
+        if (getScreenBounds().intersects(playing.player.getScreenBounds())) {
             return true;
         }
         worldX += directionX * speed;

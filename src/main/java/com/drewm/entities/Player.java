@@ -18,7 +18,7 @@ public class Player extends Entity {
     public boolean leftPressed, rightPressed, jumpPressed;
 
     private int coinMultiplier = 1;
-    private int coins = 1000;
+    private int coins = 100000;
     private int maxHealth = Constants.PLAYER_STARTING_MAX_HEALTH;
     private int health = maxHealth;
     private float speed = Constants.PLAYER_STARTING_SPEED;
@@ -126,11 +126,6 @@ public class Player extends Entity {
         }
     }
 
-    @Override
-    public Rectangle2D.Float getBounds() {
-        return new Rectangle2D.Float(screenX + hitboxOffsetX, screenY + hitboxOffsetY, hitboxWidth, hitboxHeight);
-    }
-
     public void draw(Graphics2D g2) {
         if (facingLeft) {
             g2.drawImage(this.movementSprites[spriteNum], this.screenX + this.spriteWidth * Constants.SCALE, this.screenY, this.spriteWidth * -Constants.SCALE, this.spriteHeight * Constants.SCALE, null);
@@ -139,7 +134,7 @@ public class Player extends Entity {
         }
 
         if (showHitbox) {
-            Rectangle2D.Float rect = getBounds();
+            Rectangle2D.Float rect = getScreenBounds();
             g2.setColor(Color.RED);
             g2.drawRect((int) rect.x, (int) rect.y, (int) rect.width, (int) rect.height);
         }

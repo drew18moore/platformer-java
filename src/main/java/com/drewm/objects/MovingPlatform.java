@@ -27,10 +27,6 @@ public class MovingPlatform {
         this.playing = playing;
     }
 
-    public void update() {
-
-    }
-
     public void draw(Graphics2D g2) {
         float screenX = this.worldX - playing.camera.getCameraX();
         float screenY = this.worldY - playing.camera.getCameraY();
@@ -42,10 +38,36 @@ public class MovingPlatform {
         }
     }
 
+    public boolean canLandOn(Rectangle2D.Float entityBounds, float entityVelocityY, float entityPreviousY) {
+        if (entityVelocityY <= 0) {
+            return false;
+        }
+
+        if (entityBounds.x + entityBounds.width <= worldX || entityBounds.x >= worldX + width) {
+            return false;
+        }
+
+        float entityBottom = entityBounds.y + entityBounds.height;
+        float entityPreviousBottom = entityPreviousY + entityBounds.height;
+        float platformTop = worldY;
+
+        return entityPreviousBottom <= platformTop &&
+                entityBottom >= platformTop &&
+                entityBottom <= platformTop + height;
+    }
+
+    public float getLandingY() {
+        return worldY;
+    }
+
+    public Rectangle2D.Float getBounds() {
+        return new Rectangle2D.Float(worldX, worldY, width, height);
+    }
+
     public Rectangle2D.Float getScreenBounds() {
         float screenX = this.worldX - playing.camera.getCameraX();
         float screenY = this.worldY - playing.camera.getCameraY();
-        return new Rectangle2D.Float(screenX, screenY, width * Constants.SCALE, height * Constants.SCALE);
+        return new Rectangle2D.Float(screenX, screenY, width, height * Constants.SCALE);
     }
 
     public float getWorldX() {

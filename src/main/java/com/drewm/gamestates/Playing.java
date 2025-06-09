@@ -140,6 +140,10 @@ public class Playing implements Statemethods {
                 }
             }
 
+            for (MovingPlatform movingPlatform : this.levelManager.getCurrentRoom().getMovingPlatforms()) {
+                movingPlatform.update();
+            }
+
             Iterator<Explosion> explosionIterator = explosions.iterator();
             while (explosionIterator.hasNext()) {
                 Explosion explosion = explosionIterator.next();

@@ -1468,14 +1468,13 @@
       ],
       "movingPlatforms": [
         {
-          "x": 2800,
-          "y": 2080,
+          "startX": 2800,
+          "startY": 2080,
+          "endX": 2400,
+          "endY": 2080,
           "width": 80,
           "height": 4,
-          "speed": 1.0,
-          "min": 0,
-          "max": 0,
-          "movingHorizontal": true
+          "speed": 0.2
         }
       ]
     }

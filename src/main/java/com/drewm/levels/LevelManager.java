@@ -117,7 +117,7 @@ public class LevelManager {
                 List<MovingPlatformData> movingPlatformData = room.movingPlatforms();
                 List<MovingPlatform> movingPlatforms = new ArrayList<>();
                 for (MovingPlatformData movingPlatform : movingPlatformData) {
-                    movingPlatforms.add(new MovingPlatform(movingPlatform.x(), movingPlatform.y(), movingPlatform.width(), movingPlatform.height(), movingPlatform.speed(), movingPlatform.min(), movingPlatform.max(), movingPlatform.movingHorizontal(), playing));
+                    movingPlatforms.add(new MovingPlatform(movingPlatform.startX(), movingPlatform.startY(), movingPlatform.endX(), movingPlatform.endY(), movingPlatform.width(), movingPlatform.height(), movingPlatform.speed(), playing));
                 }
 
                 rooms.put(i, new Room(worldMap, roomNumTileWidth, roomNumTileHeight, worldBackground, basicZombies, collectables, doors, floatingMines, sawBlades, lasers, movingPlatforms));

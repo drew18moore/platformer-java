@@ -9,22 +9,27 @@ import java.awt.geom.Rectangle2D;
 public class MovingPlatform {
     private final Playing playing;
     private float worldX, worldY;
+    private float startX, startY, endX, endY;
+    private float directionX, directionY;
+    private boolean movingToEnd = true;
     private final float width, height;
     private float speed;
-    private float min, max;
-    private boolean horizontal;
-    private boolean forward = true;
 
-    public MovingPlatform(float worldX, float worldY, float width, float height, float speed, float min, float max, boolean horizontal, Playing playing) {
-        this.worldX = worldX;
-        this.worldY = worldY;
+    public MovingPlatform(float startX, float startY, float endX, float endY, float width, float height, float speed, Playing playing) {
+        this.startX = startX;
+        this.startY = startY;
+        this.endX = endX;
+        this.endY = endY;
+        this.worldX = startX;
+        this.worldY = startY;
         this.width = width;
         this.height = height;
         this.speed = speed;
-        this.min = min;
-        this.max = max;
-        this.horizontal = horizontal;
         this.playing = playing;
+    }
+
+    public void update() {
+
     }
 
     public void draw(Graphics2D g2) {
@@ -76,13 +81,5 @@ public class MovingPlatform {
 
     public float getWorldY() {
         return worldY;
-    }
-
-    public float getSpeedX() {
-        return horizontal ? (forward ? speed : -speed) : 0;
-    }
-
-    public float getSpeedY() {
-        return horizontal ? 0 : (forward ? speed : -speed);
     }
 }

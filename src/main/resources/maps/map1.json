@@ -1474,7 +1474,16 @@
           "endY": 2080,
           "width": 80,
           "height": 4,
-          "speed": 0.2
+          "speed": 0.5
+        },
+        {
+          "startX": 2080,
+          "startY": 2080,
+          "endX": 2080,
+          "endY": 2960,
+          "width": 80,
+          "height": 4,
+          "speed": 0.5
         }
       ]
     }

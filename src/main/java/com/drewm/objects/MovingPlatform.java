@@ -26,10 +26,23 @@ public class MovingPlatform {
         this.height = height;
         this.speed = speed;
         this.playing = playing;
+
+        calculateDirection();
     }
 
     public void update() {
+        worldX += directionX * speed;
+        worldY += directionY * speed;
 
+        float targetX = movingToEnd ? endX : startX;
+        float targetY = movingToEnd ? endY : startY;
+
+        if (distanceTo(targetX, targetY) < speed) {
+            worldX = targetX;
+            worldY = targetY;
+            movingToEnd = !movingToEnd;
+            calculateDirection();
+        }
     }
 
     public void draw(Graphics2D g2) {
@@ -81,5 +94,22 @@ public class MovingPlatform {
 
     public float getWorldY() {
         return worldY;
+    }
+
+    private float distanceTo(float targetX, float targetY) {
+        float dx = targetX - worldX;
+        float dy = targetY - worldY;
+        return (float) Math.sqrt(dx * dx + dy * dy);
+    }
+
+    private void calculateDirection() {
+        float dx = (movingToEnd ? endX - worldX : startX - worldX);
+        float dy = (movingToEnd ? endY - worldY : startY - worldY);
+        float distance = (float) Math.sqrt(dx * dx + dy * dy);
+
+        if (distance != 0) {
+            directionX = dx / distance;
+            directionY = dy / distance;
+        }
     }
 }

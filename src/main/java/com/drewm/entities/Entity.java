@@ -28,6 +28,10 @@ public class Entity {
     public float jumpPower = Constants.STARTING_JUMP_FORCE;
     public int health = 100;
 
+    private MovingPlatform ridingPlatform = null;
+    private float lastPlatformX = 0;
+    private float lastPlatformY = 0;
+
     BufferedImage[] movementSprites;
     public int spriteCounter = 0;
     public int spriteNum = 0;
@@ -68,11 +72,36 @@ public class Entity {
         }
 
         moveVertically();
+
         updateGroundStatus();
+
+        if (ridingPlatform != null && isOnGround) {
+            float currentPlatformX = ridingPlatform.getWorldX();
+            float currentPlatformY = ridingPlatform.getWorldY();
+
+            if (lastPlatformX != 0 || lastPlatformY != 0) {
+                float platformDeltaX = currentPlatformX - lastPlatformX;
+                float platformDeltaY = currentPlatformY - lastPlatformY;
+
+                worldX += platformDeltaX;
+                worldY += platformDeltaY;
+            }
+
+            float platformTop = ridingPlatform.getWorldY();
+            float desiredY = platformTop - (hitboxOffsetY + hitboxHeight);
+            worldY = desiredY;
+
+            lastPlatformX = currentPlatformX;
+            lastPlatformY = currentPlatformY;
+        } else {
+            lastPlatformX = 0;
+            lastPlatformY = 0;
+        }
+
+        screenY = Math.round(worldY - playing.camera.getCameraY());
 
         updateSpriteAnimation();
     }
-
 
     public void draw(Graphics2D g2) {
         if (facingLeft) {
@@ -89,7 +118,6 @@ public class Entity {
     }
 
     private void updateGroundStatus() {
-        // Check regular tiles
         int feetY = (int) (worldY + hitboxOffsetY + hitboxHeight - 1);
         int leftX = (int) (worldX + hitboxOffsetX + 1);
         int rightX = (int) (worldX + hitboxOffsetX + hitboxWidth - 1);
@@ -97,28 +125,48 @@ public class Entity {
         boolean onSolidTile = playing.levelManager.isSolidTile(leftX, feetY + 2) ||
                 playing.levelManager.isSolidTile(rightX, feetY + 2);
 
-        // Check one-way platforms
-        boolean onOneWayPlatform = false;
+        MovingPlatform platformBelow = findPlatformBelow();
+
+        if (platformBelow != null) {
+            ridingPlatform = platformBelow;
+            isOnGround = true;
+        } else if (onSolidTile) {
+            ridingPlatform = null;
+            isOnGround = true;
+        } else {
+            ridingPlatform = null;
+            isOnGround = false;
+        }
+    }
+
+    private MovingPlatform findPlatformBelow() {
         Rectangle2D.Float entityBounds = getBounds();
+        float entityBottom = entityBounds.y + entityBounds.height;
 
-        for (MovingPlatform platform : playing.levelManager.getCurrentRoom().getMovingPlatforms()) {
-            float platformTop = platform.getWorldY();
-            float entityBottom = entityBounds.y + entityBounds.height;
-
-            if (Math.abs(entityBottom - platformTop) <= 2 &&
-                    entityBounds.x < platform.getWorldX() + platform.getBounds().width &&
-                    entityBounds.x + entityBounds.width > platform.getWorldX()) {
-                onOneWayPlatform = true;
-                break;
+        if (ridingPlatform != null) {
+            float platformTop = ridingPlatform.getWorldY();
+            if (Math.abs(entityBottom - platformTop) <= 3 &&
+                    entityBounds.x < ridingPlatform.getWorldX() + ridingPlatform.getBounds().width &&
+                    entityBounds.x + entityBounds.width > ridingPlatform.getWorldX()) {
+                return ridingPlatform;
             }
         }
 
-        this.isOnGround = onSolidTile || onOneWayPlatform;
+        for (MovingPlatform platform : playing.levelManager.getCurrentRoom().getMovingPlatforms()) {
+            float platformTop = platform.getWorldY();
+
+            if (Math.abs(entityBottom - platformTop) <= 3 &&
+                    entityBounds.x < platform.getWorldX() + platform.getBounds().width &&
+                    entityBounds.x + entityBounds.width > platform.getWorldX()) {
+                return platform;
+            }
+        }
+
+        return null;
     }
 
     private void applyGravity() {
         if (!useGravity || isOnGround) return;
-
 
         velocityY += (velocityY < 0) ? Constants.GRAVITY_ASCEND : Constants.GRAVITY_DESCEND;
 
@@ -130,6 +178,9 @@ public class Entity {
     private void jump() {
         velocityY = -jumpPower;
         isOnGround = false;
+        ridingPlatform = null;
+        lastPlatformX = 0;
+        lastPlatformY = 0;
     }
 
     private MovingPlatform checkOneWayPlatformCollision(float nextWorldY) {
@@ -150,6 +201,10 @@ public class Entity {
     }
 
     private void moveVertically() {
+        if (ridingPlatform != null && isOnGround) {
+            return;
+        }
+
         float nextWorldY = worldY + velocityY;
 
         if (!isColliding((int) worldX, Math.round(nextWorldY))) {
@@ -159,6 +214,7 @@ public class Entity {
                 worldY = platform.getLandingY() - (hitboxOffsetY + hitboxHeight);
                 velocityY = 0;
                 isOnGround = true;
+                ridingPlatform = platform;
             } else {
                 worldY = nextWorldY;
             }
@@ -166,7 +222,6 @@ public class Entity {
             if (velocityY > 0) isOnGround = true;
             velocityY = 0;
         }
-        screenY = Math.round(worldY - playing.camera.getCameraY());
     }
 
     private void updateSpriteAnimation() {

@@ -9,7 +9,8 @@ import java.awt.geom.Rectangle2D;
 public class MovingPlatform {
     private final Playing playing;
     private float worldX, worldY;
-    private float startX, startY, endX, endY;
+    private float prevWorldX, prevWorldY;
+    private final float startX, startY, endX, endY;
     private float directionX, directionY;
     private boolean movingToEnd = true;
     private final float width, height;
@@ -22,6 +23,8 @@ public class MovingPlatform {
         this.endY = endY;
         this.worldX = startX;
         this.worldY = startY;
+        this.prevWorldX = startX;
+        this.prevWorldY = startY;
         this.width = width;
         this.height = height;
         this.speed = speed;
@@ -31,6 +34,9 @@ public class MovingPlatform {
     }
 
     public void update() {
+        prevWorldX = worldX;
+        prevWorldY = worldY;
+
         worldX += directionX * speed;
         worldY += directionY * speed;
 
@@ -94,6 +100,14 @@ public class MovingPlatform {
 
     public float getWorldY() {
         return worldY;
+    }
+
+    public float getDeltaX() {
+        return worldX - prevWorldX;
+    }
+
+    public float getDeltaY() {
+        return worldY - prevWorldY;
     }
 
     private float distanceTo(float targetX, float targetY) {

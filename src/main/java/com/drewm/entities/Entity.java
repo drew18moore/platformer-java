@@ -29,8 +29,6 @@ public class Entity {
     public int health = 100;
 
     private MovingPlatform ridingPlatform = null;
-    private float lastPlatformX = 0;
-    private float lastPlatformY = 0;
 
     BufferedImage[] movementSprites;
     public int spriteCounter = 0;
@@ -76,26 +74,9 @@ public class Entity {
         updateGroundStatus();
 
         if (ridingPlatform != null && isOnGround) {
-            float currentPlatformX = ridingPlatform.getWorldX();
-            float currentPlatformY = ridingPlatform.getWorldY();
-
-            if (lastPlatformX != 0 || lastPlatformY != 0) {
-                float platformDeltaX = currentPlatformX - lastPlatformX;
-                float platformDeltaY = currentPlatformY - lastPlatformY;
-
-                worldX += platformDeltaX;
-                worldY += platformDeltaY;
-            }
-
-            float platformTop = ridingPlatform.getWorldY();
-            float desiredY = platformTop - (hitboxOffsetY + hitboxHeight);
-            worldY = desiredY;
-
-            lastPlatformX = currentPlatformX;
-            lastPlatformY = currentPlatformY;
-        } else {
-            lastPlatformX = 0;
-            lastPlatformY = 0;
+            worldX += ridingPlatform.getDeltaX();
+            worldY += ridingPlatform.getDeltaY();
+            worldY = ridingPlatform.getLandingY() - (hitboxOffsetY + hitboxHeight);
         }
 
         screenY = Math.round(worldY - playing.camera.getCameraY());
@@ -179,8 +160,6 @@ public class Entity {
         velocityY = -jumpPower;
         isOnGround = false;
         ridingPlatform = null;
-        lastPlatformX = 0;
-        lastPlatformY = 0;
     }
 
     private MovingPlatform checkOneWayPlatformCollision(float nextWorldY) {

@@ -58,7 +58,17 @@ public class MovingPlatform {
                 screenX < Constants.SCREEN_WIDTH &&
                 screenY + Constants.TILE_SIZE * 2 > 0 &&
                 screenY < Constants.SCREEN_HEIGHT) {
-            g2.draw(getScreenBounds());
+            g2.setColor(Color.DARK_GRAY);
+            g2.fill(getScreenBounds());
+            g2.setColor(Color.LIGHT_GRAY);
+            g2.setStroke(new BasicStroke(4));
+            Rectangle2D.Float bounds = getScreenBounds();
+            g2.draw(new Rectangle2D.Float(
+                    bounds.x + 4f / 2f,
+                    bounds.y + 4f / 2f,
+                    bounds.width - 4f,
+                    bounds.height - 4f
+            ));
         }
     }
 

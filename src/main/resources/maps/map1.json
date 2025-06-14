@@ -2,8 +2,8 @@
   "players": [
     {
       "type": "player",
-      "x": 2960.0,
-      "y": 1920.0,
+      "x": 1520.0,
+      "y": 960.0,
       "health": 10,
       "facingLeft": false
     }
@@ -1474,16 +1474,16 @@
           "endY": 2080,
           "width": 160,
           "height": 4,
-          "speed": 0.5
+          "speed": 0.75
         },
         {
           "startX": 2080,
-          "startY": 2080,
+          "startY": 1760,
           "endX": 2080,
           "endY": 2960,
           "width": 160,
           "height": 4,
-          "speed": 0.5
+          "speed": 0.75
         }
       ]
     }

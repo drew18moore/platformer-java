@@ -48,7 +48,7 @@ public class Collectable {
     }
 
     public boolean update() {
-        if (getScreenBounds().intersects(playing.player.getBounds())) {
+        if (getScreenBounds().intersects(playing.player.getScreenBounds())) {
             switch(itemType) {
                 case COIN -> playing.player.earnCoins(playing.player.getCoinMultiplier());
                 case KEYCARD -> {

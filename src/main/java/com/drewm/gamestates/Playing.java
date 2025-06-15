@@ -110,7 +110,7 @@ public class Playing implements Statemethods {
 
             currentDoor = null;
             for (Door door : this.levelManager.getCurrentRoom().getDoors()) {
-                if (door.getScreenBounds().intersects(player.getBounds())) {
+                if (door.getScreenBounds().intersects(player.getScreenBounds())) {
                     currentDoor = door;
                     break;
                 }
@@ -128,16 +128,20 @@ public class Playing implements Statemethods {
 
             for (SawBlade sawBlade : this.levelManager.getCurrentRoom().getSawBlades()) {
                 sawBlade.update();
-                if (sawBlade.getScreenBounds().intersects(player.getBounds())) {
+                if (sawBlade.getScreenBounds().intersects(player.getScreenBounds())) {
                     player.takeDamage(1);
                 }
             }
 
             for (Laser laser : this.levelManager.getCurrentRoom().getLasers()) {
                 laser.update();
-                if (laser.isActive() && laser.getScreenBounds().intersects(player.getBounds())) {
+                if (laser.isActive() && laser.getScreenBounds().intersects(player.getScreenBounds())) {
                     player.takeDamage(1);
                 }
+            }
+
+            for (MovingPlatform movingPlatform : this.levelManager.getCurrentRoom().getMovingPlatforms()) {
+                movingPlatform.update();
             }
 
             Iterator<Explosion> explosionIterator = explosions.iterator();
@@ -187,6 +191,10 @@ public class Playing implements Statemethods {
 
         for (Explosion explosion : explosions) {
             explosion.draw(g2, camera.getCameraX(), camera.getCameraY());
+        }
+
+        for (MovingPlatform movingPlatform : this.levelManager.getCurrentRoom().getMovingPlatforms()) {
+            movingPlatform.draw(g2);
         }
 
         Modal activeModal = getActiveModal();

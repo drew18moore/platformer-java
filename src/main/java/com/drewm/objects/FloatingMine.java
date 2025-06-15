@@ -6,7 +6,6 @@ import com.drewm.utils.Constants;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
@@ -21,7 +20,7 @@ public class FloatingMine {
     private int spriteCounter = 0;
     private int spriteNum = 0;
     private float speed = 1f;
-    private final boolean showHitbox = true;
+    private final boolean showHitbox = false;
 
     public FloatingMine(float startX, float startY, float endX, float endY, Playing playing) {
         this.playing = playing;
@@ -52,7 +51,7 @@ public class FloatingMine {
     }
 
     public boolean update() {
-        if (getScreenBounds().intersects(playing.player.getBounds())) {
+        if (getScreenBounds().intersects(playing.player.getScreenBounds())) {
             return true;
         }
         worldX += directionX * speed;

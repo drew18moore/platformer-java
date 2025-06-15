@@ -24,7 +24,7 @@ public class SawBlade {
     private int spriteNum = 0;
     private float speed = 1f;
     private boolean upsideDown;
-    private boolean showHitbox = true;
+    private boolean showHitbox = false;
 
     public SawBlade(float startX, float endX, float y, boolean upsideDown, Playing playing) {
         this.playing = playing;

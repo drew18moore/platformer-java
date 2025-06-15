@@ -20,7 +20,7 @@ public class FloatingMine {
     private int spriteCounter = 0;
     private int spriteNum = 0;
     private float speed = 1f;
-    private final boolean showHitbox = true;
+    private final boolean showHitbox = false;
 
     public FloatingMine(float startX, float startY, float endX, float endY, Playing playing) {
         this.playing = playing;

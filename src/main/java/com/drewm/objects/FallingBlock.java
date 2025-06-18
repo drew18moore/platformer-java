@@ -24,7 +24,10 @@ public class FallingBlock {
     }
 
     public void update() {
-        if (playing.player.worldX > midpoint - (midpoint - worldX) * triggerRadius && playing.player.worldX < midpoint + (midpoint - worldX) * triggerRadius) {
+        if (playing.player.worldX > midpoint - (midpoint - worldX) * triggerRadius &&
+                playing.player.worldX < midpoint + (midpoint - worldX) * triggerRadius &&
+                playing.player.worldY > worldY + height && playing.player.worldY < worldY + height + Constants.TILE_WIDTH * 3
+        ) {
             System.out.println("TRIGGER");
         }
     }

@@ -17,6 +17,7 @@ public class Room {
     private List<SawBlade> sawBlades;
     private List<Laser> lasers;
     private List<MovingPlatform> movingPlatforms;
+    private List<FallingBlock> fallingBlocks;
 
     public Room(int[][] worldMap,
                 int roomNumTileWidth,
@@ -28,7 +29,8 @@ public class Room {
                 List<FloatingMine> floatingMines,
                 List<SawBlade> sawBlades,
                 List<Laser> lasers,
-                List<MovingPlatform> movingPlatforms
+                List<MovingPlatform> movingPlatforms,
+                List<FallingBlock> fallingBlocks
     ) {
         this.worldMap = worldMap;
         this.worldBackground = worldBackground;
@@ -42,6 +44,7 @@ public class Room {
 
         this.roomNumTileWidth = roomNumTileWidth;
         this.roomNumTileHeight = roomNumTileHeight;
+        this.fallingBlocks = fallingBlocks;
     }
 
     public int[][] getWorldMap() {
@@ -105,4 +108,6 @@ public class Room {
     }
 
     public List<MovingPlatform> getMovingPlatforms() { return movingPlatforms; }
+
+    public List<FallingBlock> getFallingBlocks() { return fallingBlocks; }
 }

@@ -11,6 +11,7 @@ public record RoomData(
         List<FloatingMineData> floatingMines,
         List<SawBladeData> sawBlades,
         List<LaserData> lasers,
-        List<MovingPlatformData> movingPlatforms
+        List<MovingPlatformData> movingPlatforms,
+        List<FallingBlockData> fallingBlocks
 ) {
 }

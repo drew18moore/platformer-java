@@ -120,7 +120,14 @@ public class LevelManager {
                     movingPlatforms.add(new MovingPlatform(movingPlatform.startX(), movingPlatform.startY(), movingPlatform.endX(), movingPlatform.endY(), movingPlatform.width(), movingPlatform.height(), movingPlatform.speed(), playing));
                 }
 
-                rooms.put(i, new Room(worldMap, roomNumTileWidth, roomNumTileHeight, worldBackground, basicZombies, collectables, doors, floatingMines, sawBlades, lasers, movingPlatforms));
+                // Load falling blocks
+                List<FallingBlockData> fallingBlockData = room.fallingBlocks();
+                List<FallingBlock> fallingBlocks = new ArrayList<>();
+                for (FallingBlockData fallingBlock : fallingBlockData) {
+                    fallingBlocks.add(new FallingBlock(fallingBlock.x(), fallingBlock.y(), fallingBlock.width(), fallingBlock.height(), playing));
+                }
+
+                rooms.put(i, new Room(worldMap, roomNumTileWidth, roomNumTileHeight, worldBackground, basicZombies, collectables, doors, floatingMines, sawBlades, lasers, movingPlatforms, fallingBlocks));
             }
         } catch (IOException e) {
             e.printStackTrace();

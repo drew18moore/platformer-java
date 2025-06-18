@@ -144,6 +144,10 @@ public class Playing implements Statemethods {
                 movingPlatform.update();
             }
 
+            for (FallingBlock fallingBlock : this.levelManager.getCurrentRoom().getFallingBlocks()) {
+                fallingBlock.update();
+            }
+
             Iterator<Explosion> explosionIterator = explosions.iterator();
             while (explosionIterator.hasNext()) {
                 Explosion explosion = explosionIterator.next();
@@ -195,6 +199,10 @@ public class Playing implements Statemethods {
 
         for (MovingPlatform movingPlatform : this.levelManager.getCurrentRoom().getMovingPlatforms()) {
             movingPlatform.draw(g2);
+        }
+
+        for (FallingBlock fallingBlock : this.levelManager.getCurrentRoom().getFallingBlocks()) {
+            fallingBlock.draw(g2);
         }
 
         Modal activeModal = getActiveModal();

@@ -6,6 +6,8 @@ import com.drewm.utils.Constants;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Arc2D;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -21,6 +23,8 @@ public class SawBlade {
     private int spriteCounter = 0;
     private int spriteNum = 0;
     private float speed = 1f;
+    private boolean upsideDown;
+    private boolean showHitbox = false;
 
     public SawBlade(float startX, float endX, float y, boolean upsideDown, Playing playing) {
         this.playing = playing;
@@ -35,17 +39,18 @@ public class SawBlade {
         }
         this.worldX = startX;
         this.worldY = y;
+        this.upsideDown = upsideDown;
 
         try {
-            BufferedImage spriteSheet = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/sprites/saw-blade.png")));
+            BufferedImage spriteSheet = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/sprites/saw-blade-sm.png")));
 
             this.spriteFrames = new BufferedImage[4];
             for (int i = 0; i < spriteFrames.length; i++) {
                 BufferedImage frame = spriteSheet.getSubimage(
-                        i * Constants.TILE_WIDTH * 2,
+                        i * Constants.TILE_WIDTH,
                         0,
-                        Constants.TILE_WIDTH * 2,
-                        Constants.TILE_WIDTH
+                        Constants.TILE_WIDTH,
+                        Constants.TILE_WIDTH / 2
                 );
 
                 if (upsideDown) {
@@ -93,12 +98,16 @@ public class SawBlade {
                 screenY + Constants.TILE_SIZE > 0 &&
                 screenY < Constants.SCREEN_HEIGHT) {
             g2.drawImage(spriteFrames[spriteNum], (int) screenX, (int) screenY, spriteFrames[0].getWidth() * Constants.SCALE, spriteFrames[0].getHeight() * Constants.SCALE, null);
+            if (showHitbox) g2.draw(getScreenBounds());
         }
     }
 
-    public Rectangle2D.Float getScreenBounds() {
-        float screenX = this.worldX - playing.player.worldX + playing.player.screenX;
-        float screenY = this.worldY - playing.player.worldY + playing.player.screenY;
-        return new Rectangle2D.Float(screenX, screenY, spriteFrames[0].getWidth() * Constants.SCALE, spriteFrames[0].getHeight() * Constants.SCALE);
+    public Arc2D.Float getScreenBounds() {
+        float screenX = this.worldX - playing.camera.getCameraX();
+        float screenY = this.worldY - playing.camera.getCameraY();
+        screenY -= upsideDown ? spriteFrames[0].getHeight() * Constants.SCALE : 0;
+        float startingAngle = upsideDown ? 180f : 0f;
+        float extent = 180f;
+        return new Arc2D.Float(screenX, screenY, spriteFrames[0].getWidth() * Constants.SCALE, spriteFrames[0].getWidth() * Constants.SCALE, startingAngle, extent, Arc2D.PIE);
     }
 }

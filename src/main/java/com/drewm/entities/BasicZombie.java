@@ -61,7 +61,7 @@ public class BasicZombie extends Entity {
             this.facingLeft = !this.facingLeft;
         }
 
-        if (getBounds().intersects(playing.player.getBounds())) {
+        if (getScreenBounds().intersects(playing.player.getScreenBounds())) {
             playing.player.takeDamage(1);
         }
     }
@@ -81,20 +81,10 @@ public class BasicZombie extends Entity {
         }
 
         if (showHitbox) {
-            Rectangle2D.Float hitbox = getBounds();
+            Rectangle2D.Float hitbox = getScreenBounds();
             g2.setColor(Color.RED);
             g2.drawRect((int) hitbox.x, (int) hitbox.y, (int) hitbox.width, (int) hitbox.height);
         }
-    }
-
-    public Rectangle2D.Float getBounds() {
-        float screenX = worldX - playing.player.worldX + playing.player.screenX;
-        float screenY = worldY - playing.player.worldY + playing.player.screenY;
-        return new Rectangle2D.Float(screenX + hitboxOffsetX, screenY + hitboxOffsetY, hitboxWidth, hitboxHeight);
-    }
-
-    public Rectangle2D.Float getWorldBounds() {
-        return new Rectangle2D.Float(worldX + hitboxOffsetX, worldY + hitboxOffsetY, hitboxWidth, hitboxHeight);
     }
 
     public void handleDrop() {

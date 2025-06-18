@@ -61,7 +61,7 @@ public class Bullet {
         }
 
         for (BasicZombie zombie : zombies) {
-            if (getWorldBounds().intersects(zombie.getWorldBounds())) {
+            if (getWorldBounds().intersects(zombie.getBounds())) {
                 zombie.takeDamage(damage);
                 return true;
             }

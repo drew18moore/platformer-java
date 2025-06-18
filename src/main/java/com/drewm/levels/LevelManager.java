@@ -113,7 +113,21 @@ public class LevelManager {
                     lasers.add(new Laser(laser.x1(), laser.y1(), laser.x2(), laser.y2(), laser.activationIntervalMS(), laser.delayMS(), playing));
                 }
 
-                rooms.put(i, new Room(worldMap, roomNumTileWidth, roomNumTileHeight, worldBackground, basicZombies, collectables, doors, floatingMines, sawBlades, lasers));
+                // Load moving platforms
+                List<MovingPlatformData> movingPlatformData = room.movingPlatforms();
+                List<MovingPlatform> movingPlatforms = new ArrayList<>();
+                for (MovingPlatformData movingPlatform : movingPlatformData) {
+                    movingPlatforms.add(new MovingPlatform(movingPlatform.startX(), movingPlatform.startY(), movingPlatform.endX(), movingPlatform.endY(), movingPlatform.width(), movingPlatform.height(), movingPlatform.speed(), playing));
+                }
+
+                // Load falling blocks
+                List<FallingBlockData> fallingBlockData = room.fallingBlocks();
+                List<FallingBlock> fallingBlocks = new ArrayList<>();
+                for (FallingBlockData fallingBlock : fallingBlockData) {
+                    fallingBlocks.add(new FallingBlock(fallingBlock.x(), fallingBlock.y(), fallingBlock.width(), fallingBlock.height(), playing));
+                }
+
+                rooms.put(i, new Room(worldMap, roomNumTileWidth, roomNumTileHeight, worldBackground, basicZombies, collectables, doors, floatingMines, sawBlades, lasers, movingPlatforms, fallingBlocks));
             }
         } catch (IOException e) {
             e.printStackTrace();

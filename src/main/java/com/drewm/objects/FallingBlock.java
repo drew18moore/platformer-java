@@ -14,6 +14,12 @@ public class FallingBlock {
     private final float midpoint;
     private final float triggerRadius = 0.2f;
 
+    private boolean isTriggered = false;
+    private boolean isFalling = false;
+    private float fallVelocity = 0;
+    private final float gravity = Constants.GRAVITY_DESCEND;
+    private final float maxFallSpeed = Constants.TERMINAL_VELOCITY;
+
     public FallingBlock(float worldX, float worldY, float width, float height, Playing playing) {
         this.playing = playing;
         this.worldX = worldX;
@@ -24,11 +30,30 @@ public class FallingBlock {
     }
 
     public void update() {
-        if (playing.player.worldX > midpoint - (midpoint - worldX) * triggerRadius &&
+        if (!isTriggered &&
+                playing.player.worldX > midpoint - (midpoint - worldX) * triggerRadius &&
                 playing.player.worldX < midpoint + (midpoint - worldX) * triggerRadius &&
-                playing.player.worldY > worldY + height && playing.player.worldY < worldY + height + Constants.TILE_WIDTH * 3
-        ) {
-            System.out.println("TRIGGER");
+                playing.player.worldY > worldY + height &&
+                playing.player.worldY < worldY + height + Constants.TILE_WIDTH * 3) {
+
+            isTriggered = true;
+            isFalling = true;
+        }
+
+        if (isFalling) {
+            fallVelocity += gravity;
+            if (fallVelocity > maxFallSpeed) {
+                fallVelocity = maxFallSpeed;
+            }
+
+            float nextY = worldY + fallVelocity;
+
+            if (!isColliding(worldX, nextY)) {
+                worldY = nextY;
+            } else {
+                isFalling = false;
+                fallVelocity = 0;
+            }
         }
     }
 
@@ -56,10 +81,49 @@ public class FallingBlock {
         }
     }
 
+    private boolean isColliding(float testX, float testY) {
+        int leftX = (int) testX;
+        int rightX = (int) (testX + width - 1);
+        int topY = (int) testY;
+        int bottomY = (int) (testY + height - 1);
+
+        return playing.levelManager.isSolidTile(leftX, topY) ||
+                playing.levelManager.isSolidTile(rightX, topY) ||
+                playing.levelManager.isSolidTile(leftX, bottomY) ||
+                playing.levelManager.isSolidTile(rightX, bottomY);
+    }
+
+    public Rectangle2D.Float getBounds() {
+        return new Rectangle2D.Float(worldX, worldY, width, height);
+    }
 
     public Rectangle2D.Float getScreenBounds() {
         float screenX = worldX - playing.camera.getCameraX();
         float screenY = worldY - playing.camera.getCameraY();
         return new Rectangle2D.Float(screenX, screenY, width, height);
+    }
+
+    public float getWorldX() {
+        return worldX;
+    }
+
+    public float getWorldY() {
+        return worldY;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
+
+    public boolean isTriggered() {
+        return isTriggered;
+    }
+
+    public boolean isFalling() {
+        return isFalling;
     }
 }

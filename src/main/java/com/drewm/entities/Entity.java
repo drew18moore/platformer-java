@@ -4,6 +4,7 @@ import com.drewm.gamestates.Playing;
 import com.drewm.levels.LevelManager;
 import com.drewm.main.Window;
 import com.drewm.objects.MovingPlatform;
+import com.drewm.objects.FallingBlock;
 import com.drewm.utils.Constants;
 
 import java.awt.*;
@@ -73,6 +74,8 @@ public class Entity {
 
         updateGroundStatus();
 
+        checkFallingBlockUndersideCollision();
+
         if (ridingPlatform != null && isOnGround) {
             worldX += ridingPlatform.getDeltaX();
             worldY += ridingPlatform.getDeltaY();
@@ -107,9 +110,13 @@ public class Entity {
                 playing.levelManager.isSolidTile(rightX, feetY + 2);
 
         MovingPlatform platformBelow = findPlatformBelow();
+        FallingBlock fallingBlockBelow = findFallingBlockBelow();
 
         if (platformBelow != null) {
             ridingPlatform = platformBelow;
+            isOnGround = true;
+        } else if (fallingBlockBelow != null) {
+            ridingPlatform = null;
             isOnGround = true;
         } else if (onSolidTile) {
             ridingPlatform = null;
@@ -140,6 +147,24 @@ public class Entity {
                     entityBounds.x < platform.getWorldX() + platform.getBounds().width &&
                     entityBounds.x + entityBounds.width > platform.getWorldX()) {
                 return platform;
+            }
+        }
+
+        return null;
+    }
+
+    private FallingBlock findFallingBlockBelow() {
+        Rectangle2D.Float entityBounds = getBounds();
+        float entityBottom = entityBounds.y + entityBounds.height;
+
+        for (FallingBlock fallingBlock : playing.levelManager.getCurrentRoom().getFallingBlocks()) {
+            Rectangle2D.Float blockBounds = fallingBlock.getBounds();
+            float blockTop = blockBounds.y;
+
+            if (Math.abs(entityBottom - blockTop) <= 3 &&
+                    entityBounds.x < blockBounds.x + blockBounds.width &&
+                    entityBounds.x + entityBounds.width > blockBounds.x) {
+                return fallingBlock;
             }
         }
 
@@ -179,6 +204,31 @@ public class Entity {
         return null;
     }
 
+    private FallingBlock checkFallingBlockCollision(float nextWorldY) {
+        Rectangle2D.Float nextBounds = new Rectangle2D.Float(
+                worldX + hitboxOffsetX,
+                nextWorldY + hitboxOffsetY,
+                hitboxWidth,
+                hitboxHeight
+        );
+
+        if (velocityY > 0) {
+            for (FallingBlock fallingBlock : playing.levelManager.getCurrentRoom().getFallingBlocks()) {
+                Rectangle2D.Float blockBounds = fallingBlock.getBounds();
+
+                if (nextBounds.intersects(blockBounds) ||
+                        (nextBounds.y + nextBounds.height >= blockBounds.y &&
+                                nextBounds.y + nextBounds.height <= blockBounds.y + 5 &&
+                                nextBounds.x < blockBounds.x + blockBounds.width &&
+                                nextBounds.x + nextBounds.width > blockBounds.x)) {
+                    return fallingBlock;
+                }
+            }
+        }
+
+        return null;
+    }
+
     private void moveVertically() {
         if (ridingPlatform != null && isOnGround) {
             return;
@@ -188,12 +238,18 @@ public class Entity {
 
         if (!isColliding((int) worldX, Math.round(nextWorldY))) {
             MovingPlatform platform = checkOneWayPlatformCollision(nextWorldY);
+            FallingBlock fallingBlock = checkFallingBlockCollision(nextWorldY);
 
             if (platform != null) {
                 worldY = platform.getLandingY() - (hitboxOffsetY + hitboxHeight);
                 velocityY = 0;
                 isOnGround = true;
                 ridingPlatform = platform;
+            } else if (fallingBlock != null) {
+                worldY = fallingBlock.getBounds().y - (hitboxOffsetY + hitboxHeight);
+                velocityY = 0;
+                isOnGround = true;
+                ridingPlatform = null;
             } else {
                 worldY = nextWorldY;
             }
@@ -203,6 +259,23 @@ public class Entity {
         }
     }
 
+    public boolean isCollidingWithFallingBlocks(float testX, float testY) {
+        Rectangle2D.Float testBounds = new Rectangle2D.Float(
+                testX + hitboxOffsetX,
+                testY + hitboxOffsetY,
+                hitboxWidth,
+                hitboxHeight
+        );
+
+        for (FallingBlock fallingBlock : playing.levelManager.getCurrentRoom().getFallingBlocks()) {
+            if (testBounds.intersects(fallingBlock.getBounds())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private void updateSpriteAnimation() {
         if (!isMoving) return;
 
@@ -210,6 +283,27 @@ public class Entity {
         if (spriteCounter > 12) {
             spriteNum = (spriteNum + 1) % movementSprites.length;
             spriteCounter = 0;
+        }
+    }
+
+    private void checkFallingBlockUndersideCollision() {
+        Rectangle2D.Float entityBounds = getBounds();
+
+        for (FallingBlock fallingBlock : playing.levelManager.getCurrentRoom().getFallingBlocks()) {
+            if (fallingBlock.isFalling()) {
+                Rectangle2D.Float blockBounds = fallingBlock.getBounds();
+
+                if (entityBounds.intersects(blockBounds)) {
+                    float entityTop = entityBounds.y;
+                    float blockBottom = blockBounds.y + blockBounds.height;
+
+                    if (entityTop < blockBottom && entityTop + entityBounds.height > blockBounds.y) {
+                        if (entityTop > blockBounds.y) {
+                            takeDamage(this.health);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -229,8 +323,12 @@ public class Entity {
         int topY = worldY + hitboxOffsetY;
         int bottomY = worldY + hitboxOffsetY + hitboxHeight - 1;
 
-        return levelManager.isSolidTile(leftX, topY) || levelManager.isSolidTile(rightX, topY) ||
+        boolean tileCollision = levelManager.isSolidTile(leftX, topY) || levelManager.isSolidTile(rightX, topY) ||
                 levelManager.isSolidTile(leftX, bottomY) || levelManager.isSolidTile(rightX, bottomY);
+
+        boolean fallingBlockCollision = isCollidingWithFallingBlocks(worldX, worldY);
+
+        return tileCollision || fallingBlockCollision;
     }
 
     public boolean isStandingOnSpike(int worldX, int worldY) {

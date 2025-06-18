@@ -216,11 +216,11 @@ public class Entity {
             for (FallingBlock fallingBlock : playing.levelManager.getCurrentRoom().getFallingBlocks()) {
                 Rectangle2D.Float blockBounds = fallingBlock.getBounds();
 
-                if (nextBounds.intersects(blockBounds) ||
-                        (nextBounds.y + nextBounds.height >= blockBounds.y &&
-                                nextBounds.y + nextBounds.height <= blockBounds.y + 5 &&
-                                nextBounds.x < blockBounds.x + blockBounds.width &&
-                                nextBounds.x + nextBounds.width > blockBounds.x)) {
+                if (nextBounds.y + nextBounds.height >= blockBounds.y &&
+                        nextBounds.y + nextBounds.height <= blockBounds.y + 5 &&
+                        nextBounds.x < blockBounds.x + blockBounds.width &&
+                        nextBounds.x + nextBounds.width > blockBounds.x &&
+                        previousWorldY + hitboxOffsetY + hitboxHeight <= blockBounds.y + 3) {
                     return fallingBlock;
                 }
             }

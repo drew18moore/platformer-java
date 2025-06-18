@@ -18,7 +18,7 @@ public class FallingBlock {
     private boolean isFalling = false;
     private float fallVelocity = 0;
     private final float gravity = Constants.GRAVITY_DESCEND;
-    private final float maxFallSpeed = Constants.TERMINAL_VELOCITY;
+    private final float maxFallSpeed = 1;
 
     public FallingBlock(float worldX, float worldY, float width, float height, Playing playing) {
         this.playing = playing;
@@ -34,7 +34,7 @@ public class FallingBlock {
                 playing.player.worldX > midpoint - (midpoint - worldX) * triggerRadius &&
                 playing.player.worldX < midpoint + (midpoint - worldX) * triggerRadius &&
                 playing.player.worldY > worldY + height &&
-                playing.player.worldY < worldY + height + Constants.TILE_WIDTH * 3) {
+                playing.player.worldY < worldY + height + Constants.TILE_SIZE * 3) {
 
             isTriggered = true;
             isFalling = true;
